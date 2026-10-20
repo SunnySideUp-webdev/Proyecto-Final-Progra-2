@@ -1,0 +1,26 @@
+
+# Archivos temporales de Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Archivos generados por .NET
+**/bin/
+**/obj/
+
+# Archivos de desarrollo local
+*.rsuser
+*.cache
+TestResults/
+
+# Archivos de configuracion local
+appsettings.Development.json
+
+# Archivos de bases de datos locales
+*.mdf
+*.ldf
+
+# Archivos de registro
+*.log
