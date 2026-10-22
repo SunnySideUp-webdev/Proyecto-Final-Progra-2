@@ -42,6 +42,8 @@
     <Compile Include="ClsReporteLNFP.cs" />
     <!-- Módulo 3: Inventario (parte de Pavel) -->
     <Compile Include="ClsRepuestoLNPP.cs" />
+    <!-- Repuestos utilizados en órdenes (parte de Sharon) -->
+    <Compile Include="ClsRepuestoOrdenLNSC.cs" />
     <Compile Include="ClsValidacionExcepcionLN.cs" />
     <Compile Include="ClsVehiculoLNSC.cs" />
     <Compile Include="ClsZonaHorariaLN.cs" />

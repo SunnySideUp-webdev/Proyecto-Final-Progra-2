@@ -42,6 +42,8 @@
     <Compile Include="ClsResumenReportesENFP.cs" />
     <!-- Módulo 3: Inventario (parte de Pavel) -->
     <Compile Include="ClsRepuestoENPP.cs" />
+    <!-- Repuestos utilizados en órdenes (parte de Sharon) -->
+    <Compile Include="ClsRepuestoOrdenENSC.cs" />
     <Compile Include="ClsVehiculoENSC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

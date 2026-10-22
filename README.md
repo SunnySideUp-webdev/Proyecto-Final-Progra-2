@@ -18,24 +18,27 @@ Sistema de gestión para un taller mecánico, desarrollado en **ASP.NET Web Form
 |---|---|---|
 | Módulo 1: Clientes y vehículos | Sharon | `Cls*ClienteSC`, `Cls*VehiculoSC` (entidades, datos y lógica), `CapaPresentacion/Clientes/`, `CapaPresentacion/Vehiculos/`, `Utilidades/ClsFormatoSC.cs`, `database/01_ClientesVehiculosSC.sql`, `database/90_DatosEjemploSC.sql`, `pruebas/` |
 | Módulo 2: Órdenes de reparación | Neider | `ClsOrdenReparacionENT`, `ClsOrdenReparacionDANT`, `ClsOrdenReparacionLNT`, `CapaPresentacion/OrdenesReparacion/`, `database/02_OrdenesReparacionNT.sql` (su tabla, con ajustes de integración) |
+| Módulo 3: Inventario | Pavel | `ClsRepuestoENPP`, `ClsRepuestoDAPP`, `ClsRepuestoLNPP`, `CapaPresentacion/Inventario/`, `database/03_InventarioPP.sql` (su tabla, con ajustes de integración), `database/92_DatosEjemploInventarioPP.sql`. Explicación completa en [docs/MODULO_INVENTARIO.md](docs/MODULO_INVENTARIO.md) |
 | Módulo 4: Reportes | Fátima | `ClsReporteOrdenENFP`, `ClsResumenReportesENFP`, `ClsReporteDAFP`, `ClsReporteLNFP`, `CapaPresentacion/Reportes/`, `database/91_DatosEjemploReportesFP.sql`. Explicación completa en [docs/MODULO_REPORTES.md](docs/MODULO_REPORTES.md) |
+| Repuestos utilizados en órdenes (une órdenes e inventario) | Sharon | `ClsRepuestoOrdenENSC`, `ClsRepuestoOrdenDASC`, `ClsRepuestoOrdenLNSC`, `CapaPresentacion/OrdenesReparacion/RepuestosOrdenSC.aspx`, `database/04_RepuestosOrdenSC.sql`, `database/93_DatosEjemploRepuestosOrdenSC.sql`, `pruebas/sql/PruebasInventarioRepuestosSC.sql` |
 | Base común del sitio | Sharon | `Site.Master`, `Default.aspx`, `Error.html`, `Web.config`, `Content/autodms.css`, `Scripts/autodms.js`, `ClsConexionDA`, `ClsSqlDA`, `ClsDatoDuplicadoExcepcionDA`, `ClsValidacionExcepcionLN`, `ClsZonaHorariaLN`, `ClsRegistroErrores`, `scripts/`, `compose.yaml` |
 
-En los archivos compartidos (`.csproj` y `Site.Master.cs`) las líneas de Neider están marcadas con
-comentarios que dicen «parte de Neider» (o «Inicio / Fin de la parte de Neider» cuando son varias).
-Los archivos del módulo 2 llevan su encabezado, y los cambios que se hicieron en ellos al integrarlo
-tienen el comentario «Ajuste de integración (Sharon)».
+En los archivos compartidos (`.csproj` y `Site.Master.cs`) las líneas de cada integrante están marcadas
+con comentarios como «parte de Neider», «parte de Pavel» o «parte de Fátima» (o «Inicio / Fin de la parte
+de Neider» cuando son varias). Los archivos de cada módulo llevan el encabezado de su autor, y los cambios
+hechos en un módulo ajeno al integrarlo tienen el comentario «Ajuste de integración (Sharon)», como el
+botón «Repuestos utilizados» del detalle de la orden.
 
 ## Estructura de la solución
 
 ```
 TallerMecanico.sln
-├── CapaEntidades/        Clases que viajan entre capas (ClsClienteENSC, ClsVehiculoENSC, ClsOrdenReparacionENT, ClsReporte*ENFP)
-├── CapaDatos/            Acceso a SQL Server con consultas parametrizadas (ClsConexionDA, Cls*DASC, ClsOrdenReparacionDANT, ClsReporteDAFP)
-├── CapaLogica/           Reglas de negocio y validaciones (Cls*LNSC, ClsOrdenReparacionLNT, ClsReporteLNFP, ClsZonaHorariaLN)
-├── CapaPresentacion/     Sitio Web Forms: Site.Master, Default.aspx, Clientes/, Vehiculos/, OrdenesReparacion/, Reportes/, Error.html
+├── CapaEntidades/        Clases que viajan entre capas (Cls*ENSC, ClsOrdenReparacionENT, ClsRepuestoENPP, Cls*ENFP)
+├── CapaDatos/            Acceso a SQL Server con consultas parametrizadas (ClsConexionDA, Cls*DASC, ClsOrdenReparacionDANT, ClsRepuestoDAPP, ClsReporteDAFP)
+├── CapaLogica/           Reglas de negocio y validaciones (Cls*LNSC, ClsOrdenReparacionLNT, ClsRepuestoLNPP, ClsReporteLNFP, ClsZonaHorariaLN)
+├── CapaPresentacion/     Sitio Web Forms: Site.Master, Default.aspx, Clientes/, Vehiculos/, OrdenesReparacion/, Inventario/, Reportes/, Error.html
 ├── database/             Scripts SQL numerados y CONVENCIONES_BD.md
-├── docs/                 Guías de los módulos (por ejemplo, MODULO_REPORTES.md)
+├── docs/                 Guías de los módulos (MODULO_INVENTARIO.md y MODULO_REPORTES.md)
 ├── pruebas/              Pruebas de capas (consola), de SQL y de conexión
 ├── scripts/              Configuración local e inicio del sitio en macOS
 └── compose.yaml          SQL Server 2022 Express en Docker
@@ -112,22 +115,22 @@ TallerMecanico.sln
 - Los scripts de `database/` se numeran (`01_`, `02_`, …) y se pueden ejecutar varias veces sin duplicar nada. Docker ejecuta solo los archivos que empiezan con dos dígitos.
 - `90_DatosEjemploSC.sql` agrega clientes y vehículos **ficticios** de ejemplo. No usa identificadores fijos, así que se puede ejecutar sobre cualquier base, también sobre una que ya tenga datos. Nunca subas datos reales de personas al repositorio.
 - `91_DatosEjemploReportesFP.sql` agrega órdenes de reparación **ficticias** sobre esos vehículos (buscándolos por VIN), para que los reportes muestren información.
+- `03_InventarioPP.sql` crea la tabla de repuestos y `04_RepuestosOrdenSC.sql`, la de repuestos utilizados en cada orden. `92_DatosEjemploInventarioPP.sql` agrega repuestos **ficticios** y `93_DatosEjemploRepuestosOrdenSC.sql` registra su uso en las órdenes de ejemplo, descontando el stock.
 - Las fechas se guardan en UTC (`SYSUTCDATETIME()`) y se muestran en hora de Guatemala con `CapaLogica/ClsZonaHorariaLN`.
 - Las reglas para nuevas tablas (claves foráneas por `VIN`, nombres de restricciones, etc.) están en [database/CONVENCIONES_BD.md](database/CONVENCIONES_BD.md).
 
 ## Pruebas
 
 - **Capas (consola):** compila `pruebas/PruebaCapas/PruebaCapas.csproj` y ejecuta `PruebaCapas.exe` (en macOS: `mono pruebas/PruebaCapas/bin/Debug/PruebaCapas.exe`). Necesita su propio `ConnectionStrings.config`, que en macOS crea el script de configuración y en Windows se copia desde la plantilla `.example` de esa carpeta.
-- **SQL:** ejecuta `pruebas/sql/PruebasClientesVehiculosSC.sql` sobre `AutoManagerDMS` con `sqlcmd -I` o SSMS. Todo ocurre dentro de una transacción que se deshace: no deja datos.
+- **SQL:** ejecuta `pruebas/sql/PruebasClientesVehiculosSC.sql` y `pruebas/sql/PruebasInventarioRepuestosSC.sql` sobre `AutoManagerDMS` con `sqlcmd -I` o SSMS. Todo ocurre dentro de una transacción que se deshace: no deja datos.
 - **Conexión:** `pruebas/PruebaConexionSQL` es un sitio mínimo que solo comprueba la conexión a `TallerMecanicoDB`.
 
 ## Cómo integrar un módulo nuevo
 
-- Crea la página principal en su carpeta de `CapaPresentacion` usando `MasterPageFile="~/Site.Master"`. El menú muestra un módulo automáticamente en cuanto su página existe (las rutas están en `Site.Master.cs`):
-  `OrdenesReparacion/OrdenesNT.aspx` y `Reportes/Reportes.aspx` (ya integrados), `Inventario/Inventario.aspx`.
+- Crea la página principal en su carpeta de `CapaPresentacion` usando `MasterPageFile="~/Site.Master"`. El menú muestra un módulo automáticamente en cuanto su página existe (las rutas están en `Site.Master.cs`); los cuatro módulos ya están integrados.
 - Obtén las conexiones con `CapaDatos.ClsConexionDA.fncObtenerConexion()` y usa siempre parámetros (`SqlCommand.Parameters`), nunca texto concatenado.
 - Para relacionar con vehículos usa el `VIN`, que es obligatorio y único como la placa: llave foránea a `dbo.Vehiculos (VIN)` con `ON UPDATE CASCADE` (las órdenes usan `(IdVehiculo, VIN)`; ver `CONVENCIONES_BD.md`). `ClsVehiculoLNSC` ya permite obtener un vehículo, listar los de un cliente y buscar por placa o VIN.
-- Agrega tus tablas en un script numerado nuevo (`01_` clientes y vehículos y `02_` órdenes ya existen; por ejemplo `database/03_InventarioPP.sql`).
+- Agrega tus tablas en un script numerado nuevo (ya existen `01_` clientes y vehículos, `02_` órdenes, `03_` inventario y `04_` repuestos por orden; el siguiente sería `05_`).
 - Convención de nombres del curso: clases `Cls<Entidad><EN|LN|DA><Iniciales>`, métodos `fnc…`, variables `l<Tipo>…` y parámetros `p<Tipo>…`.
 
 ## Seguridad y archivos locales
