@@ -40,6 +40,8 @@
     <Compile Include="ClsOrdenReparacionLNT.cs" />
     <!-- Módulo 4: Reportes (parte de Fátima) -->
     <Compile Include="ClsReporteLNFP.cs" />
+    <!-- Módulo 3: Inventario (parte de Pavel) -->
+    <Compile Include="ClsRepuestoLNPP.cs" />
     <Compile Include="ClsValidacionExcepcionLN.cs" />
     <Compile Include="ClsVehiculoLNSC.cs" />
     <Compile Include="ClsZonaHorariaLN.cs" />

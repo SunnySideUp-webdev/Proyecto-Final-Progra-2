@@ -40,6 +40,8 @@
     <!-- Módulo 4: Reportes (parte de Fátima) -->
     <Compile Include="ClsReporteOrdenENFP.cs" />
     <Compile Include="ClsResumenReportesENFP.cs" />
+    <!-- Módulo 3: Inventario (parte de Pavel) -->
+    <Compile Include="ClsRepuestoENPP.cs" />
     <Compile Include="ClsVehiculoENSC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

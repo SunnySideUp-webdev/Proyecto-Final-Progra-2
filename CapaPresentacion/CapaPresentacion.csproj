@@ -55,6 +55,9 @@
     <!-- Fin de la parte de Neider -->
     <!-- Módulo 4: Reportes (parte de Fátima) -->
     <Content Include="Reportes\Reportes.aspx" />
+    <!-- Módulo 3: Inventario (parte de Pavel) -->
+    <Content Include="Inventario\Inventario.aspx" />
+    <Content Include="Inventario\RegistroRepuesto.aspx" />
     <Content Include="Web.config" />
     <!-- Agregado por Neider: archivo local de conexión (tiene la contraseña local; Git lo ignora y no se sube). -->
     <None Include="ConnectionStrings.config" />
@@ -149,6 +152,21 @@
     </Compile>
     <Compile Include="Reportes\Reportes.aspx.designer.cs">
       <DependentUpon>Reportes.aspx</DependentUpon>
+    </Compile>
+    <!-- Módulo 3: Inventario (parte de Pavel) -->
+    <Compile Include="Inventario\Inventario.aspx.cs">
+      <DependentUpon>Inventario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Inventario\Inventario.aspx.designer.cs">
+      <DependentUpon>Inventario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Inventario\RegistroRepuesto.aspx.cs">
+      <DependentUpon>RegistroRepuesto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Inventario\RegistroRepuesto.aspx.designer.cs">
+      <DependentUpon>RegistroRepuesto.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">

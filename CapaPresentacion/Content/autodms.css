@@ -1032,6 +1032,30 @@ body.adms-body {
     font-weight: 600;
 }
 
+/* ---------- Inventario (módulo de Pavel) ---------- */
+/* Unidades en bodega; en rojo cuando no quedan. */
+.adms-stock {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.adms-stock-agotado {
+    color: var(--adms-error);
+    font-weight: 600;
+}
+
+/* Ventana de entrada a bodega: la dibuja el servidor ya abierta (sin JavaScript),
+   por eso se muestra con d-block y su fondo oscuro se agrega en la misma página. */
+.adms-modal-servidor {
+    overflow-y: auto;
+}
+
+.adms-modal-servidor .modal-content {
+    border: 0;
+    border-radius: var(--adms-radio);
+    box-shadow: var(--adms-sombra-media);
+}
+
 /* ---------- Mensajes ---------- */
 .adms-alerta {
     display: flex;
