@@ -12,6 +12,8 @@ namespace CapaPresentacion.Reportes
         protected global::System.Web.UI.WebControls.HyperLink lnkAbiertasFP;
         protected global::System.Web.UI.WebControls.HyperLink lnkCerradasFP;
         protected global::System.Web.UI.WebControls.HyperLink lnkHistorialFP;
+        protected global::System.Web.UI.WebControls.HyperLink lnkExistenciasFP;
+        protected global::System.Web.UI.WebControls.HyperLink lnkRepuestosFP;
 
         protected global::System.Web.UI.WebControls.Panel pnlResumenFP;
         protected global::System.Web.UI.WebControls.Literal litAbiertasFP;
@@ -25,8 +27,9 @@ namespace CapaPresentacion.Reportes
         protected global::System.Web.UI.WebControls.Repeater rptAbiertasFP;
         protected global::System.Web.UI.WebControls.Panel pnlSinAbiertasFP;
 
-        protected global::System.Web.UI.WebControls.Panel pnlCerradasFP;
+        protected global::System.Web.UI.WebControls.Panel pnlFiltroFP;
         protected global::System.Web.UI.WebControls.Panel pnlFiltroFechasFP;
+        protected global::System.Web.UI.WebControls.Panel pnlCerradasFP;
         protected global::System.Web.UI.WebControls.Label errDesdeFP;
         protected global::System.Web.UI.WebControls.Label errHastaFP;
         protected global::System.Web.UI.WebControls.Button btnFiltrarFP;
@@ -35,6 +38,18 @@ namespace CapaPresentacion.Reportes
         protected global::System.Web.UI.WebControls.Literal litTotalCerradasFP;
         protected global::System.Web.UI.WebControls.Repeater rptCerradasFP;
         protected global::System.Web.UI.WebControls.Panel pnlSinCerradasFP;
+
+        protected global::System.Web.UI.WebControls.Panel pnlRepuestosFP;
+        protected global::System.Web.UI.WebControls.Literal litRangoRepuestosFP;
+        protected global::System.Web.UI.WebControls.Literal litTotalRepuestosFP;
+        protected global::System.Web.UI.WebControls.Repeater rptRepuestosFP;
+        protected global::System.Web.UI.WebControls.Panel pnlSinRepuestosFP;
+
+        protected global::System.Web.UI.WebControls.Panel pnlExistenciasFP;
+        protected global::System.Web.UI.WebControls.Literal litResumenExistenciasFP;
+        protected global::System.Web.UI.WebControls.Literal litTotalExistenciasFP;
+        protected global::System.Web.UI.WebControls.Repeater rptExistenciasFP;
+        protected global::System.Web.UI.WebControls.Panel pnlSinExistenciasFP;
 
         protected global::System.Web.UI.WebControls.Panel pnlHistorialFP;
         protected global::System.Web.UI.WebControls.Panel pnlBuscarClienteFP;

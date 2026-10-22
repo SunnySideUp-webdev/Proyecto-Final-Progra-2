@@ -32,6 +32,12 @@
         <asp:HyperLink ID="lnkHistorialFP" runat="server" NavigateUrl="~/Reportes/Reportes.aspx?seccion=historial">
             <i class="bi bi-person-lines-fill" aria-hidden="true"></i>Historial por cliente
         </asp:HyperLink>
+        <asp:HyperLink ID="lnkExistenciasFP" runat="server" NavigateUrl="~/Reportes/Reportes.aspx?seccion=existencias">
+            <i class="bi bi-box-seam" aria-hidden="true"></i>Existencias
+        </asp:HyperLink>
+        <asp:HyperLink ID="lnkRepuestosFP" runat="server" NavigateUrl="~/Reportes/Reportes.aspx?seccion=repuestos">
+            <i class="bi bi-tools" aria-hidden="true"></i>Repuestos utilizados
+        </asp:HyperLink>
     </nav>
 
     <%-- ===================== Resumen ===================== --%>
@@ -151,35 +157,37 @@
         </asp:Panel>
     </asp:Panel>
 
+    <%-- ===================== Filtro de fechas ===================== --%>
+    <%-- Lo comparten «Órdenes cerradas» y «Repuestos utilizados»; «Filtrar» vuelve a la sección actual. --%>
+    <asp:Panel ID="pnlFiltroFP" runat="server" CssClass="adms-card mb-4 adms-no-imprimir" Visible="false">
+        <div class="adms-card-cuerpo">
+            <asp:Panel ID="pnlFiltroFechasFP" runat="server" DefaultButton="btnFiltrarFP" CssClass="row g-3 align-items-start">
+                <%-- Campos de fecha HTML (type="date"): el navegador muestra un calendario y envía
+                     la fecha como año-mes-día. Se usan inputs normales porque el TextBox con
+                     TextMode="Date" no se dibuja bien en Mono. Los valores se codifican al mostrarse. --%>
+                <div class="col-sm-6 col-lg-4">
+                    <label for="txtDesdeFP" class="form-label"><%= FncCodificarFP(gStrEtiquetaDesdeFP) %></label>
+                    <input type="date" id="txtDesdeFP" name="desde" class="<%= gStrClaseDesdeFP %>"
+                        value="<%= FncCodificarFP(gStrDesdeFP) %>" aria-describedby="errDesdeFP" />
+                    <asp:Label ID="errDesdeFP" runat="server" CssClass="invalid-feedback d-block" Visible="false" />
+                </div>
+                <div class="col-sm-6 col-lg-4">
+                    <label for="txtHastaFP" class="form-label">Hasta</label>
+                    <input type="date" id="txtHastaFP" name="hasta" class="<%= gStrClaseHastaFP %>"
+                        value="<%= FncCodificarFP(gStrHastaFP) %>" aria-describedby="errHastaFP" />
+                    <asp:Label ID="errHastaFP" runat="server" CssClass="invalid-feedback d-block" Visible="false" />
+                </div>
+                <div class="col-lg-auto d-flex gap-2 adms-busqueda-botones">
+                    <asp:Button ID="btnFiltrarFP" runat="server" Text="Filtrar" CssClass="btn btn-primary px-4"
+                        OnClick="btnFiltrarFP_Click" data-adms-procesando="Filtrando…" />
+                    <a class="btn btn-light" href="Reportes.aspx?seccion=<%= gStrSeccionFP %>">Mes actual</a>
+                </div>
+            </asp:Panel>
+        </div>
+    </asp:Panel>
+
     <%-- ===================== Órdenes cerradas ===================== --%>
     <asp:Panel ID="pnlCerradasFP" runat="server" Visible="false">
-        <div class="adms-card mb-4 adms-no-imprimir">
-            <div class="adms-card-cuerpo">
-                <asp:Panel ID="pnlFiltroFechasFP" runat="server" DefaultButton="btnFiltrarFP" CssClass="row g-3 align-items-start">
-                    <%-- Campos de fecha HTML (type="date"): el navegador muestra un calendario y envía
-                         la fecha como año-mes-día. Se usan inputs normales porque el TextBox con
-                         TextMode="Date" no se dibuja bien en Mono. Los valores se codifican al mostrarse. --%>
-                    <div class="col-sm-6 col-lg-4">
-                        <label for="txtDesdeFP" class="form-label">Cerradas desde</label>
-                        <input type="date" id="txtDesdeFP" name="desde" class="<%= gStrClaseDesdeFP %>"
-                            value="<%= FncCodificarFP(gStrDesdeFP) %>" aria-describedby="errDesdeFP" />
-                        <asp:Label ID="errDesdeFP" runat="server" CssClass="invalid-feedback d-block" Visible="false" />
-                    </div>
-                    <div class="col-sm-6 col-lg-4">
-                        <label for="txtHastaFP" class="form-label">Hasta</label>
-                        <input type="date" id="txtHastaFP" name="hasta" class="<%= gStrClaseHastaFP %>"
-                            value="<%= FncCodificarFP(gStrHastaFP) %>" aria-describedby="errHastaFP" />
-                        <asp:Label ID="errHastaFP" runat="server" CssClass="invalid-feedback d-block" Visible="false" />
-                    </div>
-                    <div class="col-lg-auto d-flex gap-2 adms-busqueda-botones">
-                        <asp:Button ID="btnFiltrarFP" runat="server" Text="Filtrar" CssClass="btn btn-primary px-4"
-                            OnClick="btnFiltrarFP_Click" data-adms-procesando="Filtrando…" />
-                        <a class="btn btn-light" href="Reportes.aspx?seccion=cerradas">Mes actual</a>
-                    </div>
-                </asp:Panel>
-            </div>
-        </div>
-
         <asp:Panel ID="pnlResultadoCerradasFP" runat="server" CssClass="adms-card adms-card-tabla">
             <div class="adms-card-encabezado">
                 <div>
@@ -247,6 +255,118 @@
                 <p class="adms-vacio-titulo">No se cerraron órdenes en estas fechas</p>
                 <p class="adms-vacio-texto">Prueba con un rango de fechas más amplio.</p>
             </asp:Panel>
+        </asp:Panel>
+    </asp:Panel>
+
+    <%-- ===================== Repuestos utilizados ===================== --%>
+    <asp:Panel ID="pnlRepuestosFP" runat="server" CssClass="adms-card adms-card-tabla" Visible="false">
+        <div class="adms-card-encabezado">
+            <div>
+                <h2 class="adms-card-titulo">Repuestos utilizados</h2>
+                <p class="adms-card-subtitulo"><asp:Literal ID="litRangoRepuestosFP" runat="server" Mode="Encode" /></p>
+            </div>
+            <span class="adms-contador"><asp:Literal ID="litTotalRepuestosFP" runat="server" Mode="Encode" /></span>
+        </div>
+
+        <asp:Repeater ID="rptRepuestosFP" runat="server">
+            <HeaderTemplate>
+                <div class="table-responsive">
+                    <table class="table table-hover adms-tabla">
+                        <thead>
+                            <tr>
+                                <th scope="col">Repuesto</th>
+                                <th scope="col">Unidades</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Órdenes</th>
+                                <th scope="col" class="d-none d-lg-table-cell">Último uso</th>
+                                <th scope="col" class="d-none d-md-table-cell">Stock actual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            </HeaderTemplate>
+            <ItemTemplate>
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold"><%# FncCodificarFP(Eval("lStrNombreFP")) %></div>
+                                    <div class="adms-persona-detalle adms-numero"><%# FncCodificarFP(Eval("lStrCodigoFP")) %></div>
+                                </td>
+                                <td class="adms-numero fw-semibold"><%# Eval("lIntUnidadesFP") %></td>
+                                <td class="d-none d-sm-table-cell adms-numero"><%# Eval("lIntOrdenesFP") %></td>
+                                <td class="d-none d-lg-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatUltimoUsoUtcFP"))) %></td>
+                                <td class="d-none d-md-table-cell adms-numero"><%# Eval("lIntStockActualFP") %></td>
+                            </tr>
+            </ItemTemplate>
+            <FooterTemplate>
+                        </tbody>
+                    </table>
+                </div>
+            </FooterTemplate>
+        </asp:Repeater>
+
+        <asp:Panel ID="pnlSinRepuestosFP" runat="server" CssClass="adms-vacio" Visible="false">
+            <span class="adms-vacio-icono" aria-hidden="true"><i class="bi bi-tools"></i></span>
+            <p class="adms-vacio-titulo">No se utilizaron repuestos en estas fechas</p>
+            <p class="adms-vacio-texto">Prueba con un rango de fechas más amplio.</p>
+        </asp:Panel>
+    </asp:Panel>
+
+    <%-- ===================== Existencias ===================== --%>
+    <asp:Panel ID="pnlExistenciasFP" runat="server" CssClass="adms-card adms-card-tabla" Visible="false">
+        <div class="adms-card-encabezado">
+            <div>
+                <h2 class="adms-card-titulo">Existencias de repuestos</h2>
+                <p class="adms-card-subtitulo"><asp:Literal ID="litResumenExistenciasFP" runat="server" Mode="Encode" /></p>
+            </div>
+            <span class="adms-contador"><asp:Literal ID="litTotalExistenciasFP" runat="server" Mode="Encode" /></span>
+        </div>
+
+        <asp:Repeater ID="rptExistenciasFP" runat="server">
+            <HeaderTemplate>
+                <div class="table-responsive">
+                    <table class="table table-hover adms-tabla">
+                        <thead>
+                            <tr>
+                                <th scope="col">Repuesto</th>
+                                <th scope="col" class="d-none d-md-table-cell">Vehículo compatible</th>
+                                <th scope="col">Stock</th>
+                                <th scope="col" class="d-none d-sm-table-cell">Nivel</th>
+                                <th scope="col" class="d-none d-lg-table-cell">Usadas en órdenes</th>
+                                <th scope="col" class="text-end adms-no-imprimir"><span class="visually-hidden">Acciones</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            </HeaderTemplate>
+            <ItemTemplate>
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold"><%# FncCodificarFP(Eval("lStrNombreFP")) %></div>
+                                    <div class="adms-persona-detalle adms-numero"><%# FncCodificarFP(Eval("lStrCodigoFP")) %></div>
+                                </td>
+                                <td class="d-none d-md-table-cell"><%# FncCodificarFP(Eval("lStrVehiculoFP")) %></td>
+                                <td class="adms-numero fw-semibold">
+                                    <%# Eval("lIntStockFP") %>
+                                    <%-- En teléfonos la columna «Nivel» se oculta: el nivel se muestra aquí. --%>
+                                    <div class="d-sm-none"><span class='<%# FncClaseNivelStockFP((string)Eval("lStrNivelStockFP")) %>'><%# FncCodificarFP(Eval("lStrNivelStockFP")) %></span></div>
+                                </td>
+                                <td class="d-none d-sm-table-cell"><span class='<%# FncClaseNivelStockFP((string)Eval("lStrNivelStockFP")) %>'><%# FncCodificarFP(Eval("lStrNivelStockFP")) %></span></td>
+                                <td class="d-none d-lg-table-cell adms-numero"><%# Eval("lIntUnidadesUsadasFP") %></td>
+                                <td class="text-end adms-no-imprimir">
+                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='../Inventario/Inventario.aspx?q=<%# FncCodificarFP(HttpUtility.UrlEncode((string)Eval("lStrCodigoFP"))) %>' title="Ver en el inventario">
+                                        <i class="bi bi-box-seam" aria-hidden="true"></i><span class="visually-hidden">Ver en el inventario</span>
+                                    </a>
+                                </td>
+                            </tr>
+            </ItemTemplate>
+            <FooterTemplate>
+                        </tbody>
+                    </table>
+                </div>
+            </FooterTemplate>
+        </asp:Repeater>
+
+        <asp:Panel ID="pnlSinExistenciasFP" runat="server" CssClass="adms-vacio" Visible="false">
+            <span class="adms-vacio-icono" aria-hidden="true"><i class="bi bi-box-seam"></i></span>
+            <p class="adms-vacio-titulo">Todavía no hay repuestos en el inventario</p>
+            <p class="adms-vacio-texto">Cuando se registren repuestos en el módulo de inventario, aparecerán aquí.</p>
         </asp:Panel>
     </asp:Panel>
 

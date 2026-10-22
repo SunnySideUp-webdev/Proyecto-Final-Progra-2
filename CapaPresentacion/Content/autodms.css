@@ -1032,6 +1032,22 @@ body.adms-body {
     font-weight: 600;
 }
 
+/* Nivel de stock en el reporte de existencias (se usa junto con .adms-estado). */
+.adms-nivel-agotado {
+    background-color: var(--adms-error-suave);
+    color: var(--adms-error);
+}
+
+.adms-nivel-bajo {
+    background-color: var(--adms-advertencia-suave);
+    color: var(--adms-advertencia);
+}
+
+.adms-nivel-disponible {
+    background-color: var(--adms-exito-suave);
+    color: var(--adms-exito);
+}
+
 /* ---------- Inventario (módulo de Pavel) ---------- */
 /* Unidades en bodega; en rojo cuando no quedan. */
 .adms-stock {
