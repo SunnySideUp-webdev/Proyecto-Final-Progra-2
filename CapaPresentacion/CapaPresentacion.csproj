@@ -208,7 +208,7 @@
       <DependentUpon>Vehiculos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Utilidades\ClsFormatoSC.cs" />
-    <Compile Include="Utilidades\ClsRegistroErrores.cs" />
+    <Compile Include="Utilidades\ClsRegistroErroresSC.cs" />
   </ItemGroup>
   <ItemGroup>
     <!-- Agregado por Neider al integrar su módulo (las páginas no usan CapaDatos directamente). -->

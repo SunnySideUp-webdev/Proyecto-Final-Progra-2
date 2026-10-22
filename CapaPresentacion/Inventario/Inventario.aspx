@@ -68,20 +68,20 @@
                             <tr>
                                 <td>
                                     <div class="adms-persona">
-                                        <span class="adms-avatar d-none d-sm-inline-flex" aria-hidden="true"><%# FncCodificarPP(FncInicialesPP((string)Eval("lStrNombrePP"))) %></span>
+                                        <span class="adms-avatar d-none d-sm-inline-flex" aria-hidden="true"><%# FncCodificarPP(FncInicialesPP((string)Eval("gStrNombrePP"))) %></span>
                                         <div class="adms-persona-texto">
-                                            <div class="fw-semibold"><%# FncCodificarPP(Eval("lStrNombrePP")) %></div>
-                                            <div class="adms-persona-detalle"><%# FncCodificarPP(Eval("lStrMarcaCarroPP") + " " + Eval("lStrModeloCarroPP") + " (" + Eval("lIntAnioCarroPP") + ")") %></div>
+                                            <div class="fw-semibold"><%# FncCodificarPP(Eval("gStrNombrePP")) %></div>
+                                            <div class="adms-persona-detalle"><%# FncCodificarPP(Eval("gStrMarcaCarroPP") + " " + Eval("gStrModeloCarroPP") + " (" + Eval("gIntAnioCarroPP") + ")") %></div>
                                             <%-- En pantallas pequeñas la columna «Código» se oculta: el código se muestra aquí. --%>
-                                            <div class="adms-persona-detalle adms-numero d-md-none"><%# FncCodificarPP(Eval("lStrCodigoPP")) %></div>
+                                            <div class="adms-persona-detalle adms-numero d-md-none"><%# FncCodificarPP(Eval("gStrCodigoPP")) %></div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="d-none d-md-table-cell adms-numero fw-semibold"><%# FncCodificarPP(Eval("lStrCodigoPP")) %></td>
-                                <td class="d-none d-xl-table-cell text-secondary"><%# FncCodificarPP(Eval("lStrDescripcionPP")) %></td>
-                                <td><span class='<%# FncClaseStockPP((int)Eval("lIntStockPP")) %>'><%# FncCodificarPP(FncTextoStockPP((int)Eval("lIntStockPP"))) %></span></td>
+                                <td class="d-none d-md-table-cell adms-numero fw-semibold"><%# FncCodificarPP(Eval("gStrCodigoPP")) %></td>
+                                <td class="d-none d-xl-table-cell text-secondary"><%# FncCodificarPP(Eval("gStrDescripcionPP")) %></td>
+                                <td><span class='<%# FncClaseStockPP((int)Eval("gIntStockPP")) %>'><%# FncCodificarPP(FncTextoStockPP((int)Eval("gIntStockPP"))) %></span></td>
                                 <td class="text-end">
-                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='<%# FncCodificarPP(FncUrlEntradaPP((int)Eval("lIntIdRepuestoPP"))) %>' title="Registrar entrada">
+                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='<%# FncCodificarPP(FncUrlEntradaPP((int)Eval("gIntIdRepuestoPP"))) %>' title="Registrar entrada">
                                         <i class="bi bi-box-arrow-in-down" aria-hidden="true"></i><span class="visually-hidden d-xl-none">Registrar entrada</span><span class="d-none d-xl-inline ms-1">Registrar entrada</span>
                                     </a>
                                 </td>
@@ -123,7 +123,7 @@
                         <label for="txtCantidadPP" class="form-label">Unidades que ingresan <span class="adms-requerido" aria-hidden="true">*</span></label>
                         <asp:TextBox ID="txtCantidadPP" runat="server" CssClass="form-control adms-numero" MaxLength="4"
                             inputmode="numeric" autocomplete="off" autofocus="autofocus" required="required" aria-describedby="ayudaCantidadPP errCantidadPP" />
-                        <div id="ayudaCantidadPP" class="form-text">Número entero entre 1 y <%= ClsRepuestoLNPP.lIntEntradaMaximaPP.ToString("N0") %>.</div>
+                        <div id="ayudaCantidadPP" class="form-text">Número entero entre 1 y <%= ClsRepuestoLNPP.gIntEntradaMaximaPP.ToString("N0") %>.</div>
                         <asp:Label ID="errCantidadPP" runat="server" CssClass="invalid-feedback d-block" Visible="false" />
                     </div>
                     <div class="modal-footer">

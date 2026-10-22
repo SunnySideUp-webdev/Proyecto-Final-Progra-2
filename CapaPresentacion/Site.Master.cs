@@ -13,7 +13,7 @@ using System.Web.UI;
 namespace CapaPresentacion
 {
     /// <summary>Tipos de mensaje que la página maestra puede mostrar.</summary>
-    public enum TipoAlerta
+    public enum TipoAlertaSC
     {
         Exito,
         Error,
@@ -24,17 +24,17 @@ namespace CapaPresentacion
     /// <summary>
     /// Página maestra compartida: barra lateral, encabezado, mensajes y estructura común.
     /// </summary>
-    public partial class SiteMaster : MasterPage
+    public partial class webSiteMasterSC : MasterPage
     {
         /// <summary>Elemento del menú principal.</summary>
-        public class ClsElementoMenu
+        public class ClsElementoMenuSC
         {
-            public string lStrTexto { get; set; }
-            public string lStrDescripcion { get; set; }
-            public string lStrUrl { get; set; }
-            public string lStrIcono { get; set; }
-            public string lStrCarpeta { get; set; }
-            public bool lBlnActivo { get; set; }
+            public string gStrTextoSC { get; set; }
+            public string gStrDescripcionSC { get; set; }
+            public string gStrUrlSC { get; set; }
+            public string gStrIconoSC { get; set; }
+            public string gStrCarpetaSC { get; set; }
+            public bool gBlnActivoSC { get; set; }
         }
 
         /// <summary>
@@ -42,49 +42,49 @@ namespace CapaPresentacion
         /// en el proyecto, así nunca se muestran enlaces a secciones sin desarrollar.
         /// Cada integrante puede ajustar aquí la ruta de su página principal.
         /// </summary>
-        private static readonly ClsElementoMenu[] lArrModulos =
+        private static readonly ClsElementoMenuSC[] gArrModulosSC =
         {
-            new ClsElementoMenu { lStrTexto = "Inicio", lStrDescripcion = "Resumen del taller",
-                lStrUrl = "~/Default.aspx", lStrIcono = "bi-grid-1x2", lStrCarpeta = "~/Default.aspx" },
-            new ClsElementoMenu { lStrTexto = "Clientes", lStrDescripcion = "Registro y consulta de clientes",
-                lStrUrl = "~/Clientes/Clientes.aspx", lStrIcono = "bi-people", lStrCarpeta = "~/Clientes/" },
-            new ClsElementoMenu { lStrTexto = "Vehículos", lStrDescripcion = "Vehículos de cada cliente",
-                lStrUrl = "~/Vehiculos/Vehiculos.aspx", lStrIcono = "bi-car-front", lStrCarpeta = "~/Vehiculos/" },
+            new ClsElementoMenuSC { gStrTextoSC = "Inicio", gStrDescripcionSC = "Resumen del taller",
+                gStrUrlSC = "~/Default.aspx", gStrIconoSC = "bi-grid-1x2", gStrCarpetaSC = "~/Default.aspx" },
+            new ClsElementoMenuSC { gStrTextoSC = "Clientes", gStrDescripcionSC = "Registro y consulta de clientes",
+                gStrUrlSC = "~/Clientes/Clientes.aspx", gStrIconoSC = "bi-people", gStrCarpetaSC = "~/Clientes/" },
+            new ClsElementoMenuSC { gStrTextoSC = "Vehículos", gStrDescripcionSC = "Vehículos de cada cliente",
+                gStrUrlSC = "~/Vehiculos/Vehiculos.aspx", gStrIconoSC = "bi-car-front", gStrCarpetaSC = "~/Vehiculos/" },
             // Módulo 2 (parte de Neider): ruta de su página principal.
-            new ClsElementoMenu { lStrTexto = "Órdenes de reparación", lStrDescripcion = "Seguimiento de reparaciones",
-                lStrUrl = "~/OrdenesReparacion/OrdenesNT.aspx", lStrIcono = "bi-clipboard-check", lStrCarpeta = "~/OrdenesReparacion/" },
-            new ClsElementoMenu { lStrTexto = "Inventario", lStrDescripcion = "Control de repuestos",
-                lStrUrl = "~/Inventario/Inventario.aspx", lStrIcono = "bi-box-seam", lStrCarpeta = "~/Inventario/" },
-            new ClsElementoMenu { lStrTexto = "Reportes", lStrDescripcion = "Reportes del taller",
-                lStrUrl = "~/Reportes/Reportes.aspx", lStrIcono = "bi-bar-chart-line", lStrCarpeta = "~/Reportes/" }
+            new ClsElementoMenuSC { gStrTextoSC = "Órdenes de reparación", gStrDescripcionSC = "Seguimiento de reparaciones",
+                gStrUrlSC = "~/OrdenesReparacion/OrdenesNT.aspx", gStrIconoSC = "bi-clipboard-check", gStrCarpetaSC = "~/OrdenesReparacion/" },
+            new ClsElementoMenuSC { gStrTextoSC = "Inventario", gStrDescripcionSC = "Control de repuestos",
+                gStrUrlSC = "~/Inventario/Inventario.aspx", gStrIconoSC = "bi-box-seam", gStrCarpetaSC = "~/Inventario/" },
+            new ClsElementoMenuSC { gStrTextoSC = "Reportes", gStrDescripcionSC = "Reportes del taller",
+                gStrUrlSC = "~/Reportes/Reportes.aspx", gStrIconoSC = "bi-bar-chart-line", gStrCarpetaSC = "~/Reportes/" }
         };
 
         /// <summary>Devuelve los módulos cuya página existe, marcando el de la página actual.</summary>
         /// <param name="pObjContexto">Contexto de la solicitud actual.</param>
         /// <returns>Módulos disponibles en el orden del menú.</returns>
-        public static List<ClsElementoMenu> fncObtenerModulosDisponibles(HttpContext pObjContexto)
+        public static List<ClsElementoMenuSC> FncObtenerModulosDisponiblesSC(HttpContext pObjContextoSC)
         {
-            string lStrRutaActual = pObjContexto.Request.AppRelativeCurrentExecutionFilePath ?? string.Empty;
+            string lStrRutaActualSC = pObjContextoSC.Request.AppRelativeCurrentExecutionFilePath ?? string.Empty;
 
-            return lArrModulos
-                .Where(m => File.Exists(pObjContexto.Server.MapPath(m.lStrUrl)))
-                .Select(m => new ClsElementoMenu
+            return gArrModulosSC
+                .Where(pObjModuloSC => File.Exists(pObjContextoSC.Server.MapPath(pObjModuloSC.gStrUrlSC)))
+                .Select(pObjModuloSC => new ClsElementoMenuSC
                 {
-                    lStrTexto = m.lStrTexto,
-                    lStrDescripcion = m.lStrDescripcion,
-                    lStrUrl = m.lStrUrl,
-                    lStrIcono = m.lStrIcono,
-                    lStrCarpeta = m.lStrCarpeta,
-                    lBlnActivo = lStrRutaActual.StartsWith(m.lStrCarpeta, StringComparison.OrdinalIgnoreCase)
+                    gStrTextoSC = pObjModuloSC.gStrTextoSC,
+                    gStrDescripcionSC = pObjModuloSC.gStrDescripcionSC,
+                    gStrUrlSC = pObjModuloSC.gStrUrlSC,
+                    gStrIconoSC = pObjModuloSC.gStrIconoSC,
+                    gStrCarpetaSC = pObjModuloSC.gStrCarpetaSC,
+                    gBlnActivoSC = lStrRutaActualSC.StartsWith(pObjModuloSC.gStrCarpetaSC, StringComparison.OrdinalIgnoreCase)
                 })
                 .ToList();
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            lnkEstilosSitio.Href = fncUrlConVersion("~/Content/autodms.css");
+            lnkEstilosSitio.Href = FncUrlConVersionSC("~/Content/autodms.css");
             lnkMarca.NavigateUrl = "~/Default.aspx";
-            rptModulos.DataSource = fncObtenerModulosDisponibles(Context);
+            rptModulos.DataSource = FncObtenerModulosDisponiblesSC(Context);
             rptModulos.DataBind();
         }
 
@@ -95,10 +95,10 @@ namespace CapaPresentacion
             // El título de cada página se usa en el encabezado y en la pestaña del navegador.
             // litTituloPagina lo codifica (Mode="Encode"); <title> no, por eso se codifica aquí:
             // puede contener datos guardados, como el nombre de un cliente.
-            string lStrTitulo = string.IsNullOrWhiteSpace(Page.Title) ? "AutoManager DMS" : Page.Title;
-            litTituloPagina.Text = lStrTitulo;
+            string lStrTituloSC = string.IsNullOrWhiteSpace(Page.Title) ? "AutoManager DMS" : Page.Title;
+            litTituloPagina.Text = lStrTituloSC;
             Page.Title = HttpUtility.HtmlEncode(
-                lStrTitulo == "AutoManager DMS" ? lStrTitulo : lStrTitulo + " · AutoManager DMS");
+                lStrTituloSC == "AutoManager DMS" ? lStrTituloSC : lStrTituloSC + " · AutoManager DMS");
         }
 
         /// <summary>
@@ -107,43 +107,43 @@ namespace CapaPresentacion
         /// </summary>
         /// <param name="pStrRuta">Ruta relativa a la aplicación, por ejemplo ~/Content/autodms.css.</param>
         /// <returns>Dirección con el parámetro ?v=.</returns>
-        protected string fncUrlConVersion(string pStrRuta)
+        protected string FncUrlConVersionSC(string pStrRutaSC)
         {
-            string lStrRutaFisica = Server.MapPath(pStrRuta);
-            long lLngVersion = File.Exists(lStrRutaFisica) ? File.GetLastWriteTimeUtc(lStrRutaFisica).Ticks : 0;
-            return ResolveUrl(pStrRuta) + "?v=" + lLngVersion;
+            string lStrRutaFisicaSC = Server.MapPath(pStrRutaSC);
+            long lLngVersionSC = File.Exists(lStrRutaFisicaSC) ? File.GetLastWriteTimeUtc(lStrRutaFisicaSC).Ticks : 0;
+            return ResolveUrl(pStrRutaSC) + "?v=" + lLngVersionSC;
         }
 
         /// <summary>Muestra un mensaje en la parte superior del contenido.</summary>
         /// <param name="pEnmTipo">Tipo de mensaje.</param>
         /// <param name="pStrMensaje">Texto para el usuario; se codifica antes de mostrarse.</param>
-        public void fncMostrarAlerta(TipoAlerta pEnmTipo, string pStrMensaje)
+        public void SubMostrarAlertaSC(TipoAlertaSC pEnmTipoSC, string pStrMensajeSC)
         {
-            string lStrClase;
-            string lStrIcono;
-            switch (pEnmTipo)
+            string lStrClaseSC;
+            string lStrIconoSC;
+            switch (pEnmTipoSC)
             {
-                case TipoAlerta.Exito:
-                    lStrClase = "success";
-                    lStrIcono = "bi-check-circle-fill";
+                case TipoAlertaSC.Exito:
+                    lStrClaseSC = "success";
+                    lStrIconoSC = "bi-check-circle-fill";
                     break;
-                case TipoAlerta.Error:
-                    lStrClase = "danger";
-                    lStrIcono = "bi-exclamation-octagon-fill";
+                case TipoAlertaSC.Error:
+                    lStrClaseSC = "danger";
+                    lStrIconoSC = "bi-exclamation-octagon-fill";
                     break;
-                case TipoAlerta.Advertencia:
-                    lStrClase = "warning";
-                    lStrIcono = "bi-exclamation-triangle-fill";
+                case TipoAlertaSC.Advertencia:
+                    lStrClaseSC = "warning";
+                    lStrIconoSC = "bi-exclamation-triangle-fill";
                     break;
                 default:
-                    lStrClase = "info";
-                    lStrIcono = "bi-info-circle-fill";
+                    lStrClaseSC = "info";
+                    lStrIconoSC = "bi-info-circle-fill";
                     break;
             }
 
-            pnlAlerta.CssClass = "alert alert-" + lStrClase + " alert-dismissible fade show adms-alerta";
-            litAlertaIcono.Text = "<i class=\"bi " + lStrIcono + " flex-shrink-0\" aria-hidden=\"true\"></i>";
-            litAlertaMensaje.Text = pStrMensaje;
+            pnlAlerta.CssClass = "alert alert-" + lStrClaseSC + " alert-dismissible fade show adms-alerta";
+            litAlertaIcono.Text = "<i class=\"bi " + lStrIconoSC + " flex-shrink-0\" aria-hidden=\"true\"></i>";
+            litAlertaMensaje.Text = pStrMensajeSC;
             pnlAlerta.Visible = true;
         }
     }

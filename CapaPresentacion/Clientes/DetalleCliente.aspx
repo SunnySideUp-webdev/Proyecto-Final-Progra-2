@@ -114,18 +114,18 @@
                                             <div class="adms-vehiculo">
                                                 <span class="adms-placa">
                                                     <span class="adms-placa-pais" aria-hidden="true">GT</span>
-                                                    <span class="adms-placa-numero"><span class="visually-hidden">Placa </span><%# fncCodificarSC(ClsFormatoSC.fncFormatearPlacaSC((string)Eval("lStrPlacaSC"))) %></span>
+                                                    <span class="adms-placa-numero"><span class="visually-hidden">Placa </span><%# FncCodificarSC(ClsFormatoSC.FncFormatearPlacaSC((string)Eval("gStrPlacaSC"))) %></span>
                                                 </span>
                                                 <div class="adms-persona-texto">
-                                                    <a class="adms-vehiculo-titulo" href='../Vehiculos/DetalleVehiculo.aspx?id=<%# Eval("lIntIdVehiculoSC") %>'><%# fncCodificarSC(Eval("lStrMarcaSC") + " " + Eval("lStrModeloSC")) %></a>
-                                                    <div class="adms-persona-detalle">Año <%# Eval("lIntAnioSC") %></div>
+                                                    <a class="adms-vehiculo-titulo" href='../Vehiculos/DetalleVehiculo.aspx?id=<%# Eval("gIntIdVehiculoSC") %>'><%# FncCodificarSC(Eval("gStrMarcaSC") + " " + Eval("gStrModeloSC")) %></a>
+                                                    <div class="adms-persona-detalle">Año <%# Eval("gIntAnioSC") %></div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td class="d-none d-md-table-cell"><%# ClsFormatoSC.fncVinHtmlSC((string)Eval("lStrVinSC")) %></td>
-                                        <td class="adms-numero d-none d-xxl-table-cell text-secondary"><%# fncCodificarSC(ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaRegistroUtcSC"))) %></td>
+                                        <td class="d-none d-md-table-cell"><%# ClsFormatoSC.FncVinHtmlSC((string)Eval("gStrVinSC")) %></td>
+                                        <td class="adms-numero d-none d-xxl-table-cell text-secondary"><%# FncCodificarSC(ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatFechaRegistroUtcSC"))) %></td>
                                         <td class="text-end">
-                                            <a class="btn btn-sm btn-outline-primary text-nowrap" href='../Vehiculos/DetalleVehiculo.aspx?id=<%# Eval("lIntIdVehiculoSC") %>' title="Ver detalle del vehículo">
+                                            <a class="btn btn-sm btn-outline-primary text-nowrap" href='../Vehiculos/DetalleVehiculo.aspx?id=<%# Eval("gIntIdVehiculoSC") %>' title="Ver detalle del vehículo">
                                                 <i class="bi bi-eye" aria-hidden="true"></i><span class="visually-hidden d-xl-none">Ver detalle</span><span class="d-none d-xl-inline ms-1">Ver detalle</span>
                                             </a>
                                         </td>

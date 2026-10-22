@@ -20,36 +20,36 @@ namespace CapaPresentacion.Vehiculos
     /// </summary>
     public partial class webRegistrarVehiculoSC : Page
     {
-        private const string lStrClavePropietarioSC = "IdPropietarioSC";
+        private const string gStrClavePropietarioSC = "IdPropietarioSC";
 
-        private readonly ClsVehiculoLNSC lObjVehiculoLNSC = new ClsVehiculoLNSC();
-        private readonly ClsClienteLNSC lObjClienteLNSC = new ClsClienteLNSC();
+        private readonly ClsVehiculoLNSC gObjVehiculoLNSC = new ClsVehiculoLNSC();
+        private readonly ClsClienteLNSC gObjClienteLNSC = new ClsClienteLNSC();
 
-        private SiteMaster lObjSitioSC
+        private webSiteMasterSC gObjSitioSC
         {
-            get { return (SiteMaster)Master; }
+            get { return (webSiteMasterSC)Master; }
         }
 
         /// <summary>
         /// Identificador del propietario elegido. Se guarda en el ViewState, que ASP.NET
         /// protege contra modificaciones; además, la Capa Lógica vuelve a comprobar que exista.
         /// </summary>
-        private int lIntIdPropietarioSC
+        private int gIntIdPropietarioSC
         {
-            get { return ViewState[lStrClavePropietarioSC] is int lIntIdSC ? lIntIdSC : 0; }
-            set { ViewState[lStrClavePropietarioSC] = value; }
+            get { return ViewState[gStrClavePropietarioSC] is int lIntIdSC ? lIntIdSC : 0; }
+            set { ViewState[gStrClavePropietarioSC] = value; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            litAyudaAnioSC.Text = "Entre " + ClsVehiculoLNSC.lIntAnioMinimoSC + " y " + ClsVehiculoLNSC.fncObtenerAnioMaximoSC() + ".";
+            litAyudaAnioSC.Text = "Entre " + ClsVehiculoLNSC.gIntAnioMinimoSC + " y " + ClsVehiculoLNSC.FncObtenerAnioMaximoSC() + ".";
 
             if (IsPostBack)
             {
                 return;
             }
 
-            fncMostrarPropietarioSC(null);
+            SubMostrarPropietarioSC(null);
 
             string lStrIdClienteSC = Request.QueryString["idCliente"];
             if (string.IsNullOrEmpty(lStrIdClienteSC))
@@ -62,23 +62,23 @@ namespace CapaPresentacion.Vehiculos
             {
                 int lIntIdClienteSC;
                 ClsClienteENSC lObjClienteSC = int.TryParse(lStrIdClienteSC, out lIntIdClienteSC)
-                    ? lObjClienteLNSC.fncObtenerClienteSC(lIntIdClienteSC)
+                    ? gObjClienteLNSC.FncObtenerClienteSC(lIntIdClienteSC)
                     : null;
 
                 if (lObjClienteSC == null)
                 {
-                    lObjSitioSC.fncMostrarAlerta(TipoAlerta.Advertencia,
+                    gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Advertencia,
                         "El cliente indicado no existe. Busca al propietario en el formulario.");
                     return;
                 }
 
-                fncMostrarPropietarioSC(lObjClienteSC);
+                SubMostrarPropietarioSC(lObjClienteSC);
                 txtPlacaSC.Focus();
             }
             catch (Exception lObjExcepcionSC)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionSC, "RegistrarVehiculo.aspx - cargar propietario");
-                lObjSitioSC.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionSC, "RegistrarVehiculo.aspx - cargar propietario");
+                gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible cargar el cliente en este momento. Intenta de nuevo en unos minutos.");
             }
         }
@@ -86,26 +86,26 @@ namespace CapaPresentacion.Vehiculos
         /// <summary>Busca clientes para elegir al propietario.</summary>
         protected void btnBuscarPropietarioSC_Click(object sender, EventArgs e)
         {
-            fncLimpiarErroresSC();
+            SubLimpiarErroresSC();
             try
             {
-                List<ClsClienteENSC> lLstClientesSC = lObjClienteLNSC.fncBuscarClientesSC(txtBuscarPropietarioSC.Text);
+                List<ClsClienteENSC> lLstClientesSC = gObjClienteLNSC.FncBuscarClientesSC(txtBuscarPropietarioSC.Text);
                 rptPropietariosSC.DataSource = lLstClientesSC;
                 rptPropietariosSC.DataBind();
                 rptPropietariosSC.Visible = lLstClientesSC.Count > 0;
                 pnlSinPropietariosSC.Visible = lLstClientesSC.Count == 0;
                 pnlResultadosPropietarioSC.Visible = true;
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionSC)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionSC)
             {
                 string lStrMensajeSC;
-                lObjExcepcionSC.lDicErroresCampos.TryGetValue(ClsClienteLNSC.lStrCampoBusquedaSC, out lStrMensajeSC);
-                fncMarcarErrorPropietarioSC(lStrMensajeSC ?? "Revisa el texto de búsqueda.");
+                lObjExcepcionSC.gDicErroresCamposSC.TryGetValue(ClsClienteLNSC.gStrCampoBusquedaSC, out lStrMensajeSC);
+                SubMarcarErrorPropietarioSC(lStrMensajeSC ?? "Revisa el texto de búsqueda.");
             }
             catch (Exception lObjExcepcionSC)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionSC, "RegistrarVehiculo.aspx - buscar propietario");
-                lObjSitioSC.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionSC, "RegistrarVehiculo.aspx - buscar propietario");
+                gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible buscar clientes en este momento. Intenta de nuevo en unos minutos.");
             }
         }
@@ -119,23 +119,23 @@ namespace CapaPresentacion.Vehiculos
                 return;
             }
 
-            fncLimpiarErroresSC();
+            SubLimpiarErroresSC();
             try
             {
-                ClsClienteENSC lObjClienteSC = lObjClienteLNSC.fncObtenerClienteSC(lIntIdClienteSC);
+                ClsClienteENSC lObjClienteSC = gObjClienteLNSC.FncObtenerClienteSC(lIntIdClienteSC);
                 if (lObjClienteSC == null)
                 {
-                    fncMarcarErrorPropietarioSC("El cliente seleccionado ya no existe. Búscalo de nuevo.");
+                    SubMarcarErrorPropietarioSC("El cliente seleccionado ya no existe. Búscalo de nuevo.");
                     return;
                 }
 
-                fncMostrarPropietarioSC(lObjClienteSC);
+                SubMostrarPropietarioSC(lObjClienteSC);
                 txtPlacaSC.Focus();
             }
             catch (Exception lObjExcepcionSC)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionSC, "RegistrarVehiculo.aspx - seleccionar propietario");
-                lObjSitioSC.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionSC, "RegistrarVehiculo.aspx - seleccionar propietario");
+                gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible seleccionar el cliente en este momento. Intenta de nuevo en unos minutos.");
             }
         }
@@ -143,100 +143,100 @@ namespace CapaPresentacion.Vehiculos
         /// <summary>Quita el propietario elegido para buscar otro.</summary>
         protected void lnkCambiarPropietarioSC_Click(object sender, EventArgs e)
         {
-            fncMostrarPropietarioSC(null);
+            SubMostrarPropietarioSC(null);
             txtBuscarPropietarioSC.Focus();
         }
 
         /// <summary>Envía los datos a la Capa Lógica y muestra el resultado.</summary>
         protected void btnGuardarSC_Click(object sender, EventArgs e)
         {
-            fncLimpiarErroresSC();
+            SubLimpiarErroresSC();
 
             ClsVehiculoENSC lObjVehiculoSC = new ClsVehiculoENSC
             {
-                lIntIdClienteSC = lIntIdPropietarioSC,
-                lStrPlacaSC = txtPlacaSC.Text,
-                lStrVinSC = txtVinSC.Text,
-                lStrMarcaSC = txtMarcaSC.Text,
-                lStrModeloSC = txtModeloSC.Text
+                gIntIdClienteSC = gIntIdPropietarioSC,
+                gStrPlacaSC = txtPlacaSC.Text,
+                gStrVinSC = txtVinSC.Text,
+                gStrMarcaSC = txtMarcaSC.Text,
+                gStrModeloSC = txtModeloSC.Text
             };
 
             try
             {
-                int lIntIdVehiculoSC = lObjVehiculoLNSC.fncRegistrarVehiculoSC(lObjVehiculoSC, txtAnioSC.Text);
+                int lIntIdVehiculoSC = gObjVehiculoLNSC.FncRegistrarVehiculoSC(lObjVehiculoSC, txtAnioSC.Text);
 
                 // Redirigir después de guardar evita registros duplicados si el usuario recarga la página.
                 Response.Redirect("~/Vehiculos/DetalleVehiculo.aspx?id=" + lIntIdVehiculoSC + "&registrado=1", false);
                 Context.ApplicationInstance.CompleteRequest();
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionSC)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionSC)
             {
-                foreach (KeyValuePair<string, string> lObjErrorSC in lObjExcepcionSC.lDicErroresCampos)
+                foreach (KeyValuePair<string, string> lObjErrorSC in lObjExcepcionSC.gDicErroresCamposSC)
                 {
-                    fncMarcarErrorSC(lObjErrorSC.Key, lObjErrorSC.Value);
+                    SubMarcarErrorSC(lObjErrorSC.Key, lObjErrorSC.Value);
                 }
 
-                lObjSitioSC.fncMostrarAlerta(TipoAlerta.Error,
-                    lObjExcepcionSC.lDicErroresCampos.Count == 1
+                gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Error,
+                    lObjExcepcionSC.gDicErroresCamposSC.Count == 1
                         ? "No se guardó el vehículo. Revisa el campo marcado."
-                        : "No se guardó el vehículo. Revisa los " + lObjExcepcionSC.lDicErroresCampos.Count + " campos marcados.");
+                        : "No se guardó el vehículo. Revisa los " + lObjExcepcionSC.gDicErroresCamposSC.Count + " campos marcados.");
             }
             catch (Exception lObjExcepcionSC)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionSC, "RegistrarVehiculo.aspx - guardar vehículo");
-                lObjSitioSC.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionSC, "RegistrarVehiculo.aspx - guardar vehículo");
+                gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible guardar el vehículo en este momento. Tus datos siguen en el formulario; intenta de nuevo en unos minutos.");
             }
         }
 
         /// <summary>Codifica un valor para mostrarlo de forma segura dentro del HTML.</summary>
-        protected string fncCodificarSC(object pObjValorSC)
+        protected string FncCodificarSC(object pObjValorSC)
         {
             return HttpUtility.HtmlEncode(Convert.ToString(pObjValorSC));
         }
 
         /// <summary>Muestra la tarjeta del propietario elegido o, si es nulo, el buscador.</summary>
-        private void fncMostrarPropietarioSC(ClsClienteENSC pObjClienteSC)
+        private void SubMostrarPropietarioSC(ClsClienteENSC pObjClienteSC)
         {
             bool lBlnSeleccionadoSC = pObjClienteSC != null;
-            lIntIdPropietarioSC = lBlnSeleccionadoSC ? pObjClienteSC.lIntIdClienteSC : 0;
+            gIntIdPropietarioSC = lBlnSeleccionadoSC ? pObjClienteSC.gIntIdClienteSC : 0;
             pnlPropietarioSeleccionadoSC.Visible = lBlnSeleccionadoSC;
             pnlBuscarPropietarioSC.Visible = !lBlnSeleccionadoSC;
             pnlResultadosPropietarioSC.Visible = false;
 
             if (lBlnSeleccionadoSC)
             {
-                litInicialesPropietarioSC.Text = ClsFormatoSC.fncObtenerInicialesSC(pObjClienteSC.lStrNombresSC, pObjClienteSC.lStrApellidosSC);
-                litNombrePropietarioSC.Text = pObjClienteSC.lStrNombresSC + " " + pObjClienteSC.lStrApellidosSC;
-                litDpiPropietarioSC.Text = ClsFormatoSC.fncFormatearDpiSC(pObjClienteSC.lStrDpiSC);
-                litTelefonoPropietarioSC.Text = ClsFormatoSC.fncFormatearTelefonoSC(pObjClienteSC.lStrTelefonoSC);
+                litInicialesPropietarioSC.Text = ClsFormatoSC.FncObtenerInicialesSC(pObjClienteSC.gStrNombresSC, pObjClienteSC.gStrApellidosSC);
+                litNombrePropietarioSC.Text = pObjClienteSC.gStrNombresSC + " " + pObjClienteSC.gStrApellidosSC;
+                litDpiPropietarioSC.Text = ClsFormatoSC.FncFormatearDpiSC(pObjClienteSC.gStrDpiSC);
+                litTelefonoPropietarioSC.Text = ClsFormatoSC.FncFormatearTelefonoSC(pObjClienteSC.gStrTelefonoSC);
             }
         }
 
         /// <summary>Relaciona cada campo de la Capa Lógica con su control y su mensaje.</summary>
-        private Dictionary<string, Tuple<TextBox, Label>> fncObtenerCamposSC()
+        private Dictionary<string, Tuple<TextBox, Label>> FncObtenerCamposSC()
         {
             return new Dictionary<string, Tuple<TextBox, Label>>
             {
-                { ClsVehiculoLNSC.lStrCampoPlacaSC, Tuple.Create(txtPlacaSC, errPlacaSC) },
-                { ClsVehiculoLNSC.lStrCampoVinSC, Tuple.Create(txtVinSC, errVinSC) },
-                { ClsVehiculoLNSC.lStrCampoMarcaSC, Tuple.Create(txtMarcaSC, errMarcaSC) },
-                { ClsVehiculoLNSC.lStrCampoModeloSC, Tuple.Create(txtModeloSC, errModeloSC) },
-                { ClsVehiculoLNSC.lStrCampoAnioSC, Tuple.Create(txtAnioSC, errAnioSC) }
+                { ClsVehiculoLNSC.gStrCampoPlacaSC, Tuple.Create(txtPlacaSC, errPlacaSC) },
+                { ClsVehiculoLNSC.gStrCampoVinSC, Tuple.Create(txtVinSC, errVinSC) },
+                { ClsVehiculoLNSC.gStrCampoMarcaSC, Tuple.Create(txtMarcaSC, errMarcaSC) },
+                { ClsVehiculoLNSC.gStrCampoModeloSC, Tuple.Create(txtModeloSC, errModeloSC) },
+                { ClsVehiculoLNSC.gStrCampoAnioSC, Tuple.Create(txtAnioSC, errAnioSC) }
             };
         }
 
         /// <summary>Marca un campo en rojo y muestra su mensaje debajo.</summary>
-        private void fncMarcarErrorSC(string pStrCampoSC, string pStrMensajeSC)
+        private void SubMarcarErrorSC(string pStrCampoSC, string pStrMensajeSC)
         {
-            if (pStrCampoSC == ClsVehiculoLNSC.lStrCampoPropietarioSC)
+            if (pStrCampoSC == ClsVehiculoLNSC.gStrCampoPropietarioSC)
             {
-                fncMarcarErrorPropietarioSC(pStrMensajeSC);
+                SubMarcarErrorPropietarioSC(pStrMensajeSC);
                 return;
             }
 
             Tuple<TextBox, Label> lObjCampoSC;
-            if (!fncObtenerCamposSC().TryGetValue(pStrCampoSC, out lObjCampoSC))
+            if (!FncObtenerCamposSC().TryGetValue(pStrCampoSC, out lObjCampoSC))
             {
                 return;
             }
@@ -248,7 +248,7 @@ namespace CapaPresentacion.Vehiculos
         }
 
         /// <summary>Muestra un error en la sección del propietario.</summary>
-        private void fncMarcarErrorPropietarioSC(string pStrMensajeSC)
+        private void SubMarcarErrorPropietarioSC(string pStrMensajeSC)
         {
             txtBuscarPropietarioSC.CssClass = "form-control is-invalid";
             errPropietarioSC.Text = HttpUtility.HtmlEncode(pStrMensajeSC);
@@ -256,9 +256,9 @@ namespace CapaPresentacion.Vehiculos
         }
 
         /// <summary>Quita las marcas de error de un intento anterior.</summary>
-        private void fncLimpiarErroresSC()
+        private void SubLimpiarErroresSC()
         {
-            foreach (Tuple<TextBox, Label> lObjCampoSC in fncObtenerCamposSC().Values)
+            foreach (Tuple<TextBox, Label> lObjCampoSC in FncObtenerCamposSC().Values)
             {
                 lObjCampoSC.Item1.CssClass = lObjCampoSC.Item1.CssClass.Replace(" is-invalid", string.Empty);
                 lObjCampoSC.Item1.Attributes.Remove("aria-invalid");

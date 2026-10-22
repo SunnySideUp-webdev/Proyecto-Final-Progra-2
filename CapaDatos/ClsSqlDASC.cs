@@ -6,7 +6,7 @@
 namespace CapaDatos
 {
     /// <summary>Utilidades de SQL usadas por las clases de acceso a datos.</summary>
-    internal static class ClsSqlDA
+    internal static class ClsSqlDASC
     {
         /// <summary>
         /// Escapa los comodines de LIKE (%, _ y [) para que el texto del usuario se busque
@@ -14,9 +14,9 @@ namespace CapaDatos
         /// </summary>
         /// <param name="pStrTexto">Texto que se usará dentro de un patrón LIKE.</param>
         /// <returns>Texto con los comodines escapados.</returns>
-        internal static string fncEscaparPatronLike(string pStrTexto)
+        internal static string FncEscaparPatronLikeSC(string pStrTextoSC)
         {
-            return pStrTexto
+            return pStrTextoSC
                 .Replace(@"\", @"\\")
                 .Replace("%", @"\%")
                 .Replace("_", @"\_")

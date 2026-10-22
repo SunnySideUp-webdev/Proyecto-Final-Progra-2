@@ -65,13 +65,13 @@
                                     <HeaderTemplate><ul class="adms-lista"></HeaderTemplate>
                                     <ItemTemplate>
                                         <li>
-                                            <span class="adms-avatar" aria-hidden="true"><%# fncCodificarSC(ClsFormatoSC.fncObtenerInicialesSC((string)Eval("lStrNombresSC"), (string)Eval("lStrApellidosSC"))) %></span>
+                                            <span class="adms-avatar" aria-hidden="true"><%# FncCodificarSC(ClsFormatoSC.FncObtenerInicialesSC((string)Eval("gStrNombresSC"), (string)Eval("gStrApellidosSC"))) %></span>
                                             <div class="adms-persona-texto flex-grow-1">
-                                                <div class="fw-semibold"><%# fncCodificarSC(Eval("lStrNombresSC") + " " + Eval("lStrApellidosSC")) %></div>
-                                                <div class="adms-persona-detalle adms-numero">DPI <%# fncCodificarSC(ClsFormatoSC.fncFormatearDpiSC((string)Eval("lStrDpiSC"))) %></div>
+                                                <div class="fw-semibold"><%# FncCodificarSC(Eval("gStrNombresSC") + " " + Eval("gStrApellidosSC")) %></div>
+                                                <div class="adms-persona-detalle adms-numero">DPI <%# FncCodificarSC(ClsFormatoSC.FncFormatearDpiSC((string)Eval("gStrDpiSC"))) %></div>
                                             </div>
                                             <asp:LinkButton ID="lnkSeleccionarSC" runat="server" CssClass="btn btn-sm btn-primary" CommandName="Seleccionar"
-                                                CommandArgument='<%# Eval("lIntIdClienteSC") %>' CausesValidation="false">Seleccionar</asp:LinkButton>
+                                                CommandArgument='<%# Eval("gIntIdClienteSC") %>' CausesValidation="false">Seleccionar</asp:LinkButton>
                                         </li>
                                     </ItemTemplate>
                                     <FooterTemplate></ul></FooterTemplate>

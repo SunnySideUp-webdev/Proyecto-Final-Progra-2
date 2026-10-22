@@ -16,11 +16,11 @@ namespace CapaPresentacion.Clientes
     /// <summary>Lista los clientes y permite buscarlos por DPI, nombre o teléfono.</summary>
     public partial class webClientesSC : Page
     {
-        private readonly ClsClienteLNSC lObjClienteLNSC = new ClsClienteLNSC();
+        private readonly ClsClienteLNSC gObjClienteLNSC = new ClsClienteLNSC();
 
-        private SiteMaster lObjSitioSC
+        private webSiteMasterSC gObjSitioSC
         {
-            get { return (SiteMaster)Master; }
+            get { return (webSiteMasterSC)Master; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -32,7 +32,7 @@ namespace CapaPresentacion.Clientes
 
             string lStrTerminoSC = Request.QueryString["q"] ?? string.Empty;
             txtBusquedaSC.Text = lStrTerminoSC;
-            fncCargarClientesSC(lStrTerminoSC);
+            SubCargarClientesSC(lStrTerminoSC);
         }
 
         /// <summary>Lleva la búsqueda a la dirección de la página (?q=) para poder recargarla o compartirla.</summary>
@@ -48,35 +48,35 @@ namespace CapaPresentacion.Clientes
         }
 
         /// <summary>Codifica un valor para mostrarlo de forma segura dentro del HTML.</summary>
-        protected string fncCodificarSC(object pObjValorSC)
+        protected string FncCodificarSC(object pObjValorSC)
         {
             return HttpUtility.HtmlEncode(Convert.ToString(pObjValorSC));
         }
 
         /// <summary>Consulta los clientes en AutoManagerDMS y actualiza la tabla.</summary>
-        private void fncCargarClientesSC(string pStrTerminoSC)
+        private void SubCargarClientesSC(string pStrTerminoSC)
         {
             bool lBlnBuscandoSC = !string.IsNullOrWhiteSpace(pStrTerminoSC);
             lnkLimpiarSC.Visible = lBlnBuscandoSC;
 
             try
             {
-                int lIntTotalSC = lObjClienteLNSC.fncContarClientesSC();
+                int lIntTotalSC = gObjClienteLNSC.FncContarClientesSC();
                 litTotalSC.Text = lIntTotalSC == 1 ? "1 cliente registrado" : lIntTotalSC + " clientes registrados";
 
-                List<ClsClienteENSC> lLstClientesSC = lObjClienteLNSC.fncBuscarClientesSC(pStrTerminoSC);
+                List<ClsClienteENSC> lLstClientesSC = gObjClienteLNSC.FncBuscarClientesSC(pStrTerminoSC);
                 rptClientesSC.DataSource = lLstClientesSC;
                 rptClientesSC.DataBind();
                 rptClientesSC.Visible = lLstClientesSC.Count > 0;
                 pnlVacioSC.Visible = lLstClientesSC.Count == 0;
 
-                bool lBlnLimiteSC = lLstClientesSC.Count == ClsClienteLNSC.lIntMaximoResultadosSC;
+                bool lBlnLimiteSC = lLstClientesSC.Count == ClsClienteLNSC.gIntMaximoResultadosSC;
                 if (lBlnBuscandoSC)
                 {
                     litResumenSC.Text = (lLstClientesSC.Count == 1 ? "1 resultado" : lLstClientesSC.Count + " resultados")
                         + " para «" + pStrTerminoSC.Trim() + "»";
                     litLimiteSC.Text = lBlnLimiteSC
-                        ? "Se muestran los primeros " + ClsClienteLNSC.lIntMaximoResultadosSC + "; escribe más datos para afinar la búsqueda."
+                        ? "Se muestran los primeros " + ClsClienteLNSC.gIntMaximoResultadosSC + "; escribe más datos para afinar la búsqueda."
                         : "Coincidencias en DPI, nombres, apellidos o teléfono.";
                     litVacioTituloSC.Text = "No se encontraron clientes";
                     litVacioDetalleSC.Text = "Revisa el texto o busca por otro dato, como el DPI o el teléfono.";
@@ -84,17 +84,17 @@ namespace CapaPresentacion.Clientes
                 else
                 {
                     litResumenSC.Text = "Registrados recientemente";
-                    litLimiteSC.Text = lIntTotalSC > ClsClienteLNSC.lIntMaximoResultadosSC
-                        ? "Se muestran los " + ClsClienteLNSC.lIntMaximoResultadosSC + " más recientes."
+                    litLimiteSC.Text = lIntTotalSC > ClsClienteLNSC.gIntMaximoResultadosSC
+                        ? "Se muestran los " + ClsClienteLNSC.gIntMaximoResultadosSC + " más recientes."
                         : "Ordenados del más reciente al más antiguo.";
                     litVacioTituloSC.Text = "Todavía no hay clientes registrados";
                     litVacioDetalleSC.Text = "Usa el botón «Registrar cliente» para agregar el primero.";
                 }
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionSC)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionSC)
             {
                 string lStrMensajeSC;
-                lObjExcepcionSC.lDicErroresCampos.TryGetValue(ClsClienteLNSC.lStrCampoBusquedaSC, out lStrMensajeSC);
+                lObjExcepcionSC.gDicErroresCamposSC.TryGetValue(ClsClienteLNSC.gStrCampoBusquedaSC, out lStrMensajeSC);
                 lblErrorBusquedaSC.Text = HttpUtility.HtmlEncode(lStrMensajeSC ?? "Revisa el texto de búsqueda.");
                 lblErrorBusquedaSC.Visible = true;
                 txtBusquedaSC.CssClass = "form-control is-invalid";
@@ -102,8 +102,8 @@ namespace CapaPresentacion.Clientes
             }
             catch (Exception lObjExcepcionSC)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionSC, "Clientes.aspx - cargar clientes");
-                lObjSitioSC.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionSC, "Clientes.aspx - cargar clientes");
+                gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible consultar los clientes en este momento. Intenta de nuevo en unos minutos.");
                 litTotalSC.Text = string.Empty;
                 pnlResultadosSC.Visible = false;

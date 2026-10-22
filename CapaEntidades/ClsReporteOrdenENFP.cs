@@ -15,66 +15,66 @@ namespace CapaEntidades
     public class ClsReporteOrdenENFP
     {
         /// <summary>Obtiene o establece el número de la orden (dbo.OrdenesReparacion.IdOrden).</summary>
-        public int lIntIdOrdenFP { get; set; }
+        public int gIntIdOrdenFP { get; set; }
 
         /// <summary>Obtiene o establece el identificador del vehículo de la orden.</summary>
-        public int lIntIdVehiculoFP { get; set; }
+        public int gIntIdVehiculoFP { get; set; }
 
         /// <summary>Obtiene o establece la placa actual del vehículo.</summary>
-        public string lStrPlacaFP { get; set; }
+        public string gStrPlacaFP { get; set; }
 
         /// <summary>Obtiene o establece el VIN del vehículo.</summary>
-        public string lStrVinFP { get; set; }
+        public string gStrVinFP { get; set; }
 
         /// <summary>Obtiene o establece la marca del vehículo.</summary>
-        public string lStrMarcaFP { get; set; }
+        public string gStrMarcaFP { get; set; }
 
         /// <summary>Obtiene o establece el modelo del vehículo.</summary>
-        public string lStrModeloFP { get; set; }
+        public string gStrModeloFP { get; set; }
 
         /// <summary>Obtiene o establece el identificador del cliente dueño del vehículo.</summary>
-        public int lIntIdClienteFP { get; set; }
+        public int gIntIdClienteFP { get; set; }
 
         /// <summary>Obtiene o establece el nombre completo del cliente (nombres y apellidos).</summary>
-        public string lStrClienteFP { get; set; }
+        public string gStrClienteFP { get; set; }
 
         /// <summary>Obtiene o establece el estado de la orden: Abierta o Cerrada.</summary>
-        public string lStrEstadoFP { get; set; }
+        public string gStrEstadoFP { get; set; }
 
         /// <summary>Obtiene o establece el motivo por el que ingresó el vehículo.</summary>
-        public string lStrMotivoIngresoFP { get; set; }
+        public string gStrMotivoIngresoFP { get; set; }
 
         /// <summary>
         /// Obtiene o establece la fecha de apertura en UTC, tal como la guarda SQL Server.
         /// Se convierte a la hora de Guatemala solo al mostrarla.
         /// </summary>
-        public DateTime lDatFechaAperturaUtcFP { get; set; }
+        public DateTime gDatFechaAperturaUtcFP { get; set; }
 
         /// <summary>Obtiene o establece la fecha de cierre en UTC; es nula mientras la orden está abierta.</summary>
-        public DateTime? lDatFechaCierreUtcFP { get; set; }
+        public DateTime? gDatFechaCierreUtcFP { get; set; }
 
         /// <summary>
         /// Obtiene o establece cuántos días lleva abierta la orden (contados con el calendario
         /// de Guatemala). Lo calcula la Capa Lógica; solo tiene sentido en órdenes abiertas.
         /// </summary>
-        public int lIntDiasAbiertaFP { get; set; }
+        public int gIntDiasAbiertaFP { get; set; }
 
         /// <summary>
         /// Obtiene o establece cuántos minutos duró la reparación (de la apertura al cierre).
         /// Lo calcula la Capa Lógica; solo tiene sentido en órdenes cerradas.
         /// </summary>
-        public int lIntMinutosReparacionFP { get; set; }
+        public int gIntMinutosReparacionFP { get; set; }
 
         /// <summary>Inicializa los textos con valores vacíos para no trabajar con nulos.</summary>
         public ClsReporteOrdenENFP()
         {
-            lStrPlacaFP = string.Empty;
-            lStrVinFP = string.Empty;
-            lStrMarcaFP = string.Empty;
-            lStrModeloFP = string.Empty;
-            lStrClienteFP = string.Empty;
-            lStrEstadoFP = string.Empty;
-            lStrMotivoIngresoFP = string.Empty;
+            gStrPlacaFP = string.Empty;
+            gStrVinFP = string.Empty;
+            gStrMarcaFP = string.Empty;
+            gStrModeloFP = string.Empty;
+            gStrClienteFP = string.Empty;
+            gStrEstadoFP = string.Empty;
+            gStrMotivoIngresoFP = string.Empty;
         }
     }
 }

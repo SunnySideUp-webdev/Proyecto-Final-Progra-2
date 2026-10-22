@@ -1,4 +1,4 @@
-<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="CapaPresentacion.SiteMaster" ClientIDMode="Static" %>
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="CapaPresentacion.webSiteMasterSC" ClientIDMode="Static" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -33,9 +33,9 @@
                             <asp:Repeater ID="rptModulos" runat="server">
                                 <ItemTemplate>
                                     <li class="nav-item">
-                                        <a class='<%# (bool)Eval("lBlnActivo") ? "nav-link active" : "nav-link" %>' href='<%# ResolveUrl((string)Eval("lStrUrl")) %>'<%# (bool)Eval("lBlnActivo") ? " aria-current=\"page\"" : string.Empty %>>
-                                            <i class='<%# "bi " + Eval("lStrIcono") %>' aria-hidden="true"></i>
-                                            <span><%# Server.HtmlEncode((string)Eval("lStrTexto")) %></span>
+                                        <a class='<%# (bool)Eval("gBlnActivoSC") ? "nav-link active" : "nav-link" %>' href='<%# ResolveUrl((string)Eval("gStrUrlSC")) %>'<%# (bool)Eval("gBlnActivoSC") ? " aria-current=\"page\"" : string.Empty %>>
+                                            <i class='<%# "bi " + Eval("gStrIconoSC") %>' aria-hidden="true"></i>
+                                            <span><%# Server.HtmlEncode((string)Eval("gStrTextoSC")) %></span>
                                         </a>
                                     </li>
                                 </ItemTemplate>
@@ -84,6 +84,6 @@
     </form>
 
     <script src="<%= ResolveUrl("~/Scripts/lib/bootstrap/bootstrap.bundle.min.js") %>"></script>
-    <script src="<%= fncUrlConVersion("~/Scripts/autodms.js") %>"></script>
+    <script src="<%= FncUrlConVersionSC("~/Scripts/autodms.js") %>"></script>
 </body>
 </html>

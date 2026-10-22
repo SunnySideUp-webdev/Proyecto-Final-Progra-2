@@ -3,6 +3,7 @@
 // Carné: 0900-16-12945
 // Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Capa de Presentación
 // Parte de Neider: todo el código de este archivo es de su módulo.
+// Ajuste de integración (Sharon): nombres según la convención del docente (prefijo g en campos y propiedades, Sub en procedimientos).
 //==============================================================
 using System;
 using System.Web.UI;
@@ -19,7 +20,7 @@ namespace CapaPresentacion.OrdenesReparacion
         {
             if (!IsPostBack)
             {
-                FncCargarVehiculosNT();
+                SubCargarVehiculosNT();
             }
         }
 
@@ -28,19 +29,19 @@ namespace CapaPresentacion.OrdenesReparacion
         /// Llena la lista de vehículos (por placa). Usa la búsqueda del módulo de vehículos,
         /// que devuelve como máximo los 50 registrados más recientemente.
         /// </summary>
-        private void FncCargarVehiculosNT()
+        private void SubCargarVehiculosNT()
         {
             ClsVehiculoLNSC lObjVehiculoLogicaNT =
                 new ClsVehiculoLNSC();
 
 
             List<ClsVehiculoENSC> lObjVehiculosNT =
-                lObjVehiculoLogicaNT.fncBuscarVehiculosSC(null);
+                lObjVehiculoLogicaNT.FncBuscarVehiculosSC(null);
 
 
             ddlVehiculoNT.DataSource = lObjVehiculosNT;
-            ddlVehiculoNT.DataValueField = "lIntIdVehiculoSC";
-            ddlVehiculoNT.DataTextField = "lStrPlacaSC";
+            ddlVehiculoNT.DataValueField = "gIntIdVehiculoSC";
+            ddlVehiculoNT.DataTextField = "gStrPlacaSC";
             ddlVehiculoNT.DataBind();
 
             ddlVehiculoNT.Items.Insert(
@@ -79,7 +80,7 @@ namespace CapaPresentacion.OrdenesReparacion
 
 
                 ClsVehiculoENSC lObjVehiculoNT =
-                    lObjVehiculoLogicaNT.fncObtenerVehiculoSC(
+                    lObjVehiculoLogicaNT.FncObtenerVehiculoSC(
                         lIntIdVehiculoNT);
 
 
@@ -93,10 +94,10 @@ namespace CapaPresentacion.OrdenesReparacion
                 ClsOrdenReparacionENT lObjOrdenNT =
                     new ClsOrdenReparacionENT
                     {
-                        lIntIdVehiculoNT = lIntIdVehiculoNT,
-                        lStrVinNT = lObjVehiculoNT.lStrVinSC,
-                        lStrMotivoIngresoNT = txtMotivoIngresoNT.Text,
-                        lStrDiagnosticoNT = txtDiagnosticoNT.Text
+                        gIntIdVehiculoNT = lIntIdVehiculoNT,
+                        gStrVinNT = lObjVehiculoNT.gStrVinSC,
+                        gStrMotivoIngresoNT = txtMotivoIngresoNT.Text,
+                        gStrDiagnosticoNT = txtDiagnosticoNT.Text
                     };
 
                 ClsOrdenReparacionLNT lObjLogicaNT =

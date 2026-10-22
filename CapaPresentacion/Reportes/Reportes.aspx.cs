@@ -22,18 +22,18 @@ namespace CapaPresentacion.Reportes
     /// </summary>
     public partial class webReportesFP : Page
     {
-        private const string lStrSeccionResumenFP = "resumen";
-        private const string lStrSeccionAbiertasFP = "abiertas";
-        private const string lStrSeccionCerradasFP = "cerradas";
-        private const string lStrSeccionHistorialFP = "historial";
-        private const string lStrSeccionExistenciasFP = "existencias";
-        private const string lStrSeccionRepuestosFP = "repuestos";
+        private const string gStrSeccionResumenFP = "resumen";
+        private const string gStrSeccionAbiertasFP = "abiertas";
+        private const string gStrSeccionCerradasFP = "cerradas";
+        private const string gStrSeccionHistorialFP = "historial";
+        private const string gStrSeccionExistenciasFP = "existencias";
+        private const string gStrSeccionRepuestosFP = "repuestos";
 
         /// <summary>A partir de cuántos días una orden abierta se resalta como atrasada.</summary>
-        private const int lIntDiasAlertaFP = 7;
+        private const int gIntDiasAlertaFP = 7;
 
-        private const string lStrClaseCampoFP = "form-control";
-        private const string lStrClaseCampoErrorFP = "form-control is-invalid";
+        private const string gStrClaseCampoFP = "form-control";
+        private const string gStrClaseCampoErrorFP = "form-control is-invalid";
 
         private readonly ClsReporteLNFP gObjReporteLNFP = new ClsReporteLNFP();
 
@@ -42,17 +42,17 @@ namespace CapaPresentacion.Reportes
         // a la que vuelve el enlace «Mes actual».
         protected string gStrDesdeFP = string.Empty;
         protected string gStrHastaFP = string.Empty;
-        protected string gStrClaseDesdeFP = lStrClaseCampoFP;
-        protected string gStrClaseHastaFP = lStrClaseCampoFP;
+        protected string gStrClaseDesdeFP = gStrClaseCampoFP;
+        protected string gStrClaseHastaFP = gStrClaseCampoFP;
         protected string gStrEtiquetaDesdeFP = "Cerradas desde";
-        protected string gStrSeccionFP = lStrSeccionCerradasFP;
+        protected string gStrSeccionFP = gStrSeccionCerradasFP;
 
         // La búsqueda de clientes se reutiliza del módulo 1 (Clientes y vehículos).
         private readonly ClsClienteLNSC gObjClienteLNFP = new ClsClienteLNSC();
 
-        private SiteMaster gObjSitioFP
+        private webSiteMasterSC gObjSitioFP
         {
-            get { return (SiteMaster)Master; }
+            get { return (webSiteMasterSC)Master; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -67,19 +67,19 @@ namespace CapaPresentacion.Reportes
 
             switch (lStrSeccionFP)
             {
-                case lStrSeccionAbiertasFP:
+                case gStrSeccionAbiertasFP:
                     SubCargarAbiertasFP();
                     break;
-                case lStrSeccionCerradasFP:
+                case gStrSeccionCerradasFP:
                     SubCargarCerradasFP();
                     break;
-                case lStrSeccionHistorialFP:
+                case gStrSeccionHistorialFP:
                     SubCargarHistorialFP();
                     break;
-                case lStrSeccionExistenciasFP:
+                case gStrSeccionExistenciasFP:
                     SubCargarExistenciasFP();
                     break;
-                case lStrSeccionRepuestosFP:
+                case gStrSeccionRepuestosFP:
                     SubCargarRepuestosFP();
                     break;
                 default:
@@ -95,7 +95,7 @@ namespace CapaPresentacion.Reportes
         protected void btnFiltrarFP_Click(object sender, EventArgs e)
         {
             // El filtro vuelve a la sección en la que está el usuario (cerradas o repuestos).
-            string lStrSeccionFP = FncObtenerSeccionFP() == lStrSeccionRepuestosFP ? lStrSeccionRepuestosFP : lStrSeccionCerradasFP;
+            string lStrSeccionFP = FncObtenerSeccionFP() == gStrSeccionRepuestosFP ? gStrSeccionRepuestosFP : gStrSeccionCerradasFP;
 
             // Los campos de fecha son inputs HTML: su valor llega en el formulario con su atributo name.
             string lStrDestinoFP = "~/Reportes/Reportes.aspx?seccion=" + lStrSeccionFP
@@ -108,7 +108,7 @@ namespace CapaPresentacion.Reportes
         /// <summary>Lleva el texto de búsqueda de clientes a la dirección de la página (?q=).</summary>
         protected void btnBuscarClienteFP_Click(object sender, EventArgs e)
         {
-            string lStrDestinoFP = "~/Reportes/Reportes.aspx?seccion=" + lStrSeccionHistorialFP
+            string lStrDestinoFP = "~/Reportes/Reportes.aspx?seccion=" + gStrSeccionHistorialFP
                 + "&q=" + HttpUtility.UrlEncode(txtClienteFP.Text.Trim());
             Response.Redirect(lStrDestinoFP, false);
             Context.ApplicationInstance.CompleteRequest();
@@ -124,20 +124,20 @@ namespace CapaPresentacion.Reportes
             {
                 ClsResumenReportesENFP lObjResumenFP = gObjReporteLNFP.FncObtenerResumenFP();
 
-                litAbiertasFP.Text = lObjResumenFP.lIntOrdenesAbiertasFP.ToString();
-                litCerradasMesFP.Text = lObjResumenFP.lIntOrdenesCerradasMesFP.ToString();
-                litVehiculosFP.Text = lObjResumenFP.lIntVehiculosAtendidosFP.ToString();
-                litPromedioFP.Text = lObjResumenFP.lIntMinutosPromedioReparacionFP.HasValue
-                    ? FncFormatearDuracionFP(lObjResumenFP.lIntMinutosPromedioReparacionFP.Value)
+                litAbiertasFP.Text = lObjResumenFP.gIntOrdenesAbiertasFP.ToString();
+                litCerradasMesFP.Text = lObjResumenFP.gIntOrdenesCerradasMesFP.ToString();
+                litVehiculosFP.Text = lObjResumenFP.gIntVehiculosAtendidosFP.ToString();
+                litPromedioFP.Text = lObjResumenFP.gIntMinutosPromedioReparacionFP.HasValue
+                    ? FncFormatearDuracionFP(lObjResumenFP.gIntMinutosPromedioReparacionFP.Value)
                     : "Sin datos";
 
-                litMasAntiguaFP.Text = lObjResumenFP.lIntOrdenesAbiertasFP == 0
+                litMasAntiguaFP.Text = lObjResumenFP.gIntOrdenesAbiertasFP == 0
                     ? "No hay órdenes abiertas en este momento."
                     : "La orden abierta más antigua se abrió el "
-                        + ClsFormatoSC.fncFormatearFechaSC(lObjResumenFP.lDatAperturaMasAntiguaUtcFP.Value)
-                        + (lObjResumenFP.lIntDiasOrdenMasAntiguaFP <= 0
+                        + ClsFormatoSC.FncFormatearFechaSC(lObjResumenFP.gDatAperturaMasAntiguaUtcFP.Value)
+                        + (lObjResumenFP.gIntDiasOrdenMasAntiguaFP <= 0
                             ? " (hoy)."
-                            : " (hace " + FncTextoDiasFP(lObjResumenFP.lIntDiasOrdenMasAntiguaFP) + ").");
+                            : " (hace " + FncTextoDiasFP(lObjResumenFP.gIntDiasOrdenMasAntiguaFP) + ").");
             }
             catch (Exception lObjExcepcionFP)
             {
@@ -184,10 +184,10 @@ namespace CapaPresentacion.Reportes
                     gObjReporteLNFP.FncListarOrdenesCerradasFP(lStrDesdeFP, lStrHastaFP, out lDatDesdeFP, out lDatHastaFP);
 
                 // Los campos muestran el rango que realmente se usó (incluido el mes actual por defecto).
-                gStrDesdeFP = lDatDesdeFP.ToString(ClsReporteLNFP.lStrFormatoFechaFP, CultureInfo.InvariantCulture);
-                gStrHastaFP = lDatHastaFP.ToString(ClsReporteLNFP.lStrFormatoFechaFP, CultureInfo.InvariantCulture);
-                litRangoFP.Text = "Cerradas del " + ClsFormatoSC.fncFormatearFechaLargaSC(lDatDesdeFP)
-                    + " al " + ClsFormatoSC.fncFormatearFechaLargaSC(lDatHastaFP) + ".";
+                gStrDesdeFP = lDatDesdeFP.ToString(ClsReporteLNFP.gStrFormatoFechaFP, CultureInfo.InvariantCulture);
+                gStrHastaFP = lDatHastaFP.ToString(ClsReporteLNFP.gStrFormatoFechaFP, CultureInfo.InvariantCulture);
+                litRangoFP.Text = "Cerradas del " + ClsFormatoSC.FncFormatearFechaLargaSC(lDatDesdeFP)
+                    + " al " + ClsFormatoSC.FncFormatearFechaLargaSC(lDatHastaFP) + ".";
 
                 rptCerradasFP.DataSource = lLstOrdenesFP;
                 rptCerradasFP.DataBind();
@@ -195,7 +195,7 @@ namespace CapaPresentacion.Reportes
                 pnlSinCerradasFP.Visible = lLstOrdenesFP.Count == 0;
                 litTotalCerradasFP.Text = FncContarFP(lLstOrdenesFP.Count, "orden", "órdenes");
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionFP)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionFP)
             {
                 SubMarcarErroresFechasFP(lObjExcepcionFP, lStrDesdeFP, lStrHastaFP);
                 pnlResultadoCerradasFP.Visible = false;
@@ -216,7 +216,7 @@ namespace CapaPresentacion.Reportes
             pnlFiltroFP.Visible = true;
             pnlRepuestosFP.Visible = true;
             gStrEtiquetaDesdeFP = "Utilizados desde";
-            gStrSeccionFP = lStrSeccionRepuestosFP;
+            gStrSeccionFP = gStrSeccionRepuestosFP;
             string lStrDesdeFP = Request.QueryString["desde"];
             string lStrHastaFP = Request.QueryString["hasta"];
 
@@ -227,16 +227,16 @@ namespace CapaPresentacion.Reportes
                 List<ClsRepuestoUtilizadoENFP> lLstRepuestosFP =
                     gObjReporteLNFP.FncListarRepuestosUtilizadosFP(lStrDesdeFP, lStrHastaFP, out lDatDesdeFP, out lDatHastaFP);
 
-                gStrDesdeFP = lDatDesdeFP.ToString(ClsReporteLNFP.lStrFormatoFechaFP, CultureInfo.InvariantCulture);
-                gStrHastaFP = lDatHastaFP.ToString(ClsReporteLNFP.lStrFormatoFechaFP, CultureInfo.InvariantCulture);
+                gStrDesdeFP = lDatDesdeFP.ToString(ClsReporteLNFP.gStrFormatoFechaFP, CultureInfo.InvariantCulture);
+                gStrHastaFP = lDatHastaFP.ToString(ClsReporteLNFP.gStrFormatoFechaFP, CultureInfo.InvariantCulture);
 
                 int lIntUnidadesFP = 0;
                 foreach (ClsRepuestoUtilizadoENFP lObjRepuestoFP in lLstRepuestosFP)
                 {
-                    lIntUnidadesFP += lObjRepuestoFP.lIntUnidadesFP;
+                    lIntUnidadesFP += lObjRepuestoFP.gIntUnidadesFP;
                 }
-                litRangoRepuestosFP.Text = "Del " + ClsFormatoSC.fncFormatearFechaLargaSC(lDatDesdeFP)
-                    + " al " + ClsFormatoSC.fncFormatearFechaLargaSC(lDatHastaFP) + ": "
+                litRangoRepuestosFP.Text = "Del " + ClsFormatoSC.FncFormatearFechaLargaSC(lDatDesdeFP)
+                    + " al " + ClsFormatoSC.FncFormatearFechaLargaSC(lDatHastaFP) + ": "
                     + FncContarFP(lIntUnidadesFP, "unidad", "unidades") + " en total. Primero los más utilizados.";
 
                 rptRepuestosFP.DataSource = lLstRepuestosFP;
@@ -245,7 +245,7 @@ namespace CapaPresentacion.Reportes
                 pnlSinRepuestosFP.Visible = lLstRepuestosFP.Count == 0;
                 litTotalRepuestosFP.Text = FncContarFP(lLstRepuestosFP.Count, "repuesto", "repuestos");
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionFP)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionFP)
             {
                 SubMarcarErroresFechasFP(lObjExcepcionFP, lStrDesdeFP, lStrHastaFP);
                 pnlRepuestosFP.Visible = false;
@@ -272,18 +272,18 @@ namespace CapaPresentacion.Reportes
                 int lIntBajosFP = 0;
                 foreach (ClsExistenciaRepuestoENFP lObjExistenciaFP in lLstExistenciasFP)
                 {
-                    if (lObjExistenciaFP.lStrNivelStockFP == ClsReporteLNFP.lStrNivelAgotadoFP)
+                    if (lObjExistenciaFP.gStrNivelStockFP == ClsReporteLNFP.gStrNivelAgotadoFP)
                     {
                         lIntAgotadosFP++;
                     }
-                    else if (lObjExistenciaFP.lStrNivelStockFP == ClsReporteLNFP.lStrNivelBajoFP)
+                    else if (lObjExistenciaFP.gStrNivelStockFP == ClsReporteLNFP.gStrNivelBajoFP)
                     {
                         lIntBajosFP++;
                     }
                 }
                 litResumenExistenciasFP.Text = FncContarFP(lIntAgotadosFP, "agotado", "agotados") + " y "
                     + FncContarFP(lIntBajosFP, "con stock bajo", "con stock bajo") + " ("
-                    + ClsReporteLNFP.lIntStockBajoFP + " unidades o menos). Primero los que tienen menos unidades.";
+                    + ClsReporteLNFP.gIntStockBajoFP + " unidades o menos). Primero los que tienen menos unidades.";
 
                 rptExistenciasFP.DataSource = lLstExistenciasFP;
                 rptExistenciasFP.DataBind();
@@ -325,17 +325,17 @@ namespace CapaPresentacion.Reportes
             pnlClientesEncontradosFP.Visible = true;
             try
             {
-                List<ClsClienteENSC> lLstClientesFP = gObjClienteLNFP.fncBuscarClientesSC(pStrBusquedaFP);
+                List<ClsClienteENSC> lLstClientesFP = gObjClienteLNFP.FncBuscarClientesSC(pStrBusquedaFP);
                 rptClientesFP.DataSource = lLstClientesFP;
                 rptClientesFP.DataBind();
                 rptClientesFP.Visible = lLstClientesFP.Count > 0;
                 pnlSinClientesFP.Visible = lLstClientesFP.Count == 0;
                 litTotalClientesFP.Text = FncContarFP(lLstClientesFP.Count, "cliente", "clientes");
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionFP)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionFP)
             {
                 string lStrMensajeFP;
-                lObjExcepcionFP.lDicErroresCampos.TryGetValue(ClsClienteLNSC.lStrCampoBusquedaSC, out lStrMensajeFP);
+                lObjExcepcionFP.gDicErroresCamposSC.TryGetValue(ClsClienteLNSC.gStrCampoBusquedaSC, out lStrMensajeFP);
                 lblErrorClienteFP.Text = HttpUtility.HtmlEncode(lStrMensajeFP ?? "Revisa el texto de búsqueda.");
                 lblErrorClienteFP.Visible = true;
                 txtClienteFP.CssClass = "form-control is-invalid";
@@ -360,7 +360,7 @@ namespace CapaPresentacion.Reportes
 
             try
             {
-                ClsClienteENSC lObjClienteFP = gObjClienteLNFP.fncObtenerClienteSC(lIntIdClienteFP);
+                ClsClienteENSC lObjClienteFP = gObjClienteLNFP.FncObtenerClienteSC(lIntIdClienteFP);
                 if (lObjClienteFP == null)
                 {
                     SubMostrarClienteNoEncontradoFP();
@@ -368,7 +368,7 @@ namespace CapaPresentacion.Reportes
                 }
 
                 List<ClsReporteOrdenENFP> lLstOrdenesFP = gObjReporteLNFP.FncListarOrdenesPorClienteFP(lIntIdClienteFP);
-                litClienteFP.Text = lObjClienteFP.lStrNombresSC + " " + lObjClienteFP.lStrApellidosSC;
+                litClienteFP.Text = lObjClienteFP.gStrNombresSC + " " + lObjClienteFP.gStrApellidosSC;
                 lnkVerClienteFP.NavigateUrl = "~/Clientes/DetalleCliente.aspx?id=" + lIntIdClienteFP;
                 rptHistorialFP.DataSource = lLstOrdenesFP;
                 rptHistorialFP.DataBind();
@@ -392,14 +392,14 @@ namespace CapaPresentacion.Reportes
             string lStrSeccionFP = (Request.QueryString["seccion"] ?? string.Empty).Trim().ToLowerInvariant();
             switch (lStrSeccionFP)
             {
-                case lStrSeccionAbiertasFP:
-                case lStrSeccionCerradasFP:
-                case lStrSeccionHistorialFP:
-                case lStrSeccionExistenciasFP:
-                case lStrSeccionRepuestosFP:
+                case gStrSeccionAbiertasFP:
+                case gStrSeccionCerradasFP:
+                case gStrSeccionHistorialFP:
+                case gStrSeccionExistenciasFP:
+                case gStrSeccionRepuestosFP:
                     return lStrSeccionFP;
                 default:
-                    return lStrSeccionResumenFP;
+                    return gStrSeccionResumenFP;
             }
         }
 
@@ -408,12 +408,12 @@ namespace CapaPresentacion.Reportes
         {
             Dictionary<string, HyperLink> lDicPestanasFP = new Dictionary<string, HyperLink>
             {
-                { lStrSeccionResumenFP, lnkResumenFP },
-                { lStrSeccionAbiertasFP, lnkAbiertasFP },
-                { lStrSeccionCerradasFP, lnkCerradasFP },
-                { lStrSeccionHistorialFP, lnkHistorialFP },
-                { lStrSeccionExistenciasFP, lnkExistenciasFP },
-                { lStrSeccionRepuestosFP, lnkRepuestosFP }
+                { gStrSeccionResumenFP, lnkResumenFP },
+                { gStrSeccionAbiertasFP, lnkAbiertasFP },
+                { gStrSeccionCerradasFP, lnkCerradasFP },
+                { gStrSeccionHistorialFP, lnkHistorialFP },
+                { gStrSeccionExistenciasFP, lnkExistenciasFP },
+                { gStrSeccionRepuestosFP, lnkRepuestosFP }
             };
 
             foreach (KeyValuePair<string, HyperLink> lObjPestanaFP in lDicPestanasFP)
@@ -431,10 +431,10 @@ namespace CapaPresentacion.Reportes
         /// Muestra debajo del campo el mensaje que envió la Capa Lógica para ese campo.
         /// </summary>
         /// <returns><c>true</c> si el campo tenía un error (para pintarlo en rojo).</returns>
-        private static bool FncMarcarErrorCampoFP(ClsValidacionExcepcionLN pObjExcepcionFP, string pStrCampoFP, Label pLblErrorFP)
+        private static bool FncMarcarErrorCampoFP(ClsValidacionExcepcionLNSC pObjExcepcionFP, string pStrCampoFP, Label pLblErrorFP)
         {
             string lStrMensajeFP;
-            if (!pObjExcepcionFP.lDicErroresCampos.TryGetValue(pStrCampoFP, out lStrMensajeFP))
+            if (!pObjExcepcionFP.gDicErroresCamposSC.TryGetValue(pStrCampoFP, out lStrMensajeFP))
             {
                 return false;
             }
@@ -447,17 +447,17 @@ namespace CapaPresentacion.Reportes
         /// Conserva en el filtro las fechas que escribió el usuario y marca en rojo el campo
         /// con error, con el mensaje que envió la Capa Lógica.
         /// </summary>
-        private void SubMarcarErroresFechasFP(ClsValidacionExcepcionLN pObjExcepcionFP, string pStrDesdeFP, string pStrHastaFP)
+        private void SubMarcarErroresFechasFP(ClsValidacionExcepcionLNSC pObjExcepcionFP, string pStrDesdeFP, string pStrHastaFP)
         {
             gStrDesdeFP = pStrDesdeFP ?? string.Empty;
             gStrHastaFP = pStrHastaFP ?? string.Empty;
-            if (FncMarcarErrorCampoFP(pObjExcepcionFP, ClsReporteLNFP.lStrCampoDesdeFP, errDesdeFP))
+            if (FncMarcarErrorCampoFP(pObjExcepcionFP, ClsReporteLNFP.gStrCampoDesdeFP, errDesdeFP))
             {
-                gStrClaseDesdeFP = lStrClaseCampoErrorFP;
+                gStrClaseDesdeFP = gStrClaseCampoErrorFP;
             }
-            if (FncMarcarErrorCampoFP(pObjExcepcionFP, ClsReporteLNFP.lStrCampoHastaFP, errHastaFP))
+            if (FncMarcarErrorCampoFP(pObjExcepcionFP, ClsReporteLNFP.gStrCampoHastaFP, errHastaFP))
             {
-                gStrClaseHastaFP = lStrClaseCampoErrorFP;
+                gStrClaseHastaFP = gStrClaseCampoErrorFP;
             }
         }
 
@@ -472,8 +472,8 @@ namespace CapaPresentacion.Reportes
         /// <summary>Registra el error para el equipo y muestra al usuario solo un mensaje general.</summary>
         private void SubMostrarErrorFP(Exception pObjExcepcionFP, string pStrOperacionFP, string pStrMensajeFP)
         {
-            ClsRegistroErrores.fncRegistrar(pObjExcepcionFP, "Reportes.aspx - " + pStrOperacionFP);
-            gObjSitioFP.fncMostrarAlerta(TipoAlerta.Error, pStrMensajeFP + " Intenta de nuevo en unos minutos.");
+            ClsRegistroErroresSC.SubRegistrarSC(pObjExcepcionFP, "Reportes.aspx - " + pStrOperacionFP);
+            gObjSitioFP.SubMostrarAlertaSC(TipoAlertaSC.Error, pStrMensajeFP + " Intenta de nuevo en unos minutos.");
         }
 
         // ===================== Formato (se usan desde Reportes.aspx) =====================
@@ -497,7 +497,7 @@ namespace CapaPresentacion.Reportes
         /// <summary>Clase CSS para los días abierta: resaltada si la orden lleva una semana o más.</summary>
         protected static string FncClaseDiasFP(int pIntDiasFP)
         {
-            return pIntDiasFP >= lIntDiasAlertaFP ? "adms-dias adms-dias-alerta" : "adms-dias";
+            return pIntDiasFP >= gIntDiasAlertaFP ? "adms-dias adms-dias-alerta" : "adms-dias";
         }
 
         /// <summary>Clase CSS de la etiqueta de estado (Abierta o Cerrada).</summary>
@@ -509,11 +509,11 @@ namespace CapaPresentacion.Reportes
         /// <summary>Clase CSS de la etiqueta del nivel de stock (agotado, bajo o disponible).</summary>
         protected static string FncClaseNivelStockFP(string pStrNivelFP)
         {
-            if (pStrNivelFP == ClsReporteLNFP.lStrNivelAgotadoFP)
+            if (pStrNivelFP == ClsReporteLNFP.gStrNivelAgotadoFP)
             {
                 return "adms-estado adms-nivel-agotado";
             }
-            return pStrNivelFP == ClsReporteLNFP.lStrNivelBajoFP ? "adms-estado adms-nivel-bajo" : "adms-estado adms-nivel-disponible";
+            return pStrNivelFP == ClsReporteLNFP.gStrNivelBajoFP ? "adms-estado adms-nivel-bajo" : "adms-estado adms-nivel-disponible";
         }
 
         /// <summary>
@@ -546,20 +546,20 @@ namespace CapaPresentacion.Reportes
         /// <summary>Fecha de cierre en hora de Guatemala, o una raya si la orden sigue abierta.</summary>
         protected static string FncFechaOpcionalFP(object pObjFechaUtcFP)
         {
-            return pObjFechaUtcFP is DateTime lDatFechaFP ? ClsFormatoSC.fncFormatearFechaSC(lDatFechaFP) : "—";
+            return pObjFechaUtcFP is DateTime lDatFechaFP ? ClsFormatoSC.FncFormatearFechaSC(lDatFechaFP) : "—";
         }
 
         /// <summary>Para el historial: cuánto duró una orden cerrada o cuánto lleva una abierta.</summary>
         protected static string FncTiempoOrdenFP(object pObjOrdenFP)
         {
             ClsReporteOrdenENFP lObjOrdenFP = (ClsReporteOrdenENFP)pObjOrdenFP;
-            if (lObjOrdenFP.lDatFechaCierreUtcFP.HasValue)
+            if (lObjOrdenFP.gDatFechaCierreUtcFP.HasValue)
             {
-                return "Duró " + FncFormatearDuracionFP(lObjOrdenFP.lIntMinutosReparacionFP);
+                return "Duró " + FncFormatearDuracionFP(lObjOrdenFP.gIntMinutosReparacionFP);
             }
-            return lObjOrdenFP.lIntDiasAbiertaFP <= 0
+            return lObjOrdenFP.gIntDiasAbiertaFP <= 0
                 ? "Abierta desde hoy"
-                : "Abierta hace " + FncTextoDiasFP(lObjOrdenFP.lIntDiasAbiertaFP);
+                : "Abierta hace " + FncTextoDiasFP(lObjOrdenFP.gIntDiasAbiertaFP);
         }
 
         /// <summary>Texto del contador con singular o plural: «1 orden», «3 órdenes», «0 órdenes».</summary>

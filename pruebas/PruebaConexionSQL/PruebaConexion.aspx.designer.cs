@@ -6,7 +6,7 @@
 
 namespace PruebaConexionSQL
 {
-    public partial class PruebaConexion
+    public partial class webPruebaConexionSC
     {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         protected global::System.Web.UI.WebControls.Label lblEstado;

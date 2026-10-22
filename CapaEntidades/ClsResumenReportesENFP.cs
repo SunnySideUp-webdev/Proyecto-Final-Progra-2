@@ -14,30 +14,30 @@ namespace CapaEntidades
     public class ClsResumenReportesENFP
     {
         /// <summary>Obtiene o establece cuántas órdenes están abiertas en este momento.</summary>
-        public int lIntOrdenesAbiertasFP { get; set; }
+        public int gIntOrdenesAbiertasFP { get; set; }
 
         /// <summary>Obtiene o establece cuántas órdenes se cerraron en el mes actual (calendario de Guatemala).</summary>
-        public int lIntOrdenesCerradasMesFP { get; set; }
+        public int gIntOrdenesCerradasMesFP { get; set; }
 
         /// <summary>Obtiene o establece cuántos vehículos distintos han tenido al menos una orden.</summary>
-        public int lIntVehiculosAtendidosFP { get; set; }
+        public int gIntVehiculosAtendidosFP { get; set; }
 
         /// <summary>
         /// Obtiene o establece el tiempo promedio de reparación en minutos (de la apertura al
         /// cierre de las órdenes cerradas); es nulo si todavía no hay órdenes cerradas.
         /// </summary>
-        public int? lIntMinutosPromedioReparacionFP { get; set; }
+        public int? gIntMinutosPromedioReparacionFP { get; set; }
 
         /// <summary>
         /// Obtiene o establece la fecha de apertura (UTC) de la orden abierta más antigua;
         /// es nula si no hay órdenes abiertas.
         /// </summary>
-        public DateTime? lDatAperturaMasAntiguaUtcFP { get; set; }
+        public DateTime? gDatAperturaMasAntiguaUtcFP { get; set; }
 
         /// <summary>
         /// Obtiene o establece cuántos días lleva abierta la orden más antigua. Lo calcula la
-        /// Capa Lógica a partir de <see cref="lDatAperturaMasAntiguaUtcFP"/>.
+        /// Capa Lógica a partir de <see cref="gDatAperturaMasAntiguaUtcFP"/>.
         /// </summary>
-        public int lIntDiasOrdenMasAntiguaFP { get; set; }
+        public int gIntDiasOrdenMasAntiguaFP { get; set; }
     }
 }

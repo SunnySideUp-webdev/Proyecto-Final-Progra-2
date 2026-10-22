@@ -32,7 +32,7 @@ namespace CapaDatos
         /// <summary>Lista los repuestos utilizados en una orden, en el orden en que se registraron.</summary>
         /// <param name="pIntIdOrdenSC">Identificador de la orden.</param>
         /// <returns>Repuestos de la orden (vacío si no tiene).</returns>
-        public List<ClsRepuestoOrdenENSC> fncListarPorOrdenSC(int pIntIdOrdenSC)
+        public List<ClsRepuestoOrdenENSC> FncListarPorOrdenSC(int pIntIdOrdenSC)
         {
             const string lStrConsultaSC = @"
                 SELECT ro.IdRepuestoOrden, ro.IdOrden, ro.IdRepuesto, r.codigo, r.nombre, ro.Cantidad, ro.FechaRegistro
@@ -43,7 +43,7 @@ namespace CapaDatos
 
             List<ClsRepuestoOrdenENSC> lLstUsosSC = new List<ClsRepuestoOrdenENSC>();
 
-            using (SqlConnection lObjConexionSC = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionSC = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoSC = new SqlCommand(lStrConsultaSC, lObjConexionSC))
             {
                 lObjComandoSC.Parameters.Add("@IdOrden", SqlDbType.Int).Value = pIntIdOrdenSC;
@@ -54,14 +54,14 @@ namespace CapaDatos
                     {
                         lLstUsosSC.Add(new ClsRepuestoOrdenENSC
                         {
-                            lIntIdRepuestoOrdenSC = lObjLectorSC.GetInt32(0),
-                            lIntIdOrdenSC = lObjLectorSC.GetInt32(1),
-                            lIntIdRepuestoSC = lObjLectorSC.GetInt32(2),
-                            lStrCodigoSC = lObjLectorSC.GetString(3),
-                            lStrNombreRepuestoSC = lObjLectorSC.GetString(4),
-                            lIntCantidadSC = lObjLectorSC.GetInt32(5),
+                            gIntIdRepuestoOrdenSC = lObjLectorSC.GetInt32(0),
+                            gIntIdOrdenSC = lObjLectorSC.GetInt32(1),
+                            gIntIdRepuestoSC = lObjLectorSC.GetInt32(2),
+                            gStrCodigoSC = lObjLectorSC.GetString(3),
+                            gStrNombreRepuestoSC = lObjLectorSC.GetString(4),
+                            gIntCantidadSC = lObjLectorSC.GetInt32(5),
                             // SQL Server devuelve DATETIME2 sin zona; la columna se guarda en UTC.
-                            lDatFechaRegistroUtcSC = DateTime.SpecifyKind(lObjLectorSC.GetDateTime(6), DateTimeKind.Utc)
+                            gDatFechaRegistroUtcSC = DateTime.SpecifyKind(lObjLectorSC.GetDateTime(6), DateTimeKind.Utc)
                         });
                     }
                 }
@@ -72,7 +72,7 @@ namespace CapaDatos
 
         /// <summary>Lista los repuestos que tienen unidades en bodega, ordenados por nombre.</summary>
         /// <returns>Repuestos con stock mayor que cero.</returns>
-        public List<ClsRepuestoENPP> fncListarRepuestosDisponiblesSC()
+        public List<ClsRepuestoENPP> FncListarRepuestosDisponiblesSC()
         {
             const string lStrConsultaSC = @"
                 SELECT idrepuesto, codigo, nombre, stock, marcacarro, modelocarro, aniocarro
@@ -82,7 +82,7 @@ namespace CapaDatos
 
             List<ClsRepuestoENPP> lLstRepuestosSC = new List<ClsRepuestoENPP>();
 
-            using (SqlConnection lObjConexionSC = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionSC = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoSC = new SqlCommand(lStrConsultaSC, lObjConexionSC))
             {
                 lObjConexionSC.Open();
@@ -92,13 +92,13 @@ namespace CapaDatos
                     {
                         lLstRepuestosSC.Add(new ClsRepuestoENPP
                         {
-                            lIntIdRepuestoPP = lObjLectorSC.GetInt32(0),
-                            lStrCodigoPP = lObjLectorSC.GetString(1),
-                            lStrNombrePP = lObjLectorSC.GetString(2),
-                            lIntStockPP = lObjLectorSC.GetInt32(3),
-                            lStrMarcaCarroPP = lObjLectorSC.GetString(4),
-                            lStrModeloCarroPP = lObjLectorSC.GetString(5),
-                            lIntAnioCarroPP = lObjLectorSC.GetInt32(6)
+                            gIntIdRepuestoPP = lObjLectorSC.GetInt32(0),
+                            gStrCodigoPP = lObjLectorSC.GetString(1),
+                            gStrNombrePP = lObjLectorSC.GetString(2),
+                            gIntStockPP = lObjLectorSC.GetInt32(3),
+                            gStrMarcaCarroPP = lObjLectorSC.GetString(4),
+                            gStrModeloCarroPP = lObjLectorSC.GetString(5),
+                            gIntAnioCarroPP = lObjLectorSC.GetInt32(6)
                         });
                     }
                 }
@@ -115,14 +115,14 @@ namespace CapaDatos
         /// <param name="pIntIdRepuestoSC">Repuesto utilizado.</param>
         /// <param name="pIntCantidadSC">Unidades utilizadas (mayor que cero).</param>
         /// <returns>Correcto, o el motivo por el que no se registró.</returns>
-        public ResultadoRepuestoOrdenSC fncRegistrarUsoSC(int pIntIdOrdenSC, int pIntIdRepuestoSC, int pIntCantidadSC)
+        public ResultadoRepuestoOrdenSC FncRegistrarUsoSC(int pIntIdOrdenSC, int pIntIdRepuestoSC, int pIntCantidadSC)
         {
-            using (SqlConnection lObjConexionSC = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionSC = ClsConexionDASC.FncObtenerConexionSC())
             {
                 lObjConexionSC.Open();
                 using (SqlTransaction lObjTransaccionSC = lObjConexionSC.BeginTransaction())
                 {
-                    ResultadoRepuestoOrdenSC lEnmEstadoOrdenSC = fncBloquearOrdenAbiertaSC(lObjConexionSC, lObjTransaccionSC, pIntIdOrdenSC);
+                    ResultadoRepuestoOrdenSC lEnmEstadoOrdenSC = FncBloquearOrdenAbiertaSC(lObjConexionSC, lObjTransaccionSC, pIntIdOrdenSC);
                     if (lEnmEstadoOrdenSC != ResultadoRepuestoOrdenSC.Correcto)
                     {
                         lObjTransaccionSC.Rollback();
@@ -140,7 +140,7 @@ namespace CapaDatos
                         lObjComandoSC.Parameters.Add("@IdRepuesto", SqlDbType.Int).Value = pIntIdRepuestoSC;
                         if (lObjComandoSC.ExecuteNonQuery() == 0)
                         {
-                            bool lBlnExisteSC = fncExisteRepuestoSC(lObjConexionSC, lObjTransaccionSC, pIntIdRepuestoSC);
+                            bool lBlnExisteSC = FncExisteRepuestoSC(lObjConexionSC, lObjTransaccionSC, pIntIdRepuestoSC);
                             lObjTransaccionSC.Rollback();
                             return lBlnExisteSC ? ResultadoRepuestoOrdenSC.StockInsuficiente : ResultadoRepuestoOrdenSC.RepuestoNoExiste;
                         }
@@ -170,14 +170,14 @@ namespace CapaDatos
         /// <param name="pIntIdOrdenSC">Orden de reparación a la que pertenece el registro.</param>
         /// <param name="pIntIdRepuestoOrdenSC">Registro que se quita.</param>
         /// <returns>Correcto, o el motivo por el que no se quitó.</returns>
-        public ResultadoRepuestoOrdenSC fncQuitarUsoSC(int pIntIdOrdenSC, int pIntIdRepuestoOrdenSC)
+        public ResultadoRepuestoOrdenSC FncQuitarUsoSC(int pIntIdOrdenSC, int pIntIdRepuestoOrdenSC)
         {
-            using (SqlConnection lObjConexionSC = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionSC = ClsConexionDASC.FncObtenerConexionSC())
             {
                 lObjConexionSC.Open();
                 using (SqlTransaction lObjTransaccionSC = lObjConexionSC.BeginTransaction())
                 {
-                    ResultadoRepuestoOrdenSC lEnmEstadoOrdenSC = fncBloquearOrdenAbiertaSC(lObjConexionSC, lObjTransaccionSC, pIntIdOrdenSC);
+                    ResultadoRepuestoOrdenSC lEnmEstadoOrdenSC = FncBloquearOrdenAbiertaSC(lObjConexionSC, lObjTransaccionSC, pIntIdOrdenSC);
                     if (lEnmEstadoOrdenSC != ResultadoRepuestoOrdenSC.Correcto)
                     {
                         lObjTransaccionSC.Rollback();
@@ -226,7 +226,7 @@ namespace CapaDatos
         /// Comprueba que la orden exista y siga abierta, y la bloquea hasta el final de la
         /// transacción (UPDLOCK, HOLDLOCK): mientras tanto nadie puede cerrarla.
         /// </summary>
-        private static ResultadoRepuestoOrdenSC fncBloquearOrdenAbiertaSC(SqlConnection pObjConexionSC,
+        private static ResultadoRepuestoOrdenSC FncBloquearOrdenAbiertaSC(SqlConnection pObjConexionSC,
             SqlTransaction pObjTransaccionSC, int pIntIdOrdenSC)
         {
             const string lStrConsultaSC =
@@ -246,7 +246,7 @@ namespace CapaDatos
         }
 
         /// <summary>Indica si un repuesto existe (dentro de la transacción en curso).</summary>
-        private static bool fncExisteRepuestoSC(SqlConnection pObjConexionSC, SqlTransaction pObjTransaccionSC, int pIntIdRepuestoSC)
+        private static bool FncExisteRepuestoSC(SqlConnection pObjConexionSC, SqlTransaction pObjTransaccionSC, int pIntIdRepuestoSC)
         {
             const string lStrConsultaSC = "SELECT COUNT(1) FROM dbo.Repuesto WHERE idrepuesto = @IdRepuesto;";
             using (SqlCommand lObjComandoSC = new SqlCommand(lStrConsultaSC, pObjConexionSC, pObjTransaccionSC))

@@ -6,7 +6,7 @@
 
 namespace CapaPresentacion
 {
-    public partial class SiteMaster
+    public partial class webSiteMasterSC
     {
         protected global::System.Web.UI.HtmlControls.HtmlHead encabezado;
         protected global::System.Web.UI.HtmlControls.HtmlLink lnkEstilosSitio;

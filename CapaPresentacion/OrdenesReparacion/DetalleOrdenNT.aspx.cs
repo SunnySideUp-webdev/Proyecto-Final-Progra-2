@@ -3,6 +3,7 @@
 // Carné: 0900-16-12945
 // Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Capa de Presentación
 // Parte de Neider: todo el código de este archivo es de su módulo.
+// Ajuste de integración (Sharon): nombres según la convención del docente (prefijo g en campos y propiedades, Sub en procedimientos).
 //==============================================================
 using System;
 using System.Web.UI;
@@ -19,12 +20,12 @@ namespace CapaPresentacion.OrdenesReparacion
         {
             if (!IsPostBack)
             {
-                FncCargarDetalleNT();
+                SubCargarDetalleNT();
             }
         }
 
         /// <summary>Carga la orden indicada en ?id=; si no es válida o no existe, muestra un mensaje.</summary>
-        private void FncCargarDetalleNT()
+        private void SubCargarDetalleNT()
         {
             int lIntIdOrdenNT;
 
@@ -54,24 +55,24 @@ namespace CapaPresentacion.OrdenesReparacion
                     return;
                 }
 
-                lblIdOrdenNT.Text = lObjOrdenNT.lIntIdOrdenNT.ToString();
-                lblVinNT.Text = Server.HtmlEncode(lObjOrdenNT.lStrVinNT);
-                lblPlacaNT.Text = Server.HtmlEncode(lObjOrdenNT.lStrPlacaNT);
+                lblIdOrdenNT.Text = lObjOrdenNT.gIntIdOrdenNT.ToString();
+                lblVinNT.Text = Server.HtmlEncode(lObjOrdenNT.gStrVinNT);
+                lblPlacaNT.Text = Server.HtmlEncode(lObjOrdenNT.gStrPlacaNT);
 
                 lblMotivoNT.Text =
-                    Server.HtmlEncode(lObjOrdenNT.lStrMotivoIngresoNT);
+                    Server.HtmlEncode(lObjOrdenNT.gStrMotivoIngresoNT);
 
                 lblDiagnosticoNT.Text =
-                    Server.HtmlEncode(lObjOrdenNT.lStrDiagnosticoNT);
+                    Server.HtmlEncode(lObjOrdenNT.gStrDiagnosticoNT);
 
                 lblEstadoNT.Text =
-                    Server.HtmlEncode(lObjOrdenNT.lStrEstadoNT);
+                    Server.HtmlEncode(lObjOrdenNT.gStrEstadoNT);
 
                 pnlDetalleNT.Visible = true;
 
                 pnlCerrarNT.Visible =
                     string.Equals(
-                        lObjOrdenNT.lStrEstadoNT,
+                        lObjOrdenNT.gStrEstadoNT,
                         "Abierta",
                         StringComparison.OrdinalIgnoreCase);
             }
@@ -115,7 +116,7 @@ namespace CapaPresentacion.OrdenesReparacion
                     lblMensajeNT.Text =
                         "La orden no existe o ya se encuentra cerrada.";
 
-                    FncCargarDetalleNT();
+                    SubCargarDetalleNT();
                     return;
                 }
 

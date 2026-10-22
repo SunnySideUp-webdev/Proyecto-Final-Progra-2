@@ -59,12 +59,12 @@
                         <HeaderTemplate><ul class="adms-lista"></HeaderTemplate>
                         <ItemTemplate>
                             <li>
-                                <span class="adms-avatar" aria-hidden="true"><%# fncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.fncObtenerInicialesSC((string)Eval("lStrNombresSC"), (string)Eval("lStrApellidosSC"))) %></span>
+                                <span class="adms-avatar" aria-hidden="true"><%# FncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.FncObtenerInicialesSC((string)Eval("gStrNombresSC"), (string)Eval("gStrApellidosSC"))) %></span>
                                 <div class="adms-persona-texto flex-grow-1">
-                                    <a class="adms-persona-nombre" href='Clientes/DetalleCliente.aspx?id=<%# Eval("lIntIdClienteSC") %>'><%# fncCodificarSC(Eval("lStrNombresSC") + " " + Eval("lStrApellidosSC")) %></a>
-                                    <div class="adms-persona-detalle adms-numero">DPI <%# fncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.fncFormatearDpiSC((string)Eval("lStrDpiSC"))) %></div>
+                                    <a class="adms-persona-nombre" href='Clientes/DetalleCliente.aspx?id=<%# Eval("gIntIdClienteSC") %>'><%# FncCodificarSC(Eval("gStrNombresSC") + " " + Eval("gStrApellidosSC")) %></a>
+                                    <div class="adms-persona-detalle adms-numero">DPI <%# FncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.FncFormatearDpiSC((string)Eval("gStrDpiSC"))) %></div>
                                 </div>
-                                <span class="adms-chip d-none d-sm-inline-flex adms-numero"><%# fncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaRegistroUtcSC"))) %></span>
+                                <span class="adms-chip d-none d-sm-inline-flex adms-numero"><%# FncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatFechaRegistroUtcSC"))) %></span>
                             </li>
                         </ItemTemplate>
                         <FooterTemplate></ul></FooterTemplate>
@@ -102,11 +102,11 @@
                         </a>
                         <asp:Repeater ID="rptAccesosSC" runat="server">
                             <ItemTemplate>
-                                <a class="adms-acceso" href='<%# ResolveUrl((string)Eval("lStrUrl")) %>'>
-                                    <span class="adms-acceso-icono" aria-hidden="true"><i class='<%# "bi " + Eval("lStrIcono") %>'></i></span>
+                                <a class="adms-acceso" href='<%# ResolveUrl((string)Eval("gStrUrlSC")) %>'>
+                                    <span class="adms-acceso-icono" aria-hidden="true"><i class='<%# "bi " + Eval("gStrIconoSC") %>'></i></span>
                                     <span>
-                                        <span class="adms-acceso-titulo"><%# fncCodificarSC(Eval("lStrTexto")) %></span>
-                                        <span class="adms-acceso-descripcion"><%# fncCodificarSC(Eval("lStrDescripcion")) %></span>
+                                        <span class="adms-acceso-titulo"><%# FncCodificarSC(Eval("gStrTextoSC")) %></span>
+                                        <span class="adms-acceso-descripcion"><%# FncCodificarSC(Eval("gStrDescripcionSC")) %></span>
                                     </span>
                                     <i class="bi bi-chevron-right adms-acceso-flecha" aria-hidden="true"></i>
                                 </a>

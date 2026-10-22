@@ -43,9 +43,9 @@ Fuera del alcance acordado por el equipo quedan los precios, los costos y cualqu
 
 Componentes de otros módulos que el reporte reutiliza en lugar de duplicarlos:
 
-- `ClsConexionDA` (común): conexión a `AutoManagerDMS`.
-- `ClsZonaHorariaLN` (común): conversión entre UTC y la hora de Guatemala.
-- `ClsValidacionExcepcionLN` (común): mecanismo con el que la Capa Lógica informa de un dato inválido.
+- `ClsConexionDASC` (común): conexión a `AutoManagerDMS`.
+- `ClsZonaHorariaLNSC` (común): conversión entre UTC y la hora de Guatemala.
+- `ClsValidacionExcepcionLNSC` (común): mecanismo con el que la Capa Lógica informa de un dato inválido.
 - `ClsClienteLNSC` (módulo 1): la búsqueda de clientes del historial es la misma del módulo de clientes.
 - `ClsFormatoSC` (módulo 1): formato de placas, fechas y DPI, para que se presenten igual en todo el sitio.
 - Las tablas `Clientes` y `Vehiculos` (módulo 1), `OrdenesReparacion` (módulo 2, Neider), `Repuesto`
@@ -87,7 +87,7 @@ Datos no decide qué significa «este mes» ni cómo se presenta una fecha.
 
 ### 4.1 Consulta base (Capa de Datos)
 
-Las tres listas parten de la misma consulta, definida en la constante `lStrConsultaBaseFP`:
+Las tres listas parten de la misma consulta, definida en la constante `gStrConsultaBaseFP`:
 
 ```sql
 SELECT o.IdOrden, o.IdVehiculo, v.Placa, v.VIN, v.Marca, v.Modelo,
@@ -125,7 +125,7 @@ Si no existen órdenes cerradas, `AVG` devuelve `NULL` y la tarjeta muestra «Si
 - Días abierta (`FncCalcularDiasDesdeFP` en la Capa Lógica): se cuentan días de calendario de Guatemala.
   Una orden abierta el mismo día muestra «Hoy»; una abierta el día anterior muestra «1 día», aunque
   hayan transcurrido pocas horas.
-- Las órdenes con 7 días o más se resaltan en rojo (constante `lIntDiasAlertaFP` de la página).
+- Las órdenes con 7 días o más se resaltan en rojo (constante `gIntDiasAlertaFP` de la página).
 - Cada fila enlaza con el detalle de la orden (`DetalleOrdenNT.aspx`, módulo de Neider) y con el del
   cliente (`DetalleCliente.aspx`).
 
@@ -145,7 +145,7 @@ Validaciones (`SubLeerRangoFP` y `FncLeerFechaFP` en la Capa Lógica; las compar
 | Fecha final anterior a la inicial | «La fecha final no puede ser anterior a la fecha inicial.» |
 | Rango de más de 366 días | «El rango puede abarcar como máximo 366 días.» |
 
-Los errores se notifican mediante `ClsValidacionExcepcionLN`, y la página los muestra debajo del campo
+Los errores se notifican mediante `ClsValidacionExcepcionLNSC`, y la página los muestra debajo del campo
 correspondiente.
 
 Límite superior del rango: una consulta «hasta el 22 de octubre» debe incluir ese día completo. Por
@@ -164,10 +164,10 @@ comportamiento es el mismo en Windows y en macOS.
 ### 4.5 Historial por cliente
 
 1. El cliente se localiza con la misma búsqueda del módulo de clientes
-   (`ClsClienteLNSC.fncBuscarClientesSC`): por DPI, nombres, apellidos o teléfono, sin distinguir
+   (`ClsClienteLNSC.FncBuscarClientesSC`): por DPI, nombres, apellidos o teléfono, sin distinguir
    tildes ni mayúsculas.
 2. Al seleccionarlo, la dirección cambia a `?seccion=historial&idCliente=N`.
-3. Se verifica que el cliente exista (`fncObtenerClienteSC`). Si el número no es válido o no
+3. Se verifica que el cliente exista (`FncObtenerClienteSC`). Si el número no es válido o no
    corresponde a ningún cliente, la página responde con el código 404 y un mensaje descriptivo, igual
    que el detalle de clientes y de vehículos.
 4. `FncListarOrdenesPorClienteFP` obtiene las órdenes de todos los vehículos del cliente
@@ -201,7 +201,7 @@ El nivel de stock es una regla del negocio y lo calcula la Capa Lógica (`FncObt
 | Unidades en bodega | Nivel |
 |---|---|
 | 0 | Agotado (rojo) |
-| De 1 a 3 (constante `lIntStockBajoFP`) | Stock bajo (amarillo) |
+| De 1 a 3 (constante `gIntStockBajoFP`) | Stock bajo (amarillo) |
 | Más de 3 | Disponible (verde) |
 
 El encabezado resume cuántos repuestos están agotados y cuántos tienen stock bajo. Cada fila enlaza al
@@ -242,9 +242,9 @@ botón «Filtrar» vuelve a la sección en la que está el usuario y el campo in
 - La base de datos almacena todas las fechas en UTC (`SYSUTCDATETIME()`), tanto en Docker como en
   SQL Server Express.
 - Guatemala está en UTC-6 durante todo el año, ya que no aplica horario de verano.
-- Para mostrar una fecha, esta se convierte a la hora de Guatemala con `ClsFormatoSC.fncFormatearFechaSC`.
+- Para mostrar una fecha, esta se convierte a la hora de Guatemala con `ClsFormatoSC.FncFormatearFechaSC`.
 - Para filtrar («este mes», «del 1 al 22 de octubre»), la fecha de Guatemala se convierte a UTC con
-  `ClsZonaHorariaLN.fncConvertirGuatemalaAUtc` antes de enviarse a SQL Server.
+  `ClsZonaHorariaLNSC.FncConvertirGuatemalaAUtcSC` antes de enviarse a SQL Server.
 
 Ejemplo: el filtro «cerradas desde el 1 de octubre» en hora de Guatemala equivale a «desde el 1 de
 octubre a las 06:00 UTC». Sin esta conversión, el reporte omitiría o incluiría por error las órdenes
@@ -261,7 +261,7 @@ cerradas entre la medianoche y las 6:00.
 | Código malicioso en pantalla (XSS) | Todo texto que proviene de la base de datos o de la dirección se codifica con `FncCodificarFP` (`HttpUtility.HtmlEncode`) antes de mostrarse. |
 | Datos inválidos en la dirección | Un valor desconocido en `?seccion=` muestra el resumen; las fechas inválidas generan un mensaje; un `?idCliente=` inválido responde con 404. |
 | `ValidateRequest="false"` | Está desactivado en esta página, al igual que en las de clientes y vehículos, porque la Capa Lógica valida las entradas y toda salida se codifica. Así, un texto con `<` recibe un mensaje de validación en lugar de un error del servidor. |
-| Base de datos no disponible | Cada sección captura el error, lo registra para su revisión por el equipo (`ClsRegistroErrores`) y muestra un mensaje general, sin detalles técnicos. |
+| Base de datos no disponible | Cada sección captura el error, lo registra para su revisión por el equipo (`ClsRegistroErroresSC`) y muestra un mensaje general, sin detalles técnicos. |
 
 ---
 
@@ -276,7 +276,7 @@ El módulo aplica las convenciones del documento del equipo, con las iniciales F
 | Procedimientos (no devuelven valor) | `Sub…FP` | `SubCargarResumenFP`, `SubCalcularTiemposFP` |
 | Variables locales | `l` + tipo + nombre + iniciales | `lStrSeccionFP`, `lIntIdClienteFP`, `lLstOrdenesFP` |
 | Parámetros | `p` + tipo + nombre + iniciales | `pStrDesdeFP`, `pIntIdClienteFP` |
-| Campos de la clase | `g` + tipo + nombre + iniciales | `gObjReporteLNFP`, `gStrDesdeFP` |
+| Campos, constantes y propiedades de la clase | `g` + tipo + nombre + iniciales | `gObjReporteLNFP`, `gIntStockBajoFP`, `gIntIdOrdenFP` |
 | Controles | prefijo del control + nombre + iniciales | `pnlResumenFP`, `rptAbiertasFP`, `btnFiltrarFP`, `litRangoFP` |
 
 Prefijos de tipo utilizados: `Str` (texto), `Int` (entero), `Bln` (verdadero/falso), `Obj` (objeto),
@@ -373,7 +373,7 @@ rango.
 
 **¿Por qué el nivel de stock se calcula en la Capa Lógica y no en SQL?**
 Es una regla del negocio (qué se considera «stock bajo») que puede cambiar; vive en una sola constante
-(`lIntStockBajoFP`) y la consulta solo entrega las cantidades.
+(`gIntStockBajoFP`) y la consulta solo entrega las cantidades.
 
 **¿Por qué los dos filtros de fechas usan el mismo método?**
 Para que las reglas y los mensajes sean idénticos en ambos reportes y cualquier corrección se haga en un

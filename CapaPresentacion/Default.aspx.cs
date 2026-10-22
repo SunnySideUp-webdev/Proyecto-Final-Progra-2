@@ -19,14 +19,14 @@ namespace CapaPresentacion
     /// </summary>
     public partial class webInicioSC : Page
     {
-        private const int lIntCantidadRecientesSC = 5;
+        private const int gIntCantidadRecientesSC = 5;
 
-        private readonly ClsClienteLNSC lObjClienteLNSC = new ClsClienteLNSC();
-        private readonly ClsVehiculoLNSC lObjVehiculoLNSC = new ClsVehiculoLNSC();
+        private readonly ClsClienteLNSC gObjClienteLNSC = new ClsClienteLNSC();
+        private readonly ClsVehiculoLNSC gObjVehiculoLNSC = new ClsVehiculoLNSC();
 
-        private SiteMaster lObjSitioSC
+        private webSiteMasterSC gObjSitioSC
         {
-            get { return (SiteMaster)Master; }
+            get { return (webSiteMasterSC)Master; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -36,33 +36,33 @@ namespace CapaPresentacion
                 return;
             }
 
-            litFechaHoySC.Text = ClsFormatoSC.fncFormatearFechaLargaSC(ClsZonaHorariaLN.fncObtenerHoyGuatemala());
+            litFechaHoySC.Text = ClsFormatoSC.FncFormatearFechaLargaSC(ClsZonaHorariaLNSC.FncObtenerHoyGuatemalaSC());
 
             // Accesos a los módulos disponibles, excepto Inicio (la página actual).
-            rptAccesosSC.DataSource = SiteMaster.fncObtenerModulosDisponibles(Context)
-                .Where(m => !m.lBlnActivo)
+            rptAccesosSC.DataSource = webSiteMasterSC.FncObtenerModulosDisponiblesSC(Context)
+                .Where(pObjModuloSC => !pObjModuloSC.gBlnActivoSC)
                 .ToList();
             rptAccesosSC.DataBind();
 
-            fncCargarResumenSC();
+            SubCargarResumenSC();
         }
 
         /// <summary>Codifica un valor para mostrarlo de forma segura dentro del HTML.</summary>
-        protected string fncCodificarSC(object pObjValorSC)
+        protected string FncCodificarSC(object pObjValorSC)
         {
             return HttpUtility.HtmlEncode(Convert.ToString(pObjValorSC));
         }
 
         /// <summary>Consulta en AutoManagerDMS las cantidades y los clientes recientes.</summary>
-        private void fncCargarResumenSC()
+        private void SubCargarResumenSC()
         {
             try
             {
-                litTotalClientesSC.Text = lObjClienteLNSC.fncContarClientesSC().ToString();
-                litClientesMesSC.Text = lObjClienteLNSC.fncContarClientesDelMesSC().ToString();
-                litTotalVehiculosSC.Text = lObjVehiculoLNSC.fncContarVehiculosSC().ToString();
+                litTotalClientesSC.Text = gObjClienteLNSC.FncContarClientesSC().ToString();
+                litClientesMesSC.Text = gObjClienteLNSC.FncContarClientesDelMesSC().ToString();
+                litTotalVehiculosSC.Text = gObjVehiculoLNSC.FncContarVehiculosSC().ToString();
 
-                List<ClsClienteENSC> lLstRecientesSC = lObjClienteLNSC.fncObtenerClientesRecientesSC(lIntCantidadRecientesSC);
+                List<ClsClienteENSC> lLstRecientesSC = gObjClienteLNSC.FncObtenerClientesRecientesSC(gIntCantidadRecientesSC);
                 rptRecientesSC.DataSource = lLstRecientesSC;
                 rptRecientesSC.DataBind();
                 rptRecientesSC.Visible = lLstRecientesSC.Count > 0;
@@ -70,8 +70,8 @@ namespace CapaPresentacion
             }
             catch (Exception lObjExcepcionSC)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionSC, "Default.aspx - cargar resumen");
-                lObjSitioSC.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionSC, "Default.aspx - cargar resumen");
+                gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible cargar el resumen del taller en este momento. Intenta de nuevo en unos minutos.");
                 pnlResumenSC.Visible = false;
             }

@@ -18,7 +18,7 @@ namespace CapaDatos
     public class ClsRepuestoDAPP
     {
         /// <summary>Columnas que se leen de cada repuesto, en el orden que espera FncLeerRepuestoPP.</summary>
-        private const string lStrColumnasPP =
+        private const string gStrColumnasPP =
             "idrepuesto, codigo, nombre, descripcion, stock, marcacarro, modelocarro, aniocarro";
 
         /// <summary>Comprueba si un código ya está registrado.</summary>
@@ -28,7 +28,7 @@ namespace CapaDatos
         {
             const string lStrConsultaPP = "SELECT COUNT(1) FROM dbo.Repuesto WHERE codigo = @Codigo;";
 
-            using (SqlConnection lObjConexionPP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionPP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoPP = new SqlCommand(lStrConsultaPP, lObjConexionPP))
             {
                 lObjComandoPP.Parameters.Add("@Codigo", SqlDbType.VarChar, 15).Value = pStrCodigoPP;
@@ -43,7 +43,7 @@ namespace CapaDatos
         /// </summary>
         /// <param name="pObjRepuestoPP">Repuesto validado y normalizado por la Capa Lógica.</param>
         /// <returns>Identificador asignado por SQL Server.</returns>
-        /// <exception cref="ClsDatoDuplicadoExcepcionDA">El código ya existe (UQ_Repuesto_Codigo).</exception>
+        /// <exception cref="ClsDatoDuplicadoExcepcionDASC">El código ya existe (UQ_Repuesto_Codigo).</exception>
         public int FncAgregarRepuestoPP(ClsRepuestoENPP pObjRepuestoPP)
         {
             const string lStrConsultaPP = @"
@@ -51,25 +51,25 @@ namespace CapaDatos
                 OUTPUT INSERTED.idrepuesto
                 VALUES (@Codigo, @Nombre, @Descripcion, @Stock, @Marca, @Modelo, @Anio);";
 
-            using (SqlConnection lObjConexionPP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionPP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoPP = new SqlCommand(lStrConsultaPP, lObjConexionPP))
             {
-                lObjComandoPP.Parameters.Add("@Codigo", SqlDbType.VarChar, 15).Value = pObjRepuestoPP.lStrCodigoPP;
-                lObjComandoPP.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50).Value = pObjRepuestoPP.lStrNombrePP;
-                lObjComandoPP.Parameters.Add("@Descripcion", SqlDbType.NVarChar, 100).Value = pObjRepuestoPP.lStrDescripcionPP;
-                lObjComandoPP.Parameters.Add("@Stock", SqlDbType.Int).Value = pObjRepuestoPP.lIntStockPP;
-                lObjComandoPP.Parameters.Add("@Marca", SqlDbType.NVarChar, 50).Value = pObjRepuestoPP.lStrMarcaCarroPP;
-                lObjComandoPP.Parameters.Add("@Modelo", SqlDbType.NVarChar, 50).Value = pObjRepuestoPP.lStrModeloCarroPP;
-                lObjComandoPP.Parameters.Add("@Anio", SqlDbType.Int).Value = pObjRepuestoPP.lIntAnioCarroPP;
+                lObjComandoPP.Parameters.Add("@Codigo", SqlDbType.VarChar, 15).Value = pObjRepuestoPP.gStrCodigoPP;
+                lObjComandoPP.Parameters.Add("@Nombre", SqlDbType.NVarChar, 50).Value = pObjRepuestoPP.gStrNombrePP;
+                lObjComandoPP.Parameters.Add("@Descripcion", SqlDbType.NVarChar, 100).Value = pObjRepuestoPP.gStrDescripcionPP;
+                lObjComandoPP.Parameters.Add("@Stock", SqlDbType.Int).Value = pObjRepuestoPP.gIntStockPP;
+                lObjComandoPP.Parameters.Add("@Marca", SqlDbType.NVarChar, 50).Value = pObjRepuestoPP.gStrMarcaCarroPP;
+                lObjComandoPP.Parameters.Add("@Modelo", SqlDbType.NVarChar, 50).Value = pObjRepuestoPP.gStrModeloCarroPP;
+                lObjComandoPP.Parameters.Add("@Anio", SqlDbType.Int).Value = pObjRepuestoPP.gIntAnioCarroPP;
 
                 try
                 {
                     lObjConexionPP.Open();
                     return Convert.ToInt32(lObjComandoPP.ExecuteScalar());
                 }
-                catch (SqlException lObjExcepcionPP) when (ClsDatoDuplicadoExcepcionDA.fncEsDuplicado(lObjExcepcionPP))
+                catch (SqlException lObjExcepcionPP) when (ClsDatoDuplicadoExcepcionDASC.FncEsDuplicadoSC(lObjExcepcionPP))
                 {
-                    throw new ClsDatoDuplicadoExcepcionDA(lObjExcepcionPP);
+                    throw new ClsDatoDuplicadoExcepcionDASC(lObjExcepcionPP);
                 }
             }
         }
@@ -84,7 +84,7 @@ namespace CapaDatos
         public List<ClsRepuestoENPP> FncConsultarPP(string pStrCriterioPP, int pIntMaximoPP)
         {
             // COLLATE ..._CI_AI permite encontrar "Batería" escribiendo "bateria".
-            const string lStrConsultaPP = "SELECT TOP (@Maximo) " + lStrColumnasPP + @"
+            const string lStrConsultaPP = "SELECT TOP (@Maximo) " + gStrColumnasPP + @"
                 FROM dbo.Repuesto
                 WHERE @Patron IS NULL
                    OR nombre COLLATE Latin1_General_CI_AI LIKE @Patron ESCAPE '\'
@@ -95,7 +95,7 @@ namespace CapaDatos
 
             List<ClsRepuestoENPP> lLstRepuestosPP = new List<ClsRepuestoENPP>();
 
-            using (SqlConnection lObjConexionPP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionPP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoPP = new SqlCommand(lStrConsultaPP, lObjConexionPP))
             {
                 bool lBlnSinCriterioPP = string.IsNullOrEmpty(pStrCriterioPP);
@@ -103,7 +103,7 @@ namespace CapaDatos
                 // Los comodines de LIKE (%, _ y [) se escapan para buscar el texto tal cual.
                 lObjComandoPP.Parameters.Add("@Patron", SqlDbType.NVarChar, 120).Value = lBlnSinCriterioPP
                     ? (object)DBNull.Value
-                    : "%" + ClsSqlDA.fncEscaparPatronLike(pStrCriterioPP) + "%";
+                    : "%" + ClsSqlDASC.FncEscaparPatronLikeSC(pStrCriterioPP) + "%";
                 lObjComandoPP.Parameters.Add("@Codigo", SqlDbType.VarChar, 50).Value = lBlnSinCriterioPP
                     ? (object)DBNull.Value
                     : pStrCriterioPP.ToUpperInvariant();
@@ -126,9 +126,9 @@ namespace CapaDatos
         /// <returns>El repuesto o <c>null</c> si no existe.</returns>
         public ClsRepuestoENPP FncObtenerRepuestoPP(int pIntIdRepuestoPP)
         {
-            const string lStrConsultaPP = "SELECT " + lStrColumnasPP + " FROM dbo.Repuesto WHERE idrepuesto = @IdRepuesto;";
+            const string lStrConsultaPP = "SELECT " + gStrColumnasPP + " FROM dbo.Repuesto WHERE idrepuesto = @IdRepuesto;";
 
-            using (SqlConnection lObjConexionPP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionPP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoPP = new SqlCommand(lStrConsultaPP, lObjConexionPP))
             {
                 lObjComandoPP.Parameters.Add("@IdRepuesto", SqlDbType.Int).Value = pIntIdRepuestoPP;
@@ -151,7 +151,7 @@ namespace CapaDatos
         {
             const string lStrConsultaPP = "UPDATE dbo.Repuesto SET stock = stock + @Cantidad WHERE idrepuesto = @IdRepuesto;";
 
-            using (SqlConnection lObjConexionPP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionPP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoPP = new SqlCommand(lStrConsultaPP, lObjConexionPP))
             {
                 lObjComandoPP.Parameters.Add("@Cantidad", SqlDbType.Int).Value = pIntCantidadPP;
@@ -167,7 +167,7 @@ namespace CapaDatos
         {
             const string lStrConsultaPP = "SELECT COUNT(1) FROM dbo.Repuesto;";
 
-            using (SqlConnection lObjConexionPP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionPP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoPP = new SqlCommand(lStrConsultaPP, lObjConexionPP))
             {
                 lObjConexionPP.Open();
@@ -175,19 +175,19 @@ namespace CapaDatos
             }
         }
 
-        /// <summary>Convierte la fila actual en un repuesto (columnas de lStrColumnasPP).</summary>
+        /// <summary>Convierte la fila actual en un repuesto (columnas de gStrColumnasPP).</summary>
         private static ClsRepuestoENPP FncLeerRepuestoPP(SqlDataReader pObjLectorPP)
         {
             return new ClsRepuestoENPP
             {
-                lIntIdRepuestoPP = pObjLectorPP.GetInt32(0),
-                lStrCodigoPP = pObjLectorPP.GetString(1),
-                lStrNombrePP = pObjLectorPP.GetString(2),
-                lStrDescripcionPP = pObjLectorPP.GetString(3),
-                lIntStockPP = pObjLectorPP.GetInt32(4),
-                lStrMarcaCarroPP = pObjLectorPP.GetString(5),
-                lStrModeloCarroPP = pObjLectorPP.GetString(6),
-                lIntAnioCarroPP = pObjLectorPP.GetInt32(7)
+                gIntIdRepuestoPP = pObjLectorPP.GetInt32(0),
+                gStrCodigoPP = pObjLectorPP.GetString(1),
+                gStrNombrePP = pObjLectorPP.GetString(2),
+                gStrDescripcionPP = pObjLectorPP.GetString(3),
+                gIntStockPP = pObjLectorPP.GetInt32(4),
+                gStrMarcaCarroPP = pObjLectorPP.GetString(5),
+                gStrModeloCarroPP = pObjLectorPP.GetString(6),
+                gIntAnioCarroPP = pObjLectorPP.GetInt32(7)
             };
         }
     }

@@ -65,33 +65,33 @@
                 <Columns>
 
                     <asp:BoundField
-                        DataField="lIntIdOrdenNT"
+                        DataField="gIntIdOrdenNT"
                         HeaderText="Orden" />
 
                     <%-- Ajuste de integración (Sharon): la fecha se guarda en UTC y aquí se muestra en hora de Guatemala. --%>
                     <asp:TemplateField
                         HeaderText="Fecha de apertura">
                         <ItemTemplate>
-                            <%# CapaPresentacion.Utilidades.ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaAperturaNT")) %>
+                            <%# CapaPresentacion.Utilidades.ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatFechaAperturaNT")) %>
                         </ItemTemplate>
                     </asp:TemplateField>
 
                     <asp:BoundField
-                        DataField="lStrPlacaNT"
+                        DataField="gStrPlacaNT"
                         HeaderText="Placa" />
 
                     <asp:BoundField
-                        DataField="lStrMotivoIngresoNT"
+                        DataField="gStrMotivoIngresoNT"
                         HeaderText="Motivo de ingreso" />
 
                     <asp:BoundField
-                        DataField="lStrEstadoNT"
+                        DataField="gStrEstadoNT"
                         HeaderText="Estado" />
 
                     <asp:HyperLinkField
                         HeaderText="Acciones"
                         Text="Ver detalle"
-                        DataNavigateUrlFields="lIntIdOrdenNT"
+                        DataNavigateUrlFields="gIntIdOrdenNT"
                         DataNavigateUrlFormatString="~/OrdenesReparacion/DetalleOrdenNT.aspx?id={0}" />
 
                 </Columns>

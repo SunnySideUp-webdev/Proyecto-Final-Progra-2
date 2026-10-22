@@ -1,3 +1,8 @@
+//==============================================================
+// Nombre: Sharon Yasmin Consuegra Borrayo
+// Carné: 0900-25-22148
+// Tema: AutoManager DMS - Prueba de conexión a SQL Server
+//==============================================================
 using System;
 using System.Configuration;
 using System.Data;
@@ -6,86 +11,94 @@ using System.Web.UI;
 
 namespace PruebaConexionSQL
 {
-    public partial class PruebaConexion : Page
+    /// <summary>
+    /// Página mínima que comprueba la conexión a TallerMecanicoDB: muestra la versión del
+    /// servidor, la base y el usuario, y ejecuta una consulta parametrizada de prueba.
+    /// </summary>
+    public partial class webPruebaConexionSC : Page
     {
-        private const string NombreConexion = "TallerMecanicoDB";
+        private const string gStrNombreConexionSC = "TallerMecanicoDB";
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            var configuracion = ConfigurationManager.ConnectionStrings[NombreConexion];
-            if (configuracion == null)
+            ConnectionStringSettings lObjConfiguracionSC = ConfigurationManager.ConnectionStrings[gStrNombreConexionSC];
+            if (lObjConfiguracionSC == null)
             {
-                MostrarError($"No existe la cadena de conexión '{NombreConexion}' en Web.config.");
+                SubMostrarErrorSC($"No existe la cadena de conexión '{gStrNombreConexionSC}' en Web.config.");
                 return;
             }
 
             // Solo se muestran datos no sensibles de la cadena de conexión.
-            var datosConexion = new SqlConnectionStringBuilder(configuracion.ConnectionString);
-            lblServidor.Text = Server.HtmlEncode(datosConexion.DataSource);
+            SqlConnectionStringBuilder lObjDatosConexionSC = new SqlConnectionStringBuilder(lObjConfiguracionSC.ConnectionString);
+            lblServidor.Text = Server.HtmlEncode(lObjDatosConexionSC.DataSource);
 
             try
             {
-                using (var conexion = new SqlConnection(configuracion.ConnectionString))
+                using (SqlConnection lObjConexionSC = new SqlConnection(lObjConfiguracionSC.ConnectionString))
                 {
-                    conexion.Open();
-                    LeerDatosServidor(conexion);
-                    lblExisteBase.Text = ExisteBaseDatos(conexion, "TallerMecanicoDB") ? "Sí" : "No";
-                    lblConsulta.Text = Convert.ToString(SumarEnServidor(conexion, 2, 3));
+                    lObjConexionSC.Open();
+                    SubLeerDatosServidorSC(lObjConexionSC);
+                    lblExisteBase.Text = FncExisteBaseDatosSC(lObjConexionSC, "TallerMecanicoDB") ? "Sí" : "No";
+                    lblConsulta.Text = Convert.ToString(FncSumarEnServidorSC(lObjConexionSC, 2, 3));
                 }
 
                 lblEstado.Text = "CONEXION_OK";
             }
-            catch (SqlException ex)
+            catch (SqlException lObjExcepcionSC)
             {
-                MostrarError($"SQL Server respondió con el error {ex.Number}: {ex.Message}");
+                SubMostrarErrorSC($"SQL Server respondió con el error {lObjExcepcionSC.Number}: {lObjExcepcionSC.Message}");
             }
-            catch (Exception ex)
+            catch (Exception lObjExcepcionSC)
             {
-                MostrarError($"{ex.GetType().Name}: {ex.Message}");
+                SubMostrarErrorSC($"{lObjExcepcionSC.GetType().Name}: {lObjExcepcionSC.Message}");
             }
         }
 
-        private void LeerDatosServidor(SqlConnection conexion)
+        /// <summary>Muestra la versión, la edición, la base de datos y el usuario de la conexión.</summary>
+        private void SubLeerDatosServidorSC(SqlConnection pObjConexionSC)
         {
-            const string consulta =
+            const string lStrConsultaSC =
                 "SELECT @@VERSION, CAST(SERVERPROPERTY('Edition') AS nvarchar(128)), DB_NAME(), SUSER_SNAME();";
 
-            using (var comando = new SqlCommand(consulta, conexion))
-            using (var lector = comando.ExecuteReader())
+            using (SqlCommand lObjComandoSC = new SqlCommand(lStrConsultaSC, pObjConexionSC))
+            using (SqlDataReader lObjLectorSC = lObjComandoSC.ExecuteReader())
             {
-                if (lector.Read())
+                if (lObjLectorSC.Read())
                 {
-                    lblVersion.Text = Server.HtmlEncode(lector.GetString(0).Split('\n')[0].Trim());
-                    lblEdicion.Text = Server.HtmlEncode(lector.GetString(1));
-                    lblBaseDatos.Text = Server.HtmlEncode(lector.GetString(2));
-                    lblUsuario.Text = Server.HtmlEncode(lector.GetString(3));
+                    lblVersion.Text = Server.HtmlEncode(lObjLectorSC.GetString(0).Split('\n')[0].Trim());
+                    lblEdicion.Text = Server.HtmlEncode(lObjLectorSC.GetString(1));
+                    lblBaseDatos.Text = Server.HtmlEncode(lObjLectorSC.GetString(2));
+                    lblUsuario.Text = Server.HtmlEncode(lObjLectorSC.GetString(3));
                 }
             }
         }
 
-        private static bool ExisteBaseDatos(SqlConnection conexion, string nombre)
+        /// <summary>Indica si existe una base de datos con el nombre indicado.</summary>
+        private static bool FncExisteBaseDatosSC(SqlConnection pObjConexionSC, string pStrNombreSC)
         {
-            using (var comando = new SqlCommand("SELECT COUNT(*) FROM sys.databases WHERE name = @nombre;", conexion))
+            using (SqlCommand lObjComandoSC = new SqlCommand("SELECT COUNT(*) FROM sys.databases WHERE name = @nombre;", pObjConexionSC))
             {
-                comando.Parameters.Add("@nombre", SqlDbType.NVarChar, 128).Value = nombre;
-                return (int)comando.ExecuteScalar() == 1;
+                lObjComandoSC.Parameters.Add("@nombre", SqlDbType.NVarChar, 128).Value = pStrNombreSC;
+                return (int)lObjComandoSC.ExecuteScalar() == 1;
             }
         }
 
-        private static int SumarEnServidor(SqlConnection conexion, int a, int b)
+        /// <summary>Suma dos números en SQL Server con una consulta parametrizada.</summary>
+        private static int FncSumarEnServidorSC(SqlConnection pObjConexionSC, int pIntPrimeroSC, int pIntSegundoSC)
         {
-            using (var comando = new SqlCommand("SELECT @a + @b;", conexion))
+            using (SqlCommand lObjComandoSC = new SqlCommand("SELECT @a + @b;", pObjConexionSC))
             {
-                comando.Parameters.Add("@a", SqlDbType.Int).Value = a;
-                comando.Parameters.Add("@b", SqlDbType.Int).Value = b;
-                return (int)comando.ExecuteScalar();
+                lObjComandoSC.Parameters.Add("@a", SqlDbType.Int).Value = pIntPrimeroSC;
+                lObjComandoSC.Parameters.Add("@b", SqlDbType.Int).Value = pIntSegundoSC;
+                return (int)lObjComandoSC.ExecuteScalar();
             }
         }
 
-        private void MostrarError(string mensaje)
+        /// <summary>Marca la prueba como fallida y muestra el mensaje codificado.</summary>
+        private void SubMostrarErrorSC(string pStrMensajeSC)
         {
             lblEstado.Text = "CONEXION_FALLIDA";
-            lblError.Text = Server.HtmlEncode(mensaje);
+            lblError.Text = Server.HtmlEncode(pStrMensajeSC);
         }
     }
 }

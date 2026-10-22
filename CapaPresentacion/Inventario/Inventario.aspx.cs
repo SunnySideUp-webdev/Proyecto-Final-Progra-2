@@ -26,9 +26,9 @@ namespace CapaPresentacion.Inventario
 
         private string gStrBusquedaPP = string.Empty;
 
-        private SiteMaster gObjSitioPP
+        private webSiteMasterSC gObjSitioPP
         {
-            get { return (SiteMaster)Master; }
+            get { return (webSiteMasterSC)Master; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -76,12 +76,12 @@ namespace CapaPresentacion.Inventario
                     + "actualizado=" + lIntIdRepuestoPP, false);
                 Context.ApplicationInstance.CompleteRequest();
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionPP)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionPP)
             {
                 SubCargarRepuestosPP();
 
                 string lStrMensajePP;
-                if (lObjExcepcionPP.lDicErroresCampos.TryGetValue(ClsRepuestoLNPP.lStrCampoCantidadPP, out lStrMensajePP))
+                if (lObjExcepcionPP.gDicErroresCamposSC.TryGetValue(ClsRepuestoLNPP.gStrCampoCantidadPP, out lStrMensajePP))
                 {
                     txtCantidadPP.CssClass = "form-control adms-numero is-invalid";
                     txtCantidadPP.Attributes["aria-invalid"] = "true";
@@ -91,14 +91,14 @@ namespace CapaPresentacion.Inventario
                 }
                 else
                 {
-                    lObjExcepcionPP.lDicErroresCampos.TryGetValue(ClsRepuestoLNPP.lStrCampoRepuestoPP, out lStrMensajePP);
-                    gObjSitioPP.fncMostrarAlerta(TipoAlerta.Advertencia, lStrMensajePP ?? "No se pudo registrar la entrada.");
+                    lObjExcepcionPP.gDicErroresCamposSC.TryGetValue(ClsRepuestoLNPP.gStrCampoRepuestoPP, out lStrMensajePP);
+                    gObjSitioPP.SubMostrarAlertaSC(TipoAlertaSC.Advertencia, lStrMensajePP ?? "No se pudo registrar la entrada.");
                 }
             }
             catch (Exception lObjExcepcionPP)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionPP, "Inventario.aspx - registrar entrada");
-                gObjSitioPP.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionPP, "Inventario.aspx - registrar entrada");
+                gObjSitioPP.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible registrar la entrada en este momento. Intenta de nuevo en unos minutos.");
             }
         }
@@ -133,17 +133,17 @@ namespace CapaPresentacion.Inventario
                 else
                 {
                     litResumenPP.Text = "Repuestos registrados recientemente";
-                    litDetallePP.Text = lIntTotalPP > ClsRepuestoLNPP.lIntMaximoResultadosPP
-                        ? "Se muestran los " + ClsRepuestoLNPP.lIntMaximoResultadosPP + " más recientes."
+                    litDetallePP.Text = lIntTotalPP > ClsRepuestoLNPP.gIntMaximoResultadosPP
+                        ? "Se muestran los " + ClsRepuestoLNPP.gIntMaximoResultadosPP + " más recientes."
                         : "Ordenados del más reciente al más antiguo.";
                     litVacioTituloPP.Text = "Todavía no hay repuestos registrados";
                     litVacioDetallePP.Text = "Usa el botón «Registrar repuesto» para agregar el primero.";
                 }
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionPP)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionPP)
             {
                 string lStrMensajePP;
-                lObjExcepcionPP.lDicErroresCampos.TryGetValue(ClsRepuestoLNPP.lStrCampoBusquedaPP, out lStrMensajePP);
+                lObjExcepcionPP.gDicErroresCamposSC.TryGetValue(ClsRepuestoLNPP.gStrCampoBusquedaPP, out lStrMensajePP);
                 lblErrorBusquedaPP.Text = HttpUtility.HtmlEncode(lStrMensajePP ?? "Revisa el texto de búsqueda.");
                 lblErrorBusquedaPP.Visible = true;
                 txtBuscarPP.CssClass = "form-control is-invalid";
@@ -151,8 +151,8 @@ namespace CapaPresentacion.Inventario
             }
             catch (Exception lObjExcepcionPP)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionPP, "Inventario.aspx - cargar repuestos");
-                gObjSitioPP.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionPP, "Inventario.aspx - cargar repuestos");
+                gObjSitioPP.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible consultar el inventario en este momento. Intenta de nuevo en unos minutos.");
                 litTotalPP.Text = string.Empty;
                 pnlResultadosPP.Visible = false;
@@ -175,20 +175,20 @@ namespace CapaPresentacion.Inventario
                 ClsRepuestoENPP lObjRepuestoPP = gObjRepuestoLNPP.FncObtenerRepuestoPP(FncLeerIdEntradaPP());
                 if (lObjRepuestoPP == null)
                 {
-                    gObjSitioPP.fncMostrarAlerta(TipoAlerta.Advertencia, "El repuesto indicado no existe. Búscalo en el listado.");
+                    gObjSitioPP.SubMostrarAlertaSC(TipoAlertaSC.Advertencia, "El repuesto indicado no existe. Búscalo en el listado.");
                     return;
                 }
 
-                litInicialesEntradaPP.Text = FncInicialesPP(lObjRepuestoPP.lStrNombrePP);
-                litNombreEntradaPP.Text = lObjRepuestoPP.lStrNombrePP;
-                litCodigoEntradaPP.Text = lObjRepuestoPP.lStrCodigoPP;
-                litStockEntradaPP.Text = FncTextoStockPP(lObjRepuestoPP.lIntStockPP);
+                litInicialesEntradaPP.Text = FncInicialesPP(lObjRepuestoPP.gStrNombrePP);
+                litNombreEntradaPP.Text = lObjRepuestoPP.gStrNombrePP;
+                litCodigoEntradaPP.Text = lObjRepuestoPP.gStrCodigoPP;
+                litStockEntradaPP.Text = FncTextoStockPP(lObjRepuestoPP.gIntStockPP);
                 pnlEntradaPP.Visible = true;
             }
             catch (Exception lObjExcepcionPP)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionPP, "Inventario.aspx - abrir entrada");
-                gObjSitioPP.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionPP, "Inventario.aspx - abrir entrada");
+                gObjSitioPP.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible cargar el repuesto en este momento. Intenta de nuevo en unos minutos.");
             }
         }
@@ -212,13 +212,13 @@ namespace CapaPresentacion.Inventario
                     return;
                 }
 
-                gObjSitioPP.fncMostrarAlerta(TipoAlerta.Exito, lBlnRegistradoPP
-                    ? "Se registró el repuesto «" + lObjRepuestoPP.lStrNombrePP + "» con el código " + lObjRepuestoPP.lStrCodigoPP + "."
-                    : "Se actualizó el stock de «" + lObjRepuestoPP.lStrNombrePP + "»: ahora hay " + FncTextoStockPP(lObjRepuestoPP.lIntStockPP) + ".");
+                gObjSitioPP.SubMostrarAlertaSC(TipoAlertaSC.Exito, lBlnRegistradoPP
+                    ? "Se registró el repuesto «" + lObjRepuestoPP.gStrNombrePP + "» con el código " + lObjRepuestoPP.gStrCodigoPP + "."
+                    : "Se actualizó el stock de «" + lObjRepuestoPP.gStrNombrePP + "»: ahora hay " + FncTextoStockPP(lObjRepuestoPP.gIntStockPP) + ".");
             }
             catch (Exception lObjExcepcionPP)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionPP, "Inventario.aspx - mostrar aviso");
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionPP, "Inventario.aspx - mostrar aviso");
             }
         }
 

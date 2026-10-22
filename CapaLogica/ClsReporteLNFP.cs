@@ -20,24 +20,24 @@ namespace CapaLogica
     public class ClsReporteLNFP
     {
         /// <summary>Cantidad máxima de días que puede abarcar un filtro de fechas.</summary>
-        public const int lIntRangoMaximoDiasFP = 366;
+        public const int gIntRangoMaximoDiasFP = 366;
 
         /// <summary>Un repuesto con esta cantidad de unidades o menos se considera con stock bajo.</summary>
-        public const int lIntStockBajoFP = 3;
+        public const int gIntStockBajoFP = 3;
 
         // Niveles de stock del reporte de existencias.
-        public const string lStrNivelAgotadoFP = "Agotado";
-        public const string lStrNivelBajoFP = "Stock bajo";
-        public const string lStrNivelDisponibleFP = "Disponible";
+        public const string gStrNivelAgotadoFP = "Agotado";
+        public const string gStrNivelBajoFP = "Stock bajo";
+        public const string gStrNivelDisponibleFP = "Disponible";
 
         /// <summary>Formato de fecha que envía el campo de fecha del navegador (año-mes-día).</summary>
-        public const string lStrFormatoFechaFP = "yyyy-MM-dd";
+        public const string gStrFormatoFechaFP = "yyyy-MM-dd";
 
-        // Nombres de campo usados como clave en ClsValidacionExcepcionLN.
-        public const string lStrCampoDesdeFP = "Desde";
-        public const string lStrCampoHastaFP = "Hasta";
+        // Nombres de campo usados como clave en ClsValidacionExcepcionLNSC.
+        public const string gStrCampoDesdeFP = "Desde";
+        public const string gStrCampoHastaFP = "Hasta";
 
-        private static readonly DateTime lDatFechaMinimaFP = new DateTime(2000, 1, 1);
+        private static readonly DateTime gDatFechaMinimaFP = new DateTime(2000, 1, 1);
 
         private readonly ClsReporteDAFP gObjReporteDAFP = new ClsReporteDAFP();
 
@@ -48,17 +48,17 @@ namespace CapaLogica
         /// <returns>Indicadores del taller, con los días de la orden abierta más antigua ya calculados.</returns>
         public ClsResumenReportesENFP FncObtenerResumenFP()
         {
-            DateTime lDatHoyFP = ClsZonaHorariaLN.fncObtenerHoyGuatemala();
+            DateTime lDatHoyFP = ClsZonaHorariaLNSC.FncObtenerHoyGuatemalaSC();
             DateTime lDatInicioMesFP = new DateTime(lDatHoyFP.Year, lDatHoyFP.Month, 1);
 
             ClsResumenReportesENFP lObjResumenFP = gObjReporteDAFP.FncObtenerResumenFP(
-                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(lDatInicioMesFP),
-                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(lDatInicioMesFP.AddMonths(1)));
+                ClsZonaHorariaLNSC.FncConvertirGuatemalaAUtcSC(lDatInicioMesFP),
+                ClsZonaHorariaLNSC.FncConvertirGuatemalaAUtcSC(lDatInicioMesFP.AddMonths(1)));
 
-            if (lObjResumenFP.lDatAperturaMasAntiguaUtcFP.HasValue)
+            if (lObjResumenFP.gDatAperturaMasAntiguaUtcFP.HasValue)
             {
-                lObjResumenFP.lIntDiasOrdenMasAntiguaFP =
-                    FncCalcularDiasDesdeFP(lObjResumenFP.lDatAperturaMasAntiguaUtcFP.Value, lDatHoyFP);
+                lObjResumenFP.gIntDiasOrdenMasAntiguaFP =
+                    FncCalcularDiasDesdeFP(lObjResumenFP.gDatAperturaMasAntiguaUtcFP.Value, lDatHoyFP);
             }
             return lObjResumenFP;
         }
@@ -81,7 +81,7 @@ namespace CapaLogica
         /// <param name="pDatDesdeFP">Devuelve la fecha inicial que se usó (calendario de Guatemala).</param>
         /// <param name="pDatHastaFP">Devuelve la fecha final que se usó (calendario de Guatemala).</param>
         /// <returns>Órdenes cerradas en el rango, con la duración de cada reparación.</returns>
-        /// <exception cref="ClsValidacionExcepcionLN">Alguna fecha no es válida o el rango no es correcto.</exception>
+        /// <exception cref="ClsValidacionExcepcionLNSC">Alguna fecha no es válida o el rango no es correcto.</exception>
         public List<ClsReporteOrdenENFP> FncListarOrdenesCerradasFP(string pStrDesdeFP, string pStrHastaFP,
             out DateTime pDatDesdeFP, out DateTime pDatHastaFP)
         {
@@ -89,8 +89,8 @@ namespace CapaLogica
 
             // El día final se incluye completo: se busca hasta el inicio del día siguiente.
             List<ClsReporteOrdenENFP> lLstOrdenesFP = gObjReporteDAFP.FncListarOrdenesCerradasFP(
-                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatDesdeFP),
-                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatHastaFP.AddDays(1)));
+                ClsZonaHorariaLNSC.FncConvertirGuatemalaAUtcSC(pDatDesdeFP),
+                ClsZonaHorariaLNSC.FncConvertirGuatemalaAUtcSC(pDatHastaFP.AddDays(1)));
             SubCalcularTiemposFP(lLstOrdenesFP);
             return lLstOrdenesFP;
         }
@@ -120,7 +120,7 @@ namespace CapaLogica
             List<ClsExistenciaRepuestoENFP> lLstExistenciasFP = gObjReporteDAFP.FncListarExistenciasFP();
             foreach (ClsExistenciaRepuestoENFP lObjExistenciaFP in lLstExistenciasFP)
             {
-                lObjExistenciaFP.lStrNivelStockFP = FncObtenerNivelStockFP(lObjExistenciaFP.lIntStockFP);
+                lObjExistenciaFP.gStrNivelStockFP = FncObtenerNivelStockFP(lObjExistenciaFP.gIntStockFP);
             }
             return lLstExistenciasFP;
         }
@@ -134,19 +134,19 @@ namespace CapaLogica
         /// <param name="pDatDesdeFP">Devuelve la fecha inicial que se usó (calendario de Guatemala).</param>
         /// <param name="pDatHastaFP">Devuelve la fecha final que se usó (calendario de Guatemala).</param>
         /// <returns>Repuestos utilizados en el rango, del más utilizado al menos utilizado.</returns>
-        /// <exception cref="ClsValidacionExcepcionLN">Alguna fecha no es válida o el rango no es correcto.</exception>
+        /// <exception cref="ClsValidacionExcepcionLNSC">Alguna fecha no es válida o el rango no es correcto.</exception>
         public List<ClsRepuestoUtilizadoENFP> FncListarRepuestosUtilizadosFP(string pStrDesdeFP, string pStrHastaFP,
             out DateTime pDatDesdeFP, out DateTime pDatHastaFP)
         {
             SubLeerRangoFP(pStrDesdeFP, pStrHastaFP, out pDatDesdeFP, out pDatHastaFP);
             return gObjReporteDAFP.FncListarRepuestosUtilizadosFP(
-                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatDesdeFP),
-                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatHastaFP.AddDays(1)));
+                ClsZonaHorariaLNSC.FncConvertirGuatemalaAUtcSC(pDatDesdeFP),
+                ClsZonaHorariaLNSC.FncConvertirGuatemalaAUtcSC(pDatHastaFP.AddDays(1)));
         }
 
         /// <summary>
         /// Nivel de stock de un repuesto: «Agotado» sin unidades, «Stock bajo» con
-        /// <see cref="lIntStockBajoFP"/> unidades o menos y «Disponible» con más.
+        /// <see cref="gIntStockBajoFP"/> unidades o menos y «Disponible» con más.
         /// </summary>
         /// <param name="pIntStockFP">Unidades en bodega.</param>
         /// <returns>Texto del nivel.</returns>
@@ -154,41 +154,41 @@ namespace CapaLogica
         {
             if (pIntStockFP <= 0)
             {
-                return lStrNivelAgotadoFP;
+                return gStrNivelAgotadoFP;
             }
-            return pIntStockFP <= lIntStockBajoFP ? lStrNivelBajoFP : lStrNivelDisponibleFP;
+            return pIntStockFP <= gIntStockBajoFP ? gStrNivelBajoFP : gStrNivelDisponibleFP;
         }
 
         /// <summary>
         /// Lee y valida el rango de fechas de un filtro. Sin fechas usa el mes actual (del día 1
-        /// a hoy); el rango no puede estar invertido ni pasar de <see cref="lIntRangoMaximoDiasFP"/> días.
+        /// a hoy); el rango no puede estar invertido ni pasar de <see cref="gIntRangoMaximoDiasFP"/> días.
         /// </summary>
-        /// <exception cref="ClsValidacionExcepcionLN">Alguna fecha no es válida o el rango no es correcto.</exception>
+        /// <exception cref="ClsValidacionExcepcionLNSC">Alguna fecha no es válida o el rango no es correcto.</exception>
         private static void SubLeerRangoFP(string pStrDesdeFP, string pStrHastaFP,
             out DateTime pDatDesdeFP, out DateTime pDatHastaFP)
         {
-            DateTime lDatHoyFP = ClsZonaHorariaLN.fncObtenerHoyGuatemala();
+            DateTime lDatHoyFP = ClsZonaHorariaLNSC.FncObtenerHoyGuatemalaSC();
             Dictionary<string, string> lDicErroresFP = new Dictionary<string, string>();
 
             pDatDesdeFP = FncLeerFechaFP(pStrDesdeFP, new DateTime(lDatHoyFP.Year, lDatHoyFP.Month, 1),
-                lStrCampoDesdeFP, "La fecha inicial", lDicErroresFP);
-            pDatHastaFP = FncLeerFechaFP(pStrHastaFP, lDatHoyFP, lStrCampoHastaFP, "La fecha final", lDicErroresFP);
+                gStrCampoDesdeFP, "La fecha inicial", lDicErroresFP);
+            pDatHastaFP = FncLeerFechaFP(pStrHastaFP, lDatHoyFP, gStrCampoHastaFP, "La fecha final", lDicErroresFP);
 
             if (lDicErroresFP.Count == 0)
             {
                 if (pDatDesdeFP > pDatHastaFP)
                 {
-                    lDicErroresFP[lStrCampoHastaFP] = "La fecha final no puede ser anterior a la fecha inicial.";
+                    lDicErroresFP[gStrCampoHastaFP] = "La fecha final no puede ser anterior a la fecha inicial.";
                 }
-                else if ((pDatHastaFP - pDatDesdeFP).TotalDays >= lIntRangoMaximoDiasFP)
+                else if ((pDatHastaFP - pDatDesdeFP).TotalDays >= gIntRangoMaximoDiasFP)
                 {
-                    lDicErroresFP[lStrCampoHastaFP] = "El rango puede abarcar como máximo " + lIntRangoMaximoDiasFP + " días.";
+                    lDicErroresFP[gStrCampoHastaFP] = "El rango puede abarcar como máximo " + gIntRangoMaximoDiasFP + " días.";
                 }
             }
 
             if (lDicErroresFP.Count > 0)
             {
-                throw new ClsValidacionExcepcionLN(lDicErroresFP);
+                throw new ClsValidacionExcepcionLNSC(lDicErroresFP);
             }
         }
 
@@ -198,17 +198,17 @@ namespace CapaLogica
         /// </summary>
         private static void SubCalcularTiemposFP(List<ClsReporteOrdenENFP> pLstOrdenesFP)
         {
-            DateTime lDatHoyFP = ClsZonaHorariaLN.fncObtenerHoyGuatemala();
+            DateTime lDatHoyFP = ClsZonaHorariaLNSC.FncObtenerHoyGuatemalaSC();
             foreach (ClsReporteOrdenENFP lObjOrdenFP in pLstOrdenesFP)
             {
-                if (lObjOrdenFP.lDatFechaCierreUtcFP.HasValue)
+                if (lObjOrdenFP.gDatFechaCierreUtcFP.HasValue)
                 {
-                    lObjOrdenFP.lIntMinutosReparacionFP = (int)Math.Round(
-                        (lObjOrdenFP.lDatFechaCierreUtcFP.Value - lObjOrdenFP.lDatFechaAperturaUtcFP).TotalMinutes);
+                    lObjOrdenFP.gIntMinutosReparacionFP = (int)Math.Round(
+                        (lObjOrdenFP.gDatFechaCierreUtcFP.Value - lObjOrdenFP.gDatFechaAperturaUtcFP).TotalMinutes);
                 }
                 else
                 {
-                    lObjOrdenFP.lIntDiasAbiertaFP = FncCalcularDiasDesdeFP(lObjOrdenFP.lDatFechaAperturaUtcFP, lDatHoyFP);
+                    lObjOrdenFP.gIntDiasAbiertaFP = FncCalcularDiasDesdeFP(lObjOrdenFP.gDatFechaAperturaUtcFP, lDatHoyFP);
                 }
             }
         }
@@ -219,7 +219,7 @@ namespace CapaLogica
         /// </summary>
         private static int FncCalcularDiasDesdeFP(DateTime pDatUtcFP, DateTime pDatHoyFP)
         {
-            DateTime lDatDiaFP = ClsZonaHorariaLN.fncConvertirUtcAGuatemala(pDatUtcFP).Date;
+            DateTime lDatDiaFP = ClsZonaHorariaLNSC.FncConvertirUtcAGuatemalaSC(pDatUtcFP).Date;
             return Math.Max(0, (pDatHoyFP - lDatDiaFP).Days);
         }
 
@@ -237,13 +237,13 @@ namespace CapaLogica
             }
 
             DateTime lDatFechaFP;
-            if (!DateTime.TryParseExact(lStrFechaFP, lStrFormatoFechaFP, CultureInfo.InvariantCulture,
+            if (!DateTime.TryParseExact(lStrFechaFP, gStrFormatoFechaFP, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out lDatFechaFP))
             {
                 pDicErroresFP[pStrCampoFP] = pStrEtiquetaFP + " no es válida. Elígela en el calendario.";
                 return pDatPorDefectoFP;
             }
-            if (lDatFechaFP < lDatFechaMinimaFP)
+            if (lDatFechaFP < gDatFechaMinimaFP)
             {
                 pDicErroresFP[pStrCampoFP] = pStrEtiquetaFP + " debe ser del año 2000 en adelante.";
                 return pDatPorDefectoFP;

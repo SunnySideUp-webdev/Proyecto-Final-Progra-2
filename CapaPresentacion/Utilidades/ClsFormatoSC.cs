@@ -15,12 +15,12 @@ namespace CapaPresentacion.Utilidades
     public static class ClsFormatoSC
     {
         // Tipo de placa (P, M, C, A, TC...) seguido de 3 números y 3 letras.
-        private static readonly Regex lRegPlacaGuatemalaSC = new Regex(@"^([A-Z]{1,3})(\d{3}[A-Z]{3})$");
+        private static readonly Regex gRegPlacaGuatemalaSC = new Regex(@"^([A-Z]{1,3})(\d{3}[A-Z]{3})$");
 
         /// <summary>Muestra el DPI como 1234 56789 0101.</summary>
         /// <param name="pStrDpiSC">DPI de 13 dígitos.</param>
         /// <returns>DPI con espacios, o el valor original si no tiene 13 caracteres.</returns>
-        public static string fncFormatearDpiSC(string pStrDpiSC)
+        public static string FncFormatearDpiSC(string pStrDpiSC)
         {
             if (pStrDpiSC == null || pStrDpiSC.Length != 13)
             {
@@ -32,7 +32,7 @@ namespace CapaPresentacion.Utilidades
         /// <summary>Muestra 8 dígitos como 5555-1234 y 11 dígitos con 502 como +502 5555-1234.</summary>
         /// <param name="pStrTelefonoSC">Teléfono guardado solo con dígitos.</param>
         /// <returns>Teléfono con separadores cuando el formato es conocido.</returns>
-        public static string fncFormatearTelefonoSC(string pStrTelefonoSC)
+        public static string FncFormatearTelefonoSC(string pStrTelefonoSC)
         {
             if (string.IsNullOrEmpty(pStrTelefonoSC))
             {
@@ -55,9 +55,9 @@ namespace CapaPresentacion.Utilidades
         /// </summary>
         /// <param name="pDatUtcSC">Fecha en UTC, tal como llega de la base de datos.</param>
         /// <returns>Fecha con formato día/mes/año y hora de Guatemala.</returns>
-        public static string fncFormatearFechaSC(DateTime pDatUtcSC)
+        public static string FncFormatearFechaSC(DateTime pDatUtcSC)
         {
-            return ClsZonaHorariaLN.fncConvertirUtcAGuatemala(pDatUtcSC)
+            return ClsZonaHorariaLNSC.FncConvertirUtcAGuatemalaSC(pDatUtcSC)
                 .ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
         }
 
@@ -67,13 +67,13 @@ namespace CapaPresentacion.Utilidades
         /// </summary>
         /// <param name="pStrPlacaSC">Placa normalizada (sin espacios ni guiones).</param>
         /// <returns>Placa legible.</returns>
-        public static string fncFormatearPlacaSC(string pStrPlacaSC)
+        public static string FncFormatearPlacaSC(string pStrPlacaSC)
         {
             if (string.IsNullOrEmpty(pStrPlacaSC))
             {
                 return string.Empty;
             }
-            Match lObjCoincidenciaSC = lRegPlacaGuatemalaSC.Match(pStrPlacaSC);
+            Match lObjCoincidenciaSC = gRegPlacaGuatemalaSC.Match(pStrPlacaSC);
             return lObjCoincidenciaSC.Success
                 ? lObjCoincidenciaSC.Groups[1].Value + " " + lObjCoincidenciaSC.Groups[2].Value
                 : pStrPlacaSC;
@@ -85,7 +85,7 @@ namespace CapaPresentacion.Utilidades
         /// </summary>
         /// <param name="pStrVinSC">VIN del vehículo.</param>
         /// <returns>Fragmento HTML seguro.</returns>
-        public static string fncVinHtmlSC(string pStrVinSC)
+        public static string FncVinHtmlSC(string pStrVinSC)
         {
             return "<span class=\"adms-vin\">" + HttpUtility.HtmlEncode(pStrVinSC ?? string.Empty) + "</span>";
         }
@@ -94,7 +94,7 @@ namespace CapaPresentacion.Utilidades
         /// <param name="pStrNombresSC">Nombres del cliente.</param>
         /// <param name="pStrApellidosSC">Apellidos del cliente.</param>
         /// <returns>Hasta dos letras en mayúscula.</returns>
-        public static string fncObtenerInicialesSC(string pStrNombresSC, string pStrApellidosSC)
+        public static string FncObtenerInicialesSC(string pStrNombresSC, string pStrApellidosSC)
         {
             string lStrInicialesSC = string.Empty;
             if (!string.IsNullOrEmpty(pStrNombresSC))
@@ -111,7 +111,7 @@ namespace CapaPresentacion.Utilidades
         /// <summary>Muestra una fecha larga en español, por ejemplo "lunes, 19 de octubre de 2026".</summary>
         /// <param name="pDatFechaSC">Fecha ya expresada en hora de Guatemala (no se convierte).</param>
         /// <returns>Fecha larga en español de Guatemala.</returns>
-        public static string fncFormatearFechaLargaSC(DateTime pDatFechaSC)
+        public static string FncFormatearFechaLargaSC(DateTime pDatFechaSC)
         {
             return pDatFechaSC.ToString("dddd, d 'de' MMMM 'de' yyyy", CultureInfo.GetCultureInfo("es-GT"));
         }
@@ -120,7 +120,7 @@ namespace CapaPresentacion.Utilidades
         /// <param name="pStrValorSC">Dato opcional.</param>
         /// <param name="pStrReemplazoSC">Texto a mostrar cuando el dato está vacío.</param>
         /// <returns>El dato o el reemplazo.</returns>
-        public static string fncTextoOpcionalSC(string pStrValorSC, string pStrReemplazoSC)
+        public static string FncTextoOpcionalSC(string pStrValorSC, string pStrReemplazoSC)
         {
             return string.IsNullOrWhiteSpace(pStrValorSC) ? pStrReemplazoSC : pStrValorSC;
         }

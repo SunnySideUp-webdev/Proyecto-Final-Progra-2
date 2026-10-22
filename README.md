@@ -21,7 +21,7 @@ Sistema de gestión para un taller mecánico, desarrollado en **ASP.NET Web Form
 | Módulo 3: Inventario | Pavel | `ClsRepuestoENPP`, `ClsRepuestoDAPP`, `ClsRepuestoLNPP`, `CapaPresentacion/Inventario/`, `database/03_InventarioPP.sql` (su tabla, con ajustes de integración), `database/92_DatosEjemploInventarioPP.sql`. Explicación completa en [docs/MODULO_INVENTARIO.md](docs/MODULO_INVENTARIO.md) |
 | Módulo 4: Reportes | Fátima | `ClsReporteOrdenENFP`, `ClsResumenReportesENFP`, `ClsExistenciaRepuestoENFP`, `ClsRepuestoUtilizadoENFP`, `ClsReporteDAFP`, `ClsReporteLNFP`, `CapaPresentacion/Reportes/`, `database/91_DatosEjemploReportesFP.sql`. Explicación completa en [docs/MODULO_REPORTES.md](docs/MODULO_REPORTES.md) |
 | Repuestos utilizados en órdenes (une órdenes e inventario) | Sharon | `ClsRepuestoOrdenENSC`, `ClsRepuestoOrdenDASC`, `ClsRepuestoOrdenLNSC`, `CapaPresentacion/OrdenesReparacion/RepuestosOrdenSC.aspx`, `database/04_RepuestosOrdenSC.sql`, `database/93_DatosEjemploRepuestosOrdenSC.sql`, `pruebas/sql/PruebasInventarioRepuestosSC.sql` |
-| Base común del sitio | Sharon | `Site.Master`, `Default.aspx`, `Error.html`, `Web.config`, `Content/autodms.css`, `Scripts/autodms.js`, `ClsConexionDA`, `ClsSqlDA`, `ClsDatoDuplicadoExcepcionDA`, `ClsValidacionExcepcionLN`, `ClsZonaHorariaLN`, `ClsRegistroErrores`, `scripts/`, `compose.yaml` |
+| Base común del sitio | Sharon | `Site.Master`, `Default.aspx`, `Error.html`, `Web.config`, `Content/autodms.css`, `Scripts/autodms.js`, `ClsConexionDASC`, `ClsSqlDASC`, `ClsDatoDuplicadoExcepcionDASC`, `ClsValidacionExcepcionLNSC`, `ClsZonaHorariaLNSC`, `ClsRegistroErroresSC`, `scripts/`, `compose.yaml` |
 
 En los archivos compartidos (`.csproj` y `Site.Master.cs`) las líneas de cada integrante están marcadas
 con comentarios como «parte de Neider», «parte de Pavel» o «parte de Fátima» (o «Inicio / Fin de la parte
@@ -34,8 +34,8 @@ botón «Repuestos utilizados» del detalle de la orden.
 ```
 TallerMecanico.sln
 ├── CapaEntidades/        Clases que viajan entre capas (Cls*ENSC, ClsOrdenReparacionENT, ClsRepuestoENPP, Cls*ENFP)
-├── CapaDatos/            Acceso a SQL Server con consultas parametrizadas (ClsConexionDA, Cls*DASC, ClsOrdenReparacionDANT, ClsRepuestoDAPP, ClsReporteDAFP)
-├── CapaLogica/           Reglas de negocio y validaciones (Cls*LNSC, ClsOrdenReparacionLNT, ClsRepuestoLNPP, ClsReporteLNFP, ClsZonaHorariaLN)
+├── CapaDatos/            Acceso a SQL Server con consultas parametrizadas (ClsConexionDASC, Cls*DASC, ClsOrdenReparacionDANT, ClsRepuestoDAPP, ClsReporteDAFP)
+├── CapaLogica/           Reglas de negocio y validaciones (Cls*LNSC, ClsOrdenReparacionLNT, ClsRepuestoLNPP, ClsReporteLNFP, ClsZonaHorariaLNSC)
 ├── CapaPresentacion/     Sitio Web Forms: Site.Master, Default.aspx, Clientes/, Vehiculos/, OrdenesReparacion/, Inventario/, Reportes/, Error.html
 ├── database/             Scripts SQL numerados y CONVENCIONES_BD.md
 ├── docs/                 Guías de los módulos (MODULO_INVENTARIO.md y MODULO_REPORTES.md)
@@ -116,7 +116,7 @@ TallerMecanico.sln
 - `90_DatosEjemploSC.sql` agrega clientes y vehículos **ficticios** de ejemplo. No usa identificadores fijos, así que se puede ejecutar sobre cualquier base, también sobre una que ya tenga datos. Nunca subas datos reales de personas al repositorio.
 - `91_DatosEjemploReportesFP.sql` agrega órdenes de reparación **ficticias** sobre esos vehículos (buscándolos por VIN), para que los reportes muestren información.
 - `03_InventarioPP.sql` crea la tabla de repuestos y `04_RepuestosOrdenSC.sql`, la de repuestos utilizados en cada orden. `92_DatosEjemploInventarioPP.sql` agrega repuestos **ficticios** y `93_DatosEjemploRepuestosOrdenSC.sql` registra su uso en las órdenes de ejemplo, descontando el stock.
-- Las fechas se guardan en UTC (`SYSUTCDATETIME()`) y se muestran en hora de Guatemala con `CapaLogica/ClsZonaHorariaLN`.
+- Las fechas se guardan en UTC (`SYSUTCDATETIME()`) y se muestran en hora de Guatemala con `CapaLogica/ClsZonaHorariaLNSC`.
 - Las reglas para nuevas tablas (claves foráneas por `VIN`, nombres de restricciones, etc.) están en [database/CONVENCIONES_BD.md](database/CONVENCIONES_BD.md).
 
 ## Pruebas
@@ -128,10 +128,10 @@ TallerMecanico.sln
 ## Cómo integrar un módulo nuevo
 
 - Crea la página principal en su carpeta de `CapaPresentacion` usando `MasterPageFile="~/Site.Master"`. El menú muestra un módulo automáticamente en cuanto su página existe (las rutas están en `Site.Master.cs`); los cuatro módulos ya están integrados.
-- Obtén las conexiones con `CapaDatos.ClsConexionDA.fncObtenerConexion()` y usa siempre parámetros (`SqlCommand.Parameters`), nunca texto concatenado.
+- Obtén las conexiones con `CapaDatos.ClsConexionDASC.FncObtenerConexionSC()` y usa siempre parámetros (`SqlCommand.Parameters`), nunca texto concatenado.
 - Para relacionar con vehículos usa el `VIN`, que es obligatorio y único como la placa: llave foránea a `dbo.Vehiculos (VIN)` con `ON UPDATE CASCADE` (las órdenes usan `(IdVehiculo, VIN)`; ver `CONVENCIONES_BD.md`). `ClsVehiculoLNSC` ya permite obtener un vehículo, listar los de un cliente y buscar por placa o VIN.
 - Agrega tus tablas en un script numerado nuevo (ya existen `01_` clientes y vehículos, `02_` órdenes, `03_` inventario y `04_` repuestos por orden; el siguiente sería `05_`).
-- Convención de nombres del curso: clases `Cls<Entidad><EN|LN|DA><Iniciales>`, métodos `fnc…`, variables `l<Tipo>…` y parámetros `p<Tipo>…`.
+- Convención de nombres del curso: clases `Cls<Entidad><EN|LN|DA><Iniciales>`, funciones que devuelven un valor `Fnc…<Iniciales>`, procedimientos sin valor de retorno `Sub…<Iniciales>`, variables locales `l<Tipo>…`, parámetros `p<Tipo>…` y campos, constantes y propiedades de la clase `g<Tipo>…`, todos con las iniciales del autor al final (por ejemplo `gStrPlacaSC`).
 
 ## Seguridad y archivos locales
 

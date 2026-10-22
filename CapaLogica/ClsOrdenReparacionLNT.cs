@@ -3,6 +3,7 @@
 // Carné: 0900-16-12945
 // Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Lógica de Negocio
 // Parte de Neider: todo el código de este archivo es de su módulo.
+// Ajuste de integración (Sharon): nombres según la convención del docente (prefijo g en campos y propiedades, Sub en procedimientos).
 //==============================================================
 using CapaDatos;
 using CapaEntidades;
@@ -66,7 +67,7 @@ namespace CapaLogica
 
             string lStrVinNT = pStrVinNT.Trim().ToUpperInvariant();
 
-            return lObjVehiculoDatosNT.fncExisteVinSC(lStrVinNT);
+            return lObjVehiculoDatosNT.FncExisteVinSC(lStrVinNT);
         }
 
         /// <summary>Indica si el identificador y el VIN corresponden al mismo vehículo registrado.</summary>
@@ -84,7 +85,7 @@ namespace CapaLogica
                 new ClsVehiculoDASC();
 
             ClsVehiculoENSC lObjVehiculoNT =
-                lObjVehiculoDatosNT.fncObtenerVehiculoPorIdSC(
+                lObjVehiculoDatosNT.FncObtenerVehiculoPorIdSC(
                     pIntIdVehiculoNT);
 
             if (lObjVehiculoNT == null)
@@ -93,7 +94,7 @@ namespace CapaLogica
             }
 
             return string.Equals(
-                lObjVehiculoNT.lStrVinSC,
+                lObjVehiculoNT.gStrVinSC,
                 pStrVinNT.Trim(),
                 StringComparison.OrdinalIgnoreCase);
         }
@@ -113,34 +114,34 @@ namespace CapaLogica
             }
 
             if (!FncValidarVehiculoNT(
-                pObjOrdenNT.lIntIdVehiculoNT,
-                pObjOrdenNT.lStrVinNT))
+                pObjOrdenNT.gIntIdVehiculoNT,
+                pObjOrdenNT.gStrVinNT))
             {
                 throw new ArgumentException(
                     "El VIN no corresponde a un vehículo registrado.");
             }
 
             if (string.IsNullOrWhiteSpace(
-                pObjOrdenNT.lStrMotivoIngresoNT))
+                pObjOrdenNT.gStrMotivoIngresoNT))
             {
                 throw new ArgumentException(
                     "Debe ingresar el motivo de la reparación.");
             }
 
-            pObjOrdenNT.lStrVinNT =
-                pObjOrdenNT.lStrVinNT.Trim().ToUpperInvariant();
+            pObjOrdenNT.gStrVinNT =
+                pObjOrdenNT.gStrVinNT.Trim().ToUpperInvariant();
 
-            pObjOrdenNT.lStrMotivoIngresoNT =
-                pObjOrdenNT.lStrMotivoIngresoNT.Trim();
+            pObjOrdenNT.gStrMotivoIngresoNT =
+                pObjOrdenNT.gStrMotivoIngresoNT.Trim();
 
-            if (pObjOrdenNT.lStrMotivoIngresoNT.Length > 500)
+            if (pObjOrdenNT.gStrMotivoIngresoNT.Length > 500)
             {
                 throw new ArgumentException(
                     "El motivo no puede superar 500 caracteres.");
             }
 
-            if (!string.IsNullOrEmpty(pObjOrdenNT.lStrDiagnosticoNT)
-                && pObjOrdenNT.lStrDiagnosticoNT.Length > 1000)
+            if (!string.IsNullOrEmpty(pObjOrdenNT.gStrDiagnosticoNT)
+                && pObjOrdenNT.gStrDiagnosticoNT.Length > 1000)
             {
                 throw new ArgumentException(
                     "El diagnóstico no puede superar 1000 caracteres.");
@@ -152,8 +153,8 @@ namespace CapaLogica
                 new ClsVehiculoDASC();
 
             ClsVehiculoENSC lObjVehiculoNT =
-                lObjVehiculoDatosNT.fncObtenerVehiculoPorIdSC(
-                    pObjOrdenNT.lIntIdVehiculoNT);
+                lObjVehiculoDatosNT.FncObtenerVehiculoPorIdSC(
+                    pObjOrdenNT.gIntIdVehiculoNT);
 
             if (lObjVehiculoNT == null)
             {
@@ -161,8 +162,8 @@ namespace CapaLogica
                     "No se encontró el vehículo.");
             }
 
-            pObjOrdenNT.lStrPlacaNT = lObjVehiculoNT.lStrPlacaSC;
-            pObjOrdenNT.lStrEstadoNT = "Abierta";
+            pObjOrdenNT.gStrPlacaNT = lObjVehiculoNT.gStrPlacaSC;
+            pObjOrdenNT.gStrEstadoNT = "Abierta";
 
             return gObjOrdenDatosNT.FncRegistrarOrdenNT(pObjOrdenNT);
         }
