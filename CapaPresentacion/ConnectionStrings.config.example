@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Plantilla: se sube a GitHub SIN contraseñas.
+  macOS con Docker: ./scripts/configurar-entorno-local.sh crea ConnectionStrings.config.
+  Windows con SQL Server Express: copia este archivo como ConnectionStrings.config y usa
+    Server=.\SQLEXPRESS;Database=AutoManagerDMS;Integrated Security=True;TrustServerCertificate=True;
+-->
+<connectionStrings>
+  <add name="AutoManagerDMS"
+       connectionString="Server=127.0.0.1,1434;Database=AutoManagerDMS;User ID=taller_app;Password=__TALLER_APP_PASSWORD__;Encrypt=True;TrustServerCertificate=True;"
+       providerName="System.Data.SqlClient" />
+</connectionStrings>

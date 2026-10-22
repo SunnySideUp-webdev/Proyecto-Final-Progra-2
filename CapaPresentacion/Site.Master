@@ -1,0 +1,89 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.Master.cs" Inherits="CapaPresentacion.SiteMaster" ClientIDMode="Static" %>
+
+<!DOCTYPE html>
+<html lang="es">
+<head id="encabezado" runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AutoManager DMS</title>
+    <link href="~/Content/lib/bootstrap/bootstrap.min.css" rel="stylesheet" runat="server" />
+    <link href="~/Content/lib/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet" runat="server" />
+    <link id="lnkEstilosSitio" rel="stylesheet" runat="server" />
+</head>
+<body class="adms-body">
+    <form id="frmPrincipal" runat="server">
+        <a class="visually-hidden-focusable adms-saltar" href="#contenido">Saltar al contenido</a>
+
+        <div class="adms-layout">
+            <%-- En pantallas grandes es una barra fija; en tableta y móvil se abre como menú deslizable. --%>
+            <aside class="offcanvas-lg offcanvas-start adms-sidebar" tabindex="-1" id="admsMenu" aria-labelledby="admsMenuTitulo">
+                <div class="adms-sidebar-interior">
+                    <div class="adms-sidebar-encabezado">
+                        <asp:HyperLink ID="lnkMarca" runat="server" CssClass="adms-marca">
+                            <span class="adms-marca-icono" aria-hidden="true"><i class="bi bi-wrench-adjustable"></i></span>
+                            <span class="adms-marca-texto" id="admsMenuTitulo">AutoManager<small>DMS</small></span>
+                        </asp:HyperLink>
+                        <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas"
+                            data-bs-target="#admsMenu" aria-label="Cerrar el menú"></button>
+                    </div>
+
+                    <nav class="adms-sidebar-nav" aria-label="Navegación principal">
+                        <div class="adms-sidebar-etiqueta">Módulos</div>
+                        <ul class="nav flex-column">
+                            <asp:Repeater ID="rptModulos" runat="server">
+                                <ItemTemplate>
+                                    <li class="nav-item">
+                                        <a class='<%# (bool)Eval("lBlnActivo") ? "nav-link active" : "nav-link" %>' href='<%# ResolveUrl((string)Eval("lStrUrl")) %>'<%# (bool)Eval("lBlnActivo") ? " aria-current=\"page\"" : string.Empty %>>
+                                            <i class='<%# "bi " + Eval("lStrIcono") %>' aria-hidden="true"></i>
+                                            <span><%# Server.HtmlEncode((string)Eval("lStrTexto")) %></span>
+                                        </a>
+                                    </li>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                        </ul>
+                    </nav>
+
+                    <div class="adms-sidebar-pie">
+                        Sistema de gestión de taller mecánico<br />
+                        Proyecto Final · Programación II
+                    </div>
+                </div>
+            </aside>
+
+            <div class="adms-principal">
+                <header class="adms-topbar">
+                    <button type="button" class="btn adms-btn-menu d-lg-none" data-bs-toggle="offcanvas"
+                        data-bs-target="#admsMenu" aria-controls="admsMenu" aria-label="Abrir el menú">
+                        <i class="bi bi-list" aria-hidden="true"></i>
+                    </button>
+                    <div class="adms-topbar-titulo">
+                        <asp:ContentPlaceHolder ID="cphRuta" runat="server" />
+                        <h1 class="adms-titulo-pagina"><asp:Literal ID="litTituloPagina" runat="server" Mode="Encode" /></h1>
+                    </div>
+                    <div class="adms-topbar-acciones">
+                        <asp:ContentPlaceHolder ID="cphAcciones" runat="server" />
+                    </div>
+                </header>
+
+                <main id="contenido" class="adms-contenido">
+                    <asp:Panel ID="pnlAlerta" runat="server" Visible="false" role="alert">
+                        <asp:Literal ID="litAlertaIcono" runat="server" Mode="PassThrough" />
+                        <div class="flex-grow-1"><asp:Literal ID="litAlertaMensaje" runat="server" Mode="Encode" /></div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar el mensaje"></button>
+                    </asp:Panel>
+
+                    <asp:ContentPlaceHolder ID="cphContenido" runat="server" />
+                </main>
+
+                <footer class="adms-pie">
+                    <span>AutoManager DMS</span>
+                    <span>Proyecto Final de Programación II</span>
+                </footer>
+            </div>
+        </div>
+    </form>
+
+    <script src="<%= ResolveUrl("~/Scripts/lib/bootstrap/bootstrap.bundle.min.js") %>"></script>
+    <script src="<%= fncUrlConVersion("~/Scripts/autodms.js") %>"></script>
+</body>
+</html>

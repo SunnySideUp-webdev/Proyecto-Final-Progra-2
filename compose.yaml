@@ -1,0 +1,64 @@
+name: taller-mecanico
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    pull_policy: missing
+    container_name: taller-mecanico-sqlserver
+    hostname: taller-mecanico-sqlserver
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Define MSSQL_SA_PASSWORD en .env}"
+    ports:
+      - "127.0.0.1:${SQLSERVER_PORT:-1434}:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      # SQLCMDPASSWORD evita que la contraseña aparezca en la línea de comandos.
+      test:
+        - CMD-SHELL
+        - SQLCMDPASSWORD="$${MSSQL_SA_PASSWORD}" /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -C -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  database-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    pull_policy: missing
+    container_name: taller-mecanico-db-init
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?Define MSSQL_SA_PASSWORD en .env}"
+      # sqlcmd usa las variables de entorno como variables del script init.sql.
+      TALLER_APP_PASSWORD: "${TALLER_APP_PASSWORD:?Define TALLER_APP_PASSWORD en .env}"
+    volumes:
+      - ./scripts:/scripts:ro
+      - ./database:/database:ro
+    entrypoint: /bin/bash
+    # Ejecuta init.sql y luego, en orden, los scripts numerados del equipo
+    # (database/00_..., 01_..., 02_...). Los archivos sin número no se ejecutan.
+    command:
+      - -c
+      - |
+        set -e
+        export SQLCMDPASSWORD="$${MSSQL_SA_PASSWORD}"
+        SQLCMD="/opt/mssql-tools18/bin/sqlcmd -S sqlserver -U sa -C -b -I"
+        echo "Ejecutando scripts/init.sql"
+        $$SQLCMD -i /scripts/init.sql
+        for archivo in /database/[0-9][0-9]_*.sql; do
+          [ -e "$$archivo" ] || continue
+          echo "Ejecutando database/$$(basename "$$archivo")"
+          $$SQLCMD -i "$$archivo"
+        done
+    restart: "no"
+
+volumes:
+  sqlserver_data:
+    name: taller-mecanico-sqlserver-data
