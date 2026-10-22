@@ -41,6 +41,10 @@
     <Compile Include="ClsDatoDuplicadoExcepcionDA.cs" />
     <!-- Módulo 2: Órdenes de reparación (parte de Neider) -->
     <Compile Include="ClsOrdenReparacionDANT.cs" />
+    <!-- Módulo 4: Reportes (parte de Fátima) -->
+    <Compile Include="ClsReporteDAFP.cs" />
+    <!-- Módulo 3: Inventario (parte de Pavel) -->
+    <Compile Include="ClsRepuestoDAPP.cs" />
     <Compile Include="ClsSqlDA.cs" />
     <Compile Include="ClsVehiculoDASC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

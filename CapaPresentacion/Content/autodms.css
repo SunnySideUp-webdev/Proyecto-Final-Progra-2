@@ -967,6 +967,95 @@ body.adms-body {
     max-width: 36rem;
 }
 
+/* ---------- Reportes (módulo de Fátima) ---------- */
+/* Pestañas de las secciones del reporte (son enlaces con ?seccion=). */
+.adms-pestanas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.adms-pestana {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--adms-borde);
+    border-radius: 999px;
+    background-color: var(--adms-tarjeta);
+    color: var(--adms-texto-secundario);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.adms-pestana:hover {
+    border-color: var(--adms-azul-borde);
+    color: var(--adms-azul);
+}
+
+.adms-pestana.activa {
+    border-color: var(--adms-azul);
+    background-color: var(--adms-azul);
+    color: #fff;
+}
+
+/* Etiqueta del estado de una orden. */
+.adms-estado {
+    display: inline-flex;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.adms-estado-abierta {
+    background-color: var(--adms-advertencia-suave);
+    color: var(--adms-advertencia);
+}
+
+.adms-estado-cerrada {
+    background-color: var(--adms-exito-suave);
+    color: var(--adms-exito);
+}
+
+/* Días abierta y duraciones: números alineados; en rojo si la orden lleva una semana o más. */
+.adms-dias {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.adms-dias-alerta {
+    color: var(--adms-error);
+    font-weight: 600;
+}
+
+/* ---------- Inventario (módulo de Pavel) ---------- */
+/* Unidades en bodega; en rojo cuando no quedan. */
+.adms-stock {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.adms-stock-agotado {
+    color: var(--adms-error);
+    font-weight: 600;
+}
+
+/* Ventana de entrada a bodega: la dibuja el servidor ya abierta (sin JavaScript),
+   por eso se muestra con d-block y su fondo oscuro se agrega en la misma página. */
+.adms-modal-servidor {
+    overflow-y: auto;
+}
+
+.adms-modal-servidor .modal-content {
+    border: 0;
+    border-radius: var(--adms-radio);
+    box-shadow: var(--adms-sombra-media);
+}
+
 /* ---------- Mensajes ---------- */
 .adms-alerta {
     display: flex;
@@ -1095,6 +1184,12 @@ body.adms-body {
         padding-left: 0.5rem;
     }
 
+    /* Pestañas de reportes más compactas en teléfono. */
+    .adms-pestana {
+        padding: 0.45rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
     .adms-bienvenida {
         padding: 1.35rem 1.25rem;
     }
@@ -1103,5 +1198,90 @@ body.adms-body {
 @media (prefers-reduced-motion: reduce) {
     .adms-acceso {
         transition: none;
+    }
+}
+
+/* ---------- Impresión (botón «Imprimir» de los reportes) ---------- */
+/* Se imprime solo el contenido: sin menú, botones, filtros ni pie de página. */
+@media print {
+    .adms-sidebar,
+    .adms-btn-menu,
+    .adms-topbar-acciones,
+    .adms-no-imprimir,
+    .adms-pie,
+    .adms-saltar {
+        display: none !important;
+    }
+
+    body.adms-body {
+        background-color: #fff;
+    }
+
+    .adms-layout {
+        display: block;
+    }
+
+    .adms-topbar {
+        position: static;
+        min-height: 0;
+        padding: 0 0 1rem;
+        border-bottom: 0;
+    }
+
+    .adms-contenido {
+        padding: 0;
+    }
+
+    .adms-card {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+
+    .table-responsive {
+        overflow: visible;
+    }
+
+    /* En papel se muestran todas las columnas de las tablas (en pantalla algunas se ocultan
+       según el ancho) y se quitan los anchos mínimos para que quepan en la hoja. */
+    .adms-tabla th[class*="d-none"],
+    .adms-tabla td[class*="d-none"] {
+        display: table-cell !important;
+    }
+
+    .adms-tabla .d-xxl-none {
+        display: none !important;
+    }
+
+    .adms-vehiculo,
+    .adms-col-propietario {
+        min-width: 0;
+    }
+
+    /* Letra, celdas y placas más compactas para que todas las columnas quepan en la hoja. */
+    .adms-tabla {
+        font-size: 0.72rem;
+    }
+
+    .adms-tabla thead th,
+    .adms-tabla td {
+        padding: 0.4rem 0.45rem;
+    }
+
+    .adms-vehiculo {
+        gap: 0.4rem;
+    }
+
+    .adms-vehiculo .adms-placa {
+        min-width: 0;
+    }
+
+    .adms-vehiculo .adms-placa-numero {
+        padding: 0.15rem 0.3rem;
+        font-size: 0.7rem;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: none;
     }
 }

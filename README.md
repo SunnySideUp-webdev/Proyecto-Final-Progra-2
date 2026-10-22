@@ -18,6 +18,7 @@ Sistema de gestión para un taller mecánico, desarrollado en **ASP.NET Web Form
 |---|---|---|
 | Módulo 1: Clientes y vehículos | Sharon | `Cls*ClienteSC`, `Cls*VehiculoSC` (entidades, datos y lógica), `CapaPresentacion/Clientes/`, `CapaPresentacion/Vehiculos/`, `Utilidades/ClsFormatoSC.cs`, `database/01_ClientesVehiculosSC.sql`, `database/90_DatosEjemploSC.sql`, `pruebas/` |
 | Módulo 2: Órdenes de reparación | Neider | `ClsOrdenReparacionENT`, `ClsOrdenReparacionDANT`, `ClsOrdenReparacionLNT`, `CapaPresentacion/OrdenesReparacion/`, `database/02_OrdenesReparacionNT.sql` (su tabla, con ajustes de integración) |
+| Módulo 4: Reportes | Fátima | `ClsReporteOrdenENFP`, `ClsResumenReportesENFP`, `ClsReporteDAFP`, `ClsReporteLNFP`, `CapaPresentacion/Reportes/`, `database/91_DatosEjemploReportesFP.sql`. Explicación completa en [docs/MODULO_REPORTES.md](docs/MODULO_REPORTES.md) |
 | Base común del sitio | Sharon | `Site.Master`, `Default.aspx`, `Error.html`, `Web.config`, `Content/autodms.css`, `Scripts/autodms.js`, `ClsConexionDA`, `ClsSqlDA`, `ClsDatoDuplicadoExcepcionDA`, `ClsValidacionExcepcionLN`, `ClsZonaHorariaLN`, `ClsRegistroErrores`, `scripts/`, `compose.yaml` |
 
 En los archivos compartidos (`.csproj` y `Site.Master.cs`) las líneas de Neider están marcadas con
@@ -29,11 +30,12 @@ tienen el comentario «Ajuste de integración (Sharon)».
 
 ```
 TallerMecanico.sln
-├── CapaEntidades/        Clases que viajan entre capas (ClsClienteENSC, ClsVehiculoENSC, ClsOrdenReparacionENT)
-├── CapaDatos/            Acceso a SQL Server con consultas parametrizadas (ClsConexionDA, Cls*DASC, ClsOrdenReparacionDANT)
-├── CapaLogica/           Reglas de negocio y validaciones (Cls*LNSC, ClsOrdenReparacionLNT, ClsZonaHorariaLN)
-├── CapaPresentacion/     Sitio Web Forms: Site.Master, Default.aspx, Clientes/, Vehiculos/, OrdenesReparacion/, Error.html
+├── CapaEntidades/        Clases que viajan entre capas (ClsClienteENSC, ClsVehiculoENSC, ClsOrdenReparacionENT, ClsReporte*ENFP)
+├── CapaDatos/            Acceso a SQL Server con consultas parametrizadas (ClsConexionDA, Cls*DASC, ClsOrdenReparacionDANT, ClsReporteDAFP)
+├── CapaLogica/           Reglas de negocio y validaciones (Cls*LNSC, ClsOrdenReparacionLNT, ClsReporteLNFP, ClsZonaHorariaLN)
+├── CapaPresentacion/     Sitio Web Forms: Site.Master, Default.aspx, Clientes/, Vehiculos/, OrdenesReparacion/, Reportes/, Error.html
 ├── database/             Scripts SQL numerados y CONVENCIONES_BD.md
+├── docs/                 Guías de los módulos (por ejemplo, MODULO_REPORTES.md)
 ├── pruebas/              Pruebas de capas (consola), de SQL y de conexión
 ├── scripts/              Configuración local e inicio del sitio en macOS
 └── compose.yaml          SQL Server 2022 Express en Docker
@@ -109,6 +111,7 @@ TallerMecanico.sln
 - Todo el equipo usa una sola base: **AutoManagerDMS**. La base principal para la integración final es la de Neider (SQL Server Express); para actualizarla basta ejecutar en orden los scripts numerados. `TallerMecanicoDB` solo la usa la prueba de conexión `pruebas/PruebaConexionSQL`.
 - Los scripts de `database/` se numeran (`01_`, `02_`, …) y se pueden ejecutar varias veces sin duplicar nada. Docker ejecuta solo los archivos que empiezan con dos dígitos.
 - `90_DatosEjemploSC.sql` agrega clientes y vehículos **ficticios** de ejemplo. No usa identificadores fijos, así que se puede ejecutar sobre cualquier base, también sobre una que ya tenga datos. Nunca subas datos reales de personas al repositorio.
+- `91_DatosEjemploReportesFP.sql` agrega órdenes de reparación **ficticias** sobre esos vehículos (buscándolos por VIN), para que los reportes muestren información.
 - Las fechas se guardan en UTC (`SYSUTCDATETIME()`) y se muestran en hora de Guatemala con `CapaLogica/ClsZonaHorariaLN`.
 - Las reglas para nuevas tablas (claves foráneas por `VIN`, nombres de restricciones, etc.) están en [database/CONVENCIONES_BD.md](database/CONVENCIONES_BD.md).
 
@@ -121,7 +124,7 @@ TallerMecanico.sln
 ## Cómo integrar un módulo nuevo
 
 - Crea la página principal en su carpeta de `CapaPresentacion` usando `MasterPageFile="~/Site.Master"`. El menú muestra un módulo automáticamente en cuanto su página existe (las rutas están en `Site.Master.cs`):
-  `OrdenesReparacion/OrdenesNT.aspx` (ya integrado), `Inventario/Inventario.aspx`, `Reportes/Reportes.aspx`.
+  `OrdenesReparacion/OrdenesNT.aspx` y `Reportes/Reportes.aspx` (ya integrados), `Inventario/Inventario.aspx`.
 - Obtén las conexiones con `CapaDatos.ClsConexionDA.fncObtenerConexion()` y usa siempre parámetros (`SqlCommand.Parameters`), nunca texto concatenado.
 - Para relacionar con vehículos usa el `VIN`, que es obligatorio y único como la placa: llave foránea a `dbo.Vehiculos (VIN)` con `ON UPDATE CASCADE` (las órdenes usan `(IdVehiculo, VIN)`; ver `CONVENCIONES_BD.md`). `ClsVehiculoLNSC` ya permite obtener un vehículo, listar los de un cliente y buscar por placa o VIN.
 - Agrega tus tablas en un script numerado nuevo (`01_` clientes y vehículos y `02_` órdenes ya existen; por ejemplo `database/03_InventarioPP.sql`).
