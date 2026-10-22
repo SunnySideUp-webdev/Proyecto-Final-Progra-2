@@ -47,7 +47,13 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="OrdenesReparacion\DetalleOrdenNT.aspx" />
+    <Content Include="OrdenesReparacion\HistorialOrdenesNT.aspx" />
+    <Content Include="OrdenesReparacion\OrdenesNT.aspx" />
+    <Content Include="OrdenesReparacion\RegistrarOrdenNT.aspx" />
+    
     <Content Include="Web.config" />
+    <None Include="ConnectionStrings.config" />
     <None Include="ConnectionStrings.config.example" />
     <Content Include="Site.Master" />
     <Content Include="Default.aspx" />
@@ -103,7 +109,35 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="OrdenesReparacion\DetalleOrdenNT.aspx.cs">
+      <DependentUpon>DetalleOrdenNT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\DetalleOrdenNT.aspx.designer.cs">
+      <DependentUpon>DetalleOrdenNT.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OrdenesReparacion\HistorialOrdenesNT.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\HistorialOrdenesNT.aspx.designer.cs">
+      <DependentUpon>HistorialOrdenesNT.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OrdenesReparacion\OrdenesNT.aspx.cs">
+      <DependentUpon>OrdenesNT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\OrdenesNT.aspx.designer.cs">
+      <DependentUpon>OrdenesNT.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OrdenesReparacion\RegistrarOrdenNT.aspx.cs">
+      <DependentUpon>RegistrarOrdenNT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\RegistrarOrdenNT.aspx.designer.cs">
+      <DependentUpon>RegistrarOrdenNT.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -136,6 +170,10 @@
     <Compile Include="Utilidades\ClsRegistroErrores.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CapaDatos\CapaDatos.csproj">
+      <Project>{b4172473-e599-49a6-bb7d-edc157f72f01}</Project>
+      <Name>CapaDatos</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CapaEntidades\CapaEntidades.csproj">
       <Project>{A614B455-B1AE-4702-B9AB-525B503369EA}</Project>
       <Name>CapaEntidades</Name>
@@ -145,6 +183,7 @@
       <Name>CapaLogica</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClsClienteLNSC.cs" />
+    <Compile Include="ClsOrdenReparacionLNT.cs" />
     <Compile Include="ClsValidacionExcepcionLN.cs" />
     <Compile Include="ClsVehiculoLNSC.cs" />
     <Compile Include="ClsZonaHorariaLN.cs" />

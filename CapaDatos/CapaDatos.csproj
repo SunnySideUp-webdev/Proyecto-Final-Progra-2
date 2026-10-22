@@ -39,6 +39,7 @@
     <Compile Include="ClsClienteDASC.cs" />
     <Compile Include="ClsConexionDA.cs" />
     <Compile Include="ClsDatoDuplicadoExcepcionDA.cs" />
+    <Compile Include="ClsOrdenReparacionDANT.cs" />
     <Compile Include="ClsSqlDA.cs" />
     <Compile Include="ClsVehiculoDASC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

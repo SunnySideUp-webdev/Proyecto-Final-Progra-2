@@ -51,7 +51,7 @@ namespace CapaPresentacion
             new ClsElementoMenu { lStrTexto = "Vehículos", lStrDescripcion = "Vehículos de cada cliente",
                 lStrUrl = "~/Vehiculos/Vehiculos.aspx", lStrIcono = "bi-car-front", lStrCarpeta = "~/Vehiculos/" },
             new ClsElementoMenu { lStrTexto = "Órdenes de reparación", lStrDescripcion = "Seguimiento de reparaciones",
-                lStrUrl = "~/Ordenes/Ordenes.aspx", lStrIcono = "bi-clipboard-check", lStrCarpeta = "~/Ordenes/" },
+                lStrUrl = "~/OrdenesReparacion/OrdenesNT.aspx", lStrIcono = "bi-clipboard-check", lStrCarpeta = "~/OrdenesReparacion/" },
             new ClsElementoMenu { lStrTexto = "Inventario", lStrDescripcion = "Control de repuestos",
                 lStrUrl = "~/Inventario/Inventario.aspx", lStrIcono = "bi-box-seam", lStrCarpeta = "~/Inventario/" },
             new ClsElementoMenu { lStrTexto = "Reportes", lStrDescripcion = "Reportes del taller",
