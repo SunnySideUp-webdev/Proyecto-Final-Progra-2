@@ -14,39 +14,39 @@ namespace CapaEntidades
     public class ClsClienteENSC
     {
         /// <summary>Obtiene o establece el identificador generado por SQL Server.</summary>
-        public int lIntIdClienteSC { get; set; }
+        public int gIntIdClienteSC { get; set; }
 
         /// <summary>Obtiene o establece el DPI (CUI) de 13 dígitos; no se repite entre clientes.</summary>
-        public string lStrDpiSC { get; set; }
+        public string gStrDpiSC { get; set; }
 
         /// <summary>Obtiene o establece los nombres del cliente.</summary>
-        public string lStrNombresSC { get; set; }
+        public string gStrNombresSC { get; set; }
 
         /// <summary>Obtiene o establece los apellidos del cliente.</summary>
-        public string lStrApellidosSC { get; set; }
+        public string gStrApellidosSC { get; set; }
 
         /// <summary>Obtiene o establece el teléfono, guardado solo con dígitos (8 a 15).</summary>
-        public string lStrTelefonoSC { get; set; }
+        public string gStrTelefonoSC { get; set; }
 
         /// <summary>Obtiene o establece el correo electrónico; es opcional y puede ser nulo.</summary>
-        public string lStrCorreoSC { get; set; }
+        public string gStrCorreoSC { get; set; }
 
         /// <summary>Obtiene o establece la dirección; es opcional y puede ser nula.</summary>
-        public string lStrDireccionSC { get; set; }
+        public string gStrDireccionSC { get; set; }
 
         /// <summary>
         /// Obtiene o establece la fecha de registro en UTC, tal como la guarda SQL Server.
         /// Se convierte a la hora de Guatemala solo al mostrarse.
         /// </summary>
-        public DateTime lDatFechaRegistroUtcSC { get; set; }
+        public DateTime gDatFechaRegistroUtcSC { get; set; }
 
         /// <summary>Inicializa los campos obligatorios con valores no nulos.</summary>
         public ClsClienteENSC()
         {
-            lStrDpiSC = string.Empty;
-            lStrNombresSC = string.Empty;
-            lStrApellidosSC = string.Empty;
-            lStrTelefonoSC = string.Empty;
+            gStrDpiSC = string.Empty;
+            gStrNombresSC = string.Empty;
+            gStrApellidosSC = string.Empty;
+            gStrTelefonoSC = string.Empty;
         }
     }
 }

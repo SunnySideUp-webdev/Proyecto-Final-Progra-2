@@ -12,37 +12,37 @@ namespace CapaEntidades
     public class ClsRepuestoENPP
     {
         /// <summary>Obtiene o establece el identificador generado por SQL Server.</summary>
-        public int lIntIdRepuestoPP { get; set; }
+        public int gIntIdRepuestoPP { get; set; }
 
         /// <summary>Obtiene o establece el código del repuesto (único, en mayúsculas).</summary>
-        public string lStrCodigoPP { get; set; }
+        public string gStrCodigoPP { get; set; }
 
         /// <summary>Obtiene o establece el nombre del repuesto.</summary>
-        public string lStrNombrePP { get; set; }
+        public string gStrNombrePP { get; set; }
 
         /// <summary>Obtiene o establece la descripción del repuesto.</summary>
-        public string lStrDescripcionPP { get; set; }
+        public string gStrDescripcionPP { get; set; }
 
         /// <summary>Obtiene o establece las unidades disponibles en bodega (nunca negativas).</summary>
-        public int lIntStockPP { get; set; }
+        public int gIntStockPP { get; set; }
 
         /// <summary>Obtiene o establece la marca del vehículo compatible.</summary>
-        public string lStrMarcaCarroPP { get; set; }
+        public string gStrMarcaCarroPP { get; set; }
 
         /// <summary>Obtiene o establece el modelo del vehículo compatible.</summary>
-        public string lStrModeloCarroPP { get; set; }
+        public string gStrModeloCarroPP { get; set; }
 
         /// <summary>Obtiene o establece el año del vehículo compatible.</summary>
-        public int lIntAnioCarroPP { get; set; }
+        public int gIntAnioCarroPP { get; set; }
 
         /// <summary>Inicializa los textos con valores no nulos.</summary>
         public ClsRepuestoENPP()
         {
-            lStrCodigoPP = string.Empty;
-            lStrNombrePP = string.Empty;
-            lStrDescripcionPP = string.Empty;
-            lStrMarcaCarroPP = string.Empty;
-            lStrModeloCarroPP = string.Empty;
+            gStrCodigoPP = string.Empty;
+            gStrNombrePP = string.Empty;
+            gStrDescripcionPP = string.Empty;
+            gStrMarcaCarroPP = string.Empty;
+            gStrModeloCarroPP = string.Empty;
         }
     }
 }

@@ -66,18 +66,18 @@
                             <tr>
                                 <td>
                                     <div class="adms-persona">
-                                        <span class="adms-avatar" aria-hidden="true"><%# fncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.fncObtenerInicialesSC((string)Eval("lStrNombresSC"), (string)Eval("lStrApellidosSC"))) %></span>
+                                        <span class="adms-avatar" aria-hidden="true"><%# FncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.FncObtenerInicialesSC((string)Eval("gStrNombresSC"), (string)Eval("gStrApellidosSC"))) %></span>
                                         <div class="adms-persona-texto">
-                                            <a class="adms-persona-nombre" href='DetalleCliente.aspx?id=<%# Eval("lIntIdClienteSC") %>'><%# fncCodificarSC(Eval("lStrNombresSC") + " " + Eval("lStrApellidosSC")) %></a>
-                                            <div class="adms-persona-detalle"><%# fncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.fncTextoOpcionalSC((string)Eval("lStrCorreoSC"), "Sin correo registrado")) %></div>
+                                            <a class="adms-persona-nombre" href='DetalleCliente.aspx?id=<%# Eval("gIntIdClienteSC") %>'><%# FncCodificarSC(Eval("gStrNombresSC") + " " + Eval("gStrApellidosSC")) %></a>
+                                            <div class="adms-persona-detalle"><%# FncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.FncTextoOpcionalSC((string)Eval("gStrCorreoSC"), "Sin correo registrado")) %></div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="adms-numero d-none d-sm-table-cell"><%# fncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.fncFormatearDpiSC((string)Eval("lStrDpiSC"))) %></td>
-                                <td class="adms-numero d-none d-md-table-cell"><%# fncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.fncFormatearTelefonoSC((string)Eval("lStrTelefonoSC"))) %></td>
-                                <td class="adms-numero d-none d-xl-table-cell text-secondary"><%# fncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaRegistroUtcSC"))) %></td>
+                                <td class="adms-numero d-none d-sm-table-cell"><%# FncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.FncFormatearDpiSC((string)Eval("gStrDpiSC"))) %></td>
+                                <td class="adms-numero d-none d-md-table-cell"><%# FncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.FncFormatearTelefonoSC((string)Eval("gStrTelefonoSC"))) %></td>
+                                <td class="adms-numero d-none d-xl-table-cell text-secondary"><%# FncCodificarSC(CapaPresentacion.Utilidades.ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatFechaRegistroUtcSC"))) %></td>
                                 <td class="text-end">
-                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='DetalleCliente.aspx?id=<%# Eval("lIntIdClienteSC") %>' title="Ver detalle">
+                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='DetalleCliente.aspx?id=<%# Eval("gIntIdClienteSC") %>' title="Ver detalle">
                                         <i class="bi bi-eye" aria-hidden="true"></i><span class="d-none d-md-inline ms-1">Ver detalle</span>
                                     </a>
                                 </td>

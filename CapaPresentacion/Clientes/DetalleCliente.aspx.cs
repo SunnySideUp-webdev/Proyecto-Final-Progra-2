@@ -16,12 +16,12 @@ namespace CapaPresentacion.Clientes
     /// <summary>Muestra los datos de un cliente registrado.</summary>
     public partial class webDetalleClienteSC : Page
     {
-        private readonly ClsClienteLNSC lObjClienteLNSC = new ClsClienteLNSC();
-        private readonly ClsVehiculoLNSC lObjVehiculoLNSC = new ClsVehiculoLNSC();
+        private readonly ClsClienteLNSC gObjClienteLNSC = new ClsClienteLNSC();
+        private readonly ClsVehiculoLNSC gObjVehiculoLNSC = new ClsVehiculoLNSC();
 
-        private SiteMaster lObjSitioSC
+        private webSiteMasterSC gObjSitioSC
         {
-            get { return (SiteMaster)Master; }
+            get { return (webSiteMasterSC)Master; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -34,53 +34,53 @@ namespace CapaPresentacion.Clientes
             int lIntIdClienteSC;
             if (!int.TryParse(Request.QueryString["id"], out lIntIdClienteSC) || lIntIdClienteSC <= 0)
             {
-                fncMostrarNoEncontradoSC();
+                SubMostrarNoEncontradoSC();
                 return;
             }
 
             try
             {
-                ClsClienteENSC lObjClienteSC = lObjClienteLNSC.fncObtenerClienteSC(lIntIdClienteSC);
+                ClsClienteENSC lObjClienteSC = gObjClienteLNSC.FncObtenerClienteSC(lIntIdClienteSC);
                 if (lObjClienteSC == null)
                 {
-                    fncMostrarNoEncontradoSC();
+                    SubMostrarNoEncontradoSC();
                     return;
                 }
 
-                fncMostrarClienteSC(lObjClienteSC);
-                fncCargarVehiculosSC(lObjClienteSC.lIntIdClienteSC);
+                SubMostrarClienteSC(lObjClienteSC);
+                SubCargarVehiculosSC(lObjClienteSC.gIntIdClienteSC);
 
                 if (Request.QueryString["registrado"] == "1")
                 {
-                    lObjSitioSC.fncMostrarAlerta(TipoAlerta.Exito, "Cliente registrado correctamente.");
+                    gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Exito, "Cliente registrado correctamente.");
                 }
             }
             catch (Exception lObjExcepcionSC)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionSC, "DetalleCliente.aspx - consultar cliente " + lIntIdClienteSC);
-                lObjSitioSC.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionSC, "DetalleCliente.aspx - consultar cliente " + lIntIdClienteSC);
+                gObjSitioSC.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible consultar el cliente en este momento. Intenta de nuevo en unos minutos.");
             }
         }
 
         /// <summary>Copia los datos del cliente a la página.</summary>
-        private void fncMostrarClienteSC(ClsClienteENSC pObjClienteSC)
+        private void SubMostrarClienteSC(ClsClienteENSC pObjClienteSC)
         {
-            string lStrNombreCompletoSC = pObjClienteSC.lStrNombresSC + " " + pObjClienteSC.lStrApellidosSC;
+            string lStrNombreCompletoSC = pObjClienteSC.gStrNombresSC + " " + pObjClienteSC.gStrApellidosSC;
 
             Page.Title = lStrNombreCompletoSC;
-            litInicialesSC.Text = ClsFormatoSC.fncObtenerInicialesSC(pObjClienteSC.lStrNombresSC, pObjClienteSC.lStrApellidosSC);
+            litInicialesSC.Text = ClsFormatoSC.FncObtenerInicialesSC(pObjClienteSC.gStrNombresSC, pObjClienteSC.gStrApellidosSC);
             litNombreCompletoSC.Text = lStrNombreCompletoSC;
-            litIdClienteSC.Text = pObjClienteSC.lIntIdClienteSC.ToString();
-            litDpiSC.Text = ClsFormatoSC.fncFormatearDpiSC(pObjClienteSC.lStrDpiSC);
-            litNombresSC.Text = pObjClienteSC.lStrNombresSC;
-            litApellidosSC.Text = pObjClienteSC.lStrApellidosSC;
-            litTelefonoSC.Text = ClsFormatoSC.fncFormatearTelefonoSC(pObjClienteSC.lStrTelefonoSC);
-            litCorreoSC.Text = pObjClienteSC.lStrCorreoSC ?? string.Empty;
-            lblCorreoVacioSC.Visible = string.IsNullOrWhiteSpace(pObjClienteSC.lStrCorreoSC);
-            litDireccionSC.Text = pObjClienteSC.lStrDireccionSC ?? string.Empty;
-            lblDireccionVaciaSC.Visible = string.IsNullOrWhiteSpace(pObjClienteSC.lStrDireccionSC);
-            litFechaRegistroSC.Text = ClsFormatoSC.fncFormatearFechaSC(pObjClienteSC.lDatFechaRegistroUtcSC);
+            litIdClienteSC.Text = pObjClienteSC.gIntIdClienteSC.ToString();
+            litDpiSC.Text = ClsFormatoSC.FncFormatearDpiSC(pObjClienteSC.gStrDpiSC);
+            litNombresSC.Text = pObjClienteSC.gStrNombresSC;
+            litApellidosSC.Text = pObjClienteSC.gStrApellidosSC;
+            litTelefonoSC.Text = ClsFormatoSC.FncFormatearTelefonoSC(pObjClienteSC.gStrTelefonoSC);
+            litCorreoSC.Text = pObjClienteSC.gStrCorreoSC ?? string.Empty;
+            lblCorreoVacioSC.Visible = string.IsNullOrWhiteSpace(pObjClienteSC.gStrCorreoSC);
+            litDireccionSC.Text = pObjClienteSC.gStrDireccionSC ?? string.Empty;
+            lblDireccionVaciaSC.Visible = string.IsNullOrWhiteSpace(pObjClienteSC.gStrDireccionSC);
+            litFechaRegistroSC.Text = ClsFormatoSC.FncFormatearFechaSC(pObjClienteSC.gDatFechaRegistroUtcSC);
             pnlClienteSC.Visible = true;
         }
 
@@ -89,7 +89,7 @@ namespace CapaPresentacion.Clientes
         /// con este cliente ya seleccionado. Si solo falla esta consulta, la ficha del
         /// cliente se sigue mostrando.
         /// </summary>
-        private void fncCargarVehiculosSC(int pIntIdClienteSC)
+        private void SubCargarVehiculosSC(int pIntIdClienteSC)
         {
             string lStrUrlRegistroSC = "~/Vehiculos/RegistrarVehiculo.aspx?idCliente=" + pIntIdClienteSC;
             lnkRegistrarVehiculoSC.NavigateUrl = lStrUrlRegistroSC;
@@ -97,7 +97,7 @@ namespace CapaPresentacion.Clientes
 
             try
             {
-                List<ClsVehiculoENSC> lLstVehiculosSC = lObjVehiculoLNSC.fncListarVehiculosPorClienteSC(pIntIdClienteSC);
+                List<ClsVehiculoENSC> lLstVehiculosSC = gObjVehiculoLNSC.FncListarVehiculosPorClienteSC(pIntIdClienteSC);
                 rptVehiculosSC.DataSource = lLstVehiculosSC;
                 rptVehiculosSC.DataBind();
                 rptVehiculosSC.Visible = lLstVehiculosSC.Count > 0;
@@ -108,7 +108,7 @@ namespace CapaPresentacion.Clientes
             }
             catch (Exception lObjExcepcionSC)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionSC, "DetalleCliente.aspx - vehículos del cliente " + pIntIdClienteSC);
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionSC, "DetalleCliente.aspx - vehículos del cliente " + pIntIdClienteSC);
                 rptVehiculosSC.Visible = false;
                 pnlSinVehiculosSC.Visible = false;
                 pnlErrorVehiculosSC.Visible = true;
@@ -117,13 +117,13 @@ namespace CapaPresentacion.Clientes
         }
 
         /// <summary>Codifica un valor para mostrarlo de forma segura dentro del HTML.</summary>
-        protected string fncCodificarSC(object pObjValorSC)
+        protected string FncCodificarSC(object pObjValorSC)
         {
             return HttpUtility.HtmlEncode(Convert.ToString(pObjValorSC));
         }
 
         /// <summary>Indica al navegador que el recurso no existe (404) y muestra un mensaje claro.</summary>
-        private void fncMostrarNoEncontradoSC()
+        private void SubMostrarNoEncontradoSC()
         {
             Response.StatusCode = 404;
             Response.TrySkipIisCustomErrors = true;

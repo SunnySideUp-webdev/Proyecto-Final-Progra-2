@@ -10,8 +10,8 @@ Cada integrante mantiene sus propios scripts; este documento solo describe las r
   En Docker el servidor está en UTC, pero en SQL Server Express de Windows está en hora de
   Guatemala, así que la misma columna guardaría horas distintas según la computadora.
 - La aplicación convierte a hora de Guatemala **solo al mostrar**, con
-  `CapaLogica.ClsZonaHorariaLN.fncConvertirUtcAGuatemala`. Para mostrar una fecha en una
-  página se puede usar `ClsFormatoSC.fncFormatearFechaSC`, que ya hace esa conversión.
+  `CapaLogica.ClsZonaHorariaLNSC.FncConvertirUtcAGuatemalaSC`. Para mostrar una fecha en una
+  página se puede usar `ClsFormatoSC.FncFormatearFechaSC`, que ya hace esa conversión.
 - Al leer una fecha con `SqlDataReader`, marcarla como UTC para evitar conversiones dobles:
 
   ```csharp
@@ -19,7 +19,7 @@ Cada integrante mantiene sus propios scripts; este documento solo describe las r
   ```
 
 - Para filtrar por fechas locales (por ejemplo, "órdenes de hoy"), convertir primero el
-  inicio y el fin del día de Guatemala a UTC con `ClsZonaHorariaLN.fncConvertirGuatemalaAUtc`.
+  inicio y el fin del día de Guatemala a UTC con `ClsZonaHorariaLNSC.FncConvertirGuatemalaAUtcSC`.
 
 ## 2. Relación con vehículos
 
@@ -44,8 +44,8 @@ CONSTRAINT FK_<Tabla>_Vehiculos
     FOREIGN KEY (IdVehiculo, VIN) REFERENCES dbo.Vehiculos (IdVehiculo, VIN) ON UPDATE CASCADE
 ```
 
-Desde C# se pueden usar `ClsVehiculoLNSC.fncBuscarVehiculosSC(placaOVin)` (el VIN exacto
-aparece primero) y `ClsVehiculoLNSC.fncObtenerVehiculoSC(idVehiculo)`.
+Desde C# se pueden usar `ClsVehiculoLNSC.FncBuscarVehiculosSC(placaOVin)` (el VIN exacto
+aparece primero) y `ClsVehiculoLNSC.FncObtenerVehiculoSC(idVehiculo)`.
 
 ## 3. Órdenes de reparación (`02_OrdenesReparacionNT.sql`)
 
@@ -116,7 +116,7 @@ El uso en una orden se registra en una transacción junto con el descuento del s
 
 ## 7. Conexión desde C#
 
-- Obtener las conexiones siempre con `CapaDatos.ClsConexionDA.fncObtenerConexion()`.
+- Obtener las conexiones siempre con `CapaDatos.ClsConexionDASC.FncObtenerConexionSC()`.
 - La cadena de conexión `AutoManagerDMS` está en `CapaPresentacion/ConnectionStrings.config`
   (local, no se sube a GitHub; plantilla: `ConnectionStrings.config.example`).
 - Usar siempre parámetros (`SqlCommand.Parameters`), nunca concatenar datos del usuario.

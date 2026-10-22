@@ -21,91 +21,91 @@ namespace CapaLogica
         /// Primer año aceptado: desde 1981 los vehículos tienen VIN de 17 caracteres, que es
         /// obligatorio. Coincide con la restricción CK_Vehiculos_Anio de SQL Server.
         /// </summary>
-        public const int lIntAnioMinimoSC = 1981;
+        public const int gIntAnioMinimoSC = 1981;
 
         /// <summary>Cantidad máxima de vehículos que devuelve una búsqueda.</summary>
-        public const int lIntMaximoResultadosSC = 50;
+        public const int gIntMaximoResultadosSC = 50;
 
         /// <summary>Longitud máxima del texto de búsqueda tal como lo escribe el usuario.</summary>
-        public const int lIntLongitudMaximaBusquedaSC = 40;
+        public const int gIntLongitudMaximaBusquedaSC = 40;
 
-        // Nombres de campo usados como clave en ClsValidacionExcepcionLN.
-        public const string lStrCampoPropietarioSC = nameof(ClsVehiculoENSC.lIntIdClienteSC);
-        public const string lStrCampoPlacaSC = nameof(ClsVehiculoENSC.lStrPlacaSC);
-        public const string lStrCampoVinSC = nameof(ClsVehiculoENSC.lStrVinSC);
-        public const string lStrCampoMarcaSC = nameof(ClsVehiculoENSC.lStrMarcaSC);
-        public const string lStrCampoModeloSC = nameof(ClsVehiculoENSC.lStrModeloSC);
-        public const string lStrCampoAnioSC = nameof(ClsVehiculoENSC.lIntAnioSC);
-        public const string lStrCampoBusquedaSC = "Busqueda";
+        // Nombres de campo usados como clave en ClsValidacionExcepcionLNSC.
+        public const string gStrCampoPropietarioSC = nameof(ClsVehiculoENSC.gIntIdClienteSC);
+        public const string gStrCampoPlacaSC = nameof(ClsVehiculoENSC.gStrPlacaSC);
+        public const string gStrCampoVinSC = nameof(ClsVehiculoENSC.gStrVinSC);
+        public const string gStrCampoMarcaSC = nameof(ClsVehiculoENSC.gStrMarcaSC);
+        public const string gStrCampoModeloSC = nameof(ClsVehiculoENSC.gStrModeloSC);
+        public const string gStrCampoAnioSC = nameof(ClsVehiculoENSC.gIntAnioSC);
+        public const string gStrCampoBusquedaSC = "Busqueda";
 
-        private const string lStrMensajePlacaDuplicadaSC = "Ya existe un vehículo registrado con esta placa.";
-        private const string lStrMensajeVinDuplicadoSC = "Ya existe un vehículo registrado con este VIN.";
-        private const string lStrRestriccionVinSC = "UQ_Vehiculos_VIN";
+        private const string gStrMensajePlacaDuplicadaSC = "Ya existe un vehículo registrado con esta placa.";
+        private const string gStrMensajeVinDuplicadoSC = "Ya existe un vehículo registrado con este VIN.";
+        private const string gStrRestriccionVinSC = "UQ_Vehiculos_VIN";
 
-        private static readonly Regex lRegSeparadoresSC = new Regex(@"[\s\-.]");
-        private static readonly Regex lRegNoAlfanumericoSC = new Regex(@"[^A-Za-z0-9]");
-        private static readonly Regex lRegPlacaSC = new Regex(@"^[A-Z0-9]{5,10}$");
+        private static readonly Regex gRegSeparadoresSC = new Regex(@"[\s\-.]");
+        private static readonly Regex gRegNoAlfanumericoSC = new Regex(@"[^A-Za-z0-9]");
+        private static readonly Regex gRegPlacaSC = new Regex(@"^[A-Z0-9]{5,10}$");
         // VIN estándar: 17 caracteres sin I, O ni Q (se confunden con 1 y 0).
-        private static readonly Regex lRegVinSC = new Regex(@"^[A-HJ-NPR-Z0-9]{17}$");
-        private static readonly Regex lRegMarcaSC = new Regex(@"^[\p{L}\d][\p{L}\p{M}\d .&'-]*$");
-        private static readonly Regex lRegModeloSC = new Regex(@"^[\p{L}\d][\p{L}\p{M}\d .'/+-]*$");
+        private static readonly Regex gRegVinSC = new Regex(@"^[A-HJ-NPR-Z0-9]{17}$");
+        private static readonly Regex gRegMarcaSC = new Regex(@"^[\p{L}\d][\p{L}\p{M}\d .&'-]*$");
+        private static readonly Regex gRegModeloSC = new Regex(@"^[\p{L}\d][\p{L}\p{M}\d .'/+-]*$");
         // [0-9] y no \d: \d también acepta dígitos de otros alfabetos, que int.Parse no convierte.
-        private static readonly Regex lRegAnioSC = new Regex(@"^[0-9]{4}$");
-        private static readonly Regex lRegEspaciosSC = new Regex(@"\s+");
+        private static readonly Regex gRegAnioSC = new Regex(@"^[0-9]{4}$");
+        private static readonly Regex gRegEspaciosSC = new Regex(@"\s+");
 
-        private readonly ClsVehiculoDASC lObjVehiculoDASC = new ClsVehiculoDASC();
-        private readonly ClsClienteDASC lObjClienteDASC = new ClsClienteDASC();
+        private readonly ClsVehiculoDASC gObjVehiculoDASC = new ClsVehiculoDASC();
+        private readonly ClsClienteDASC gObjClienteDASC = new ClsClienteDASC();
 
         /// <summary>Normaliza, valida y registra un vehículo asociado a un cliente existente.</summary>
         /// <param name="pObjVehiculoSC">Datos del formulario, con el identificador del propietario.</param>
         /// <param name="pStrAnioSC">Año tal como lo escribió el usuario.</param>
         /// <returns>Identificador asignado al nuevo vehículo.</returns>
-        /// <exception cref="ClsValidacionExcepcionLN">Algún dato no cumple las reglas o ya existe.</exception>
-        public int fncRegistrarVehiculoSC(ClsVehiculoENSC pObjVehiculoSC, string pStrAnioSC)
+        /// <exception cref="ClsValidacionExcepcionLNSC">Algún dato no cumple las reglas o ya existe.</exception>
+        public int FncRegistrarVehiculoSC(ClsVehiculoENSC pObjVehiculoSC, string pStrAnioSC)
         {
             if (pObjVehiculoSC == null)
             {
                 throw new ArgumentNullException(nameof(pObjVehiculoSC));
             }
 
-            fncNormalizarVehiculoSC(pObjVehiculoSC);
-            Dictionary<string, string> lDicErroresSC = fncValidarVehiculoSC(pObjVehiculoSC, pStrAnioSC);
+            SubNormalizarVehiculoSC(pObjVehiculoSC);
+            Dictionary<string, string> lDicErroresSC = FncValidarVehiculoSC(pObjVehiculoSC, pStrAnioSC);
 
             // El propietario debe existir en la base, no solo venir en el formulario.
-            if (!lDicErroresSC.ContainsKey(lStrCampoPropietarioSC)
-                && lObjClienteDASC.fncObtenerClientePorIdSC(pObjVehiculoSC.lIntIdClienteSC) == null)
+            if (!lDicErroresSC.ContainsKey(gStrCampoPropietarioSC)
+                && gObjClienteDASC.FncObtenerClientePorIdSC(pObjVehiculoSC.gIntIdClienteSC) == null)
             {
-                lDicErroresSC[lStrCampoPropietarioSC] = "El cliente seleccionado ya no existe. Búscalo de nuevo.";
+                lDicErroresSC[gStrCampoPropietarioSC] = "El cliente seleccionado ya no existe. Búscalo de nuevo.";
             }
 
-            if (!lDicErroresSC.ContainsKey(lStrCampoPlacaSC) && lObjVehiculoDASC.fncExistePlacaSC(pObjVehiculoSC.lStrPlacaSC))
+            if (!lDicErroresSC.ContainsKey(gStrCampoPlacaSC) && gObjVehiculoDASC.FncExistePlacaSC(pObjVehiculoSC.gStrPlacaSC))
             {
-                lDicErroresSC[lStrCampoPlacaSC] = lStrMensajePlacaDuplicadaSC;
+                lDicErroresSC[gStrCampoPlacaSC] = gStrMensajePlacaDuplicadaSC;
             }
 
-            if (!lDicErroresSC.ContainsKey(lStrCampoVinSC) && lObjVehiculoDASC.fncExisteVinSC(pObjVehiculoSC.lStrVinSC))
+            if (!lDicErroresSC.ContainsKey(gStrCampoVinSC) && gObjVehiculoDASC.FncExisteVinSC(pObjVehiculoSC.gStrVinSC))
             {
-                lDicErroresSC[lStrCampoVinSC] = lStrMensajeVinDuplicadoSC;
+                lDicErroresSC[gStrCampoVinSC] = gStrMensajeVinDuplicadoSC;
             }
 
             if (lDicErroresSC.Count > 0)
             {
-                throw new ClsValidacionExcepcionLN(lDicErroresSC);
+                throw new ClsValidacionExcepcionLNSC(lDicErroresSC);
             }
 
             try
             {
-                return lObjVehiculoDASC.fncInsertarVehiculoSC(pObjVehiculoSC);
+                return gObjVehiculoDASC.FncInsertarVehiculoSC(pObjVehiculoSC);
             }
-            catch (ClsDatoDuplicadoExcepcionDA lObjExcepcionSC)
+            catch (ClsDatoDuplicadoExcepcionDASC lObjExcepcionSC)
             {
                 // Otro usuario registró la misma placa o VIN entre la consulta previa y el INSERT;
                 // la restricción de SQL Server lo detuvo. Se informa en el campo correspondiente.
-                if (lObjExcepcionSC.lStrRestriccion == lStrRestriccionVinSC)
+                if (lObjExcepcionSC.gStrRestriccionSC == gStrRestriccionVinSC)
                 {
-                    throw new ClsValidacionExcepcionLN(lStrCampoVinSC, lStrMensajeVinDuplicadoSC);
+                    throw new ClsValidacionExcepcionLNSC(gStrCampoVinSC, gStrMensajeVinDuplicadoSC);
                 }
-                throw new ClsValidacionExcepcionLN(lStrCampoPlacaSC, lStrMensajePlacaDuplicadaSC);
+                throw new ClsValidacionExcepcionLNSC(gStrCampoPlacaSC, gStrMensajePlacaDuplicadaSC);
             }
         }
 
@@ -114,51 +114,51 @@ namespace CapaLogica
         /// así "p-123 abc" encuentra la placa P123ABC.
         /// </summary>
         /// <param name="pStrTerminoSC">Texto escrito por el usuario; vacío lista los más recientes.</param>
-        /// <returns>Hasta <see cref="lIntMaximoResultadosSC"/> vehículos con su propietario.</returns>
-        /// <exception cref="ClsValidacionExcepcionLN">El texto de búsqueda no es válido.</exception>
-        public List<ClsVehiculoENSC> fncBuscarVehiculosSC(string pStrTerminoSC)
+        /// <returns>Hasta <see cref="gIntMaximoResultadosSC"/> vehículos con su propietario.</returns>
+        /// <exception cref="ClsValidacionExcepcionLNSC">El texto de búsqueda no es válido.</exception>
+        public List<ClsVehiculoENSC> FncBuscarVehiculosSC(string pStrTerminoSC)
         {
             string lStrTerminoSC = (pStrTerminoSC ?? string.Empty).Trim();
-            if (lStrTerminoSC.Length > lIntLongitudMaximaBusquedaSC)
+            if (lStrTerminoSC.Length > gIntLongitudMaximaBusquedaSC)
             {
-                throw new ClsValidacionExcepcionLN(lStrCampoBusquedaSC,
-                    "La búsqueda admite como máximo " + lIntLongitudMaximaBusquedaSC + " caracteres.");
+                throw new ClsValidacionExcepcionLNSC(gStrCampoBusquedaSC,
+                    "La búsqueda admite como máximo " + gIntLongitudMaximaBusquedaSC + " caracteres.");
             }
 
-            string lStrNormalizadoSC = lRegNoAlfanumericoSC.Replace(lStrTerminoSC, string.Empty).ToUpperInvariant();
+            string lStrNormalizadoSC = gRegNoAlfanumericoSC.Replace(lStrTerminoSC, string.Empty).ToUpperInvariant();
             if (lStrNormalizadoSC.Length > 17)
             {
-                throw new ClsValidacionExcepcionLN(lStrCampoBusquedaSC,
+                throw new ClsValidacionExcepcionLNSC(gStrCampoBusquedaSC,
                     "Escribe una placa o un VIN; el VIN tiene como máximo 17 caracteres.");
             }
 
-            return lObjVehiculoDASC.fncBuscarVehiculosSC(
-                lStrNormalizadoSC.Length == 0 ? null : lStrNormalizadoSC, lIntMaximoResultadosSC);
+            return gObjVehiculoDASC.FncBuscarVehiculosSC(
+                lStrNormalizadoSC.Length == 0 ? null : lStrNormalizadoSC, gIntMaximoResultadosSC);
         }
 
         /// <summary>Obtiene un vehículo con los datos de su propietario.</summary>
         /// <param name="pIntIdVehiculoSC">Identificador del vehículo.</param>
         /// <returns>El vehículo o <c>null</c> si no existe.</returns>
-        public ClsVehiculoENSC fncObtenerVehiculoSC(int pIntIdVehiculoSC)
+        public ClsVehiculoENSC FncObtenerVehiculoSC(int pIntIdVehiculoSC)
         {
-            return pIntIdVehiculoSC <= 0 ? null : lObjVehiculoDASC.fncObtenerVehiculoPorIdSC(pIntIdVehiculoSC);
+            return pIntIdVehiculoSC <= 0 ? null : gObjVehiculoDASC.FncObtenerVehiculoPorIdSC(pIntIdVehiculoSC);
         }
 
         /// <summary>Lista los vehículos asociados a un cliente.</summary>
         /// <param name="pIntIdClienteSC">Identificador del cliente propietario.</param>
         /// <returns>Vehículos del cliente; vacío si el identificador no es válido o no tiene vehículos.</returns>
-        public List<ClsVehiculoENSC> fncListarVehiculosPorClienteSC(int pIntIdClienteSC)
+        public List<ClsVehiculoENSC> FncListarVehiculosPorClienteSC(int pIntIdClienteSC)
         {
             return pIntIdClienteSC <= 0
                 ? new List<ClsVehiculoENSC>()
-                : lObjVehiculoDASC.fncListarVehiculosPorClienteSC(pIntIdClienteSC);
+                : gObjVehiculoDASC.FncListarVehiculosPorClienteSC(pIntIdClienteSC);
         }
 
         /// <summary>Cuenta los vehículos registrados.</summary>
         /// <returns>Cantidad total de vehículos.</returns>
-        public int fncContarVehiculosSC()
+        public int FncContarVehiculosSC()
         {
-            return lObjVehiculoDASC.fncContarVehiculosSC();
+            return gObjVehiculoDASC.FncContarVehiculosSC();
         }
 
         /// <summary>
@@ -167,16 +167,16 @@ namespace CapaLogica
         /// </summary>
         /// <param name="pDatFechaReferenciaSC">Fecha con la que se evalúa la regla.</param>
         /// <returns>Año máximo permitido para un vehículo.</returns>
-        public static int fncObtenerAnioMaximoSC(DateTime pDatFechaReferenciaSC)
+        public static int FncObtenerAnioMaximoSC(DateTime pDatFechaReferenciaSC)
         {
             return pDatFechaReferenciaSC.Year + 1;
         }
 
         /// <summary>Calcula el último año aceptado según la fecha actual de Guatemala.</summary>
         /// <returns>Año máximo permitido para un vehículo.</returns>
-        public static int fncObtenerAnioMaximoSC()
+        public static int FncObtenerAnioMaximoSC()
         {
-            return fncObtenerAnioMaximoSC(ClsZonaHorariaLN.fncObtenerHoyGuatemala());
+            return FncObtenerAnioMaximoSC(ClsZonaHorariaLNSC.FncObtenerHoyGuatemalaSC());
         }
 
         /// <summary>
@@ -186,92 +186,92 @@ namespace CapaLogica
         /// <param name="pIntAnioSC">Año que escribió el usuario.</param>
         /// <param name="pDatFechaReferenciaSC">Fecha con la que se evalúa la regla.</param>
         /// <returns><c>true</c> si el año es válido; de lo contrario, <c>false</c>.</returns>
-        public static bool fncEsAnioValidoSC(int pIntAnioSC, DateTime pDatFechaReferenciaSC)
+        public static bool FncEsAnioValidoSC(int pIntAnioSC, DateTime pDatFechaReferenciaSC)
         {
-            return pIntAnioSC >= lIntAnioMinimoSC
-                && pIntAnioSC <= fncObtenerAnioMaximoSC(pDatFechaReferenciaSC);
+            return pIntAnioSC >= gIntAnioMinimoSC
+                && pIntAnioSC <= FncObtenerAnioMaximoSC(pDatFechaReferenciaSC);
         }
 
         /// <summary>Indica si un año de modelo es válido según la fecha actual de Guatemala.</summary>
         /// <param name="pIntAnioSC">Año que escribió el usuario.</param>
         /// <returns><c>true</c> si el año es válido; de lo contrario, <c>false</c>.</returns>
-        public static bool fncEsAnioValidoSC(int pIntAnioSC)
+        public static bool FncEsAnioValidoSC(int pIntAnioSC)
         {
-            return fncEsAnioValidoSC(pIntAnioSC, ClsZonaHorariaLN.fncObtenerHoyGuatemala());
+            return FncEsAnioValidoSC(pIntAnioSC, ClsZonaHorariaLNSC.FncObtenerHoyGuatemalaSC());
         }
 
         /// <summary>Quita separadores y espacios sobrantes para guardar datos uniformes.</summary>
-        private static void fncNormalizarVehiculoSC(ClsVehiculoENSC pObjVehiculoSC)
+        private static void SubNormalizarVehiculoSC(ClsVehiculoENSC pObjVehiculoSC)
         {
-            pObjVehiculoSC.lStrPlacaSC = lRegSeparadoresSC.Replace(pObjVehiculoSC.lStrPlacaSC ?? string.Empty, string.Empty)
+            pObjVehiculoSC.gStrPlacaSC = gRegSeparadoresSC.Replace(pObjVehiculoSC.gStrPlacaSC ?? string.Empty, string.Empty)
                 .ToUpperInvariant();
 
-            pObjVehiculoSC.lStrVinSC = lRegSeparadoresSC.Replace(pObjVehiculoSC.lStrVinSC ?? string.Empty, string.Empty)
+            pObjVehiculoSC.gStrVinSC = gRegSeparadoresSC.Replace(pObjVehiculoSC.gStrVinSC ?? string.Empty, string.Empty)
                 .ToUpperInvariant();
 
-            pObjVehiculoSC.lStrMarcaSC = fncNormalizarEspaciosSC(pObjVehiculoSC.lStrMarcaSC);
-            pObjVehiculoSC.lStrModeloSC = fncNormalizarEspaciosSC(pObjVehiculoSC.lStrModeloSC);
+            pObjVehiculoSC.gStrMarcaSC = FncNormalizarEspaciosSC(pObjVehiculoSC.gStrMarcaSC);
+            pObjVehiculoSC.gStrModeloSC = FncNormalizarEspaciosSC(pObjVehiculoSC.gStrModeloSC);
         }
 
         /// <summary>Revisa cada campo, devuelve todos los errores y asigna el año si es válido.</summary>
-        private static Dictionary<string, string> fncValidarVehiculoSC(ClsVehiculoENSC pObjVehiculoSC, string pStrAnioSC)
+        private static Dictionary<string, string> FncValidarVehiculoSC(ClsVehiculoENSC pObjVehiculoSC, string pStrAnioSC)
         {
             Dictionary<string, string> lDicErroresSC = new Dictionary<string, string>();
 
-            if (pObjVehiculoSC.lIntIdClienteSC <= 0)
+            if (pObjVehiculoSC.gIntIdClienteSC <= 0)
             {
-                lDicErroresSC[lStrCampoPropietarioSC] = "Selecciona el cliente propietario del vehículo.";
+                lDicErroresSC[gStrCampoPropietarioSC] = "Selecciona el cliente propietario del vehículo.";
             }
 
-            if (pObjVehiculoSC.lStrPlacaSC.Length == 0)
+            if (pObjVehiculoSC.gStrPlacaSC.Length == 0)
             {
-                lDicErroresSC[lStrCampoPlacaSC] = "La placa es obligatoria.";
+                lDicErroresSC[gStrCampoPlacaSC] = "La placa es obligatoria.";
             }
-            else if (!lRegPlacaSC.IsMatch(pObjVehiculoSC.lStrPlacaSC))
+            else if (!gRegPlacaSC.IsMatch(pObjVehiculoSC.gStrPlacaSC))
             {
-                lDicErroresSC[lStrCampoPlacaSC] = "La placa debe tener entre 5 y 10 letras o números, por ejemplo P-123ABC.";
+                lDicErroresSC[gStrCampoPlacaSC] = "La placa debe tener entre 5 y 10 letras o números, por ejemplo P-123ABC.";
             }
 
-            if (pObjVehiculoSC.lStrVinSC.Length == 0)
+            if (pObjVehiculoSC.gStrVinSC.Length == 0)
             {
-                lDicErroresSC[lStrCampoVinSC] = "El VIN es obligatorio. Está en la tarjeta de circulación o en el parabrisas.";
+                lDicErroresSC[gStrCampoVinSC] = "El VIN es obligatorio. Está en la tarjeta de circulación o en el parabrisas.";
             }
-            else if (!lRegVinSC.IsMatch(pObjVehiculoSC.lStrVinSC))
+            else if (!gRegVinSC.IsMatch(pObjVehiculoSC.gStrVinSC))
             {
-                lDicErroresSC[lStrCampoVinSC] = pObjVehiculoSC.lStrVinSC.Length != 17
+                lDicErroresSC[gStrCampoVinSC] = pObjVehiculoSC.gStrVinSC.Length != 17
                     ? "El VIN debe tener exactamente 17 caracteres."
                     : "El VIN solo admite letras y números, sin I, O ni Q.";
             }
 
-            fncValidarTextoSC(lDicErroresSC, lStrCampoMarcaSC, pObjVehiculoSC.lStrMarcaSC, lRegMarcaSC,
+            SubValidarTextoSC(lDicErroresSC, gStrCampoMarcaSC, pObjVehiculoSC.gStrMarcaSC, gRegMarcaSC,
                 "La marca es obligatoria.",
                 "La marca admite como máximo 50 caracteres.",
                 "La marca solo puede contener letras, números, espacios y los signos . & ' -");
-            fncValidarTextoSC(lDicErroresSC, lStrCampoModeloSC, pObjVehiculoSC.lStrModeloSC, lRegModeloSC,
+            SubValidarTextoSC(lDicErroresSC, gStrCampoModeloSC, pObjVehiculoSC.gStrModeloSC, gRegModeloSC,
                 "El modelo es obligatorio.",
                 "El modelo admite como máximo 50 caracteres.",
                 "El modelo solo puede contener letras, números, espacios y los signos . ' / + -");
 
             string lStrAnioSC = (pStrAnioSC ?? string.Empty).Trim();
-            int lIntAnioMaximoSC = fncObtenerAnioMaximoSC();
+            int lIntAnioMaximoSC = FncObtenerAnioMaximoSC();
             if (lStrAnioSC.Length == 0)
             {
-                lDicErroresSC[lStrCampoAnioSC] = "El año es obligatorio.";
+                lDicErroresSC[gStrCampoAnioSC] = "El año es obligatorio.";
             }
-            else if (!lRegAnioSC.IsMatch(lStrAnioSC))
+            else if (!gRegAnioSC.IsMatch(lStrAnioSC))
             {
-                lDicErroresSC[lStrCampoAnioSC] = "Escribe el año con 4 dígitos, por ejemplo 2018.";
+                lDicErroresSC[gStrCampoAnioSC] = "Escribe el año con 4 dígitos, por ejemplo 2018.";
             }
             else
             {
                 int lIntAnioSC = int.Parse(lStrAnioSC);
-                if (fncEsAnioValidoSC(lIntAnioSC))
+                if (FncEsAnioValidoSC(lIntAnioSC))
                 {
-                    pObjVehiculoSC.lIntAnioSC = lIntAnioSC;
+                    pObjVehiculoSC.gIntAnioSC = lIntAnioSC;
                 }
                 else
                 {
-                    lDicErroresSC[lStrCampoAnioSC] = "El año debe estar entre " + lIntAnioMinimoSC + " y " + lIntAnioMaximoSC + ".";
+                    lDicErroresSC[gStrCampoAnioSC] = "El año debe estar entre " + gIntAnioMinimoSC + " y " + lIntAnioMaximoSC + ".";
                 }
             }
 
@@ -279,7 +279,7 @@ namespace CapaLogica
         }
 
         /// <summary>Valida un texto obligatorio de hasta 50 caracteres con un formato dado.</summary>
-        private static void fncValidarTextoSC(Dictionary<string, string> pDicErroresSC, string pStrCampoSC,
+        private static void SubValidarTextoSC(Dictionary<string, string> pDicErroresSC, string pStrCampoSC,
             string pStrValorSC, Regex pRegFormatoSC, string pStrMensajeObligatorioSC,
             string pStrMensajeLongitudSC, string pStrMensajeFormatoSC)
         {
@@ -298,9 +298,9 @@ namespace CapaLogica
         }
 
         /// <summary>Quita espacios al inicio y al final y deja un solo espacio entre palabras.</summary>
-        private static string fncNormalizarEspaciosSC(string pStrTextoSC)
+        private static string FncNormalizarEspaciosSC(string pStrTextoSC)
         {
-            return lRegEspaciosSC.Replace(pStrTextoSC ?? string.Empty, " ").Trim();
+            return gRegEspaciosSC.Replace(pStrTextoSC ?? string.Empty, " ").Trim();
         }
     }
 }

@@ -45,27 +45,27 @@
               <asp:HyperLinkField
                  HeaderText="Acciones"
                  Text="Ver detalle"
-                 DataNavigateUrlFields="lIntIdOrdenNT"
+                 DataNavigateUrlFields="gIntIdOrdenNT"
                  DataNavigateUrlFormatString="~/OrdenesReparacion/DetalleOrdenNT.aspx?id={0}" />
 
             <asp:BoundField
-                DataField="lIntIdOrdenNT"
+                DataField="gIntIdOrdenNT"
                 HeaderText="Orden" />
 
             <asp:BoundField
-                DataField="lStrVinNT"
+                DataField="gStrVinNT"
                 HeaderText="VIN" />
 
             <asp:BoundField
-                DataField="lStrPlacaNT"
+                DataField="gStrPlacaNT"
                 HeaderText="Placa" />
 
             <asp:BoundField
-                DataField="lStrMotivoIngresoNT"
+                DataField="gStrMotivoIngresoNT"
                 HeaderText="Motivo de ingreso" />
 
             <asp:BoundField
-                DataField="lStrEstadoNT"
+                DataField="gStrEstadoNT"
                 HeaderText="Estado" />
         </Columns>
 

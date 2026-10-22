@@ -14,31 +14,31 @@ namespace CapaEntidades
     public class ClsRepuestoUtilizadoENFP
     {
         /// <summary>Obtiene o establece el identificador del repuesto.</summary>
-        public int lIntIdRepuestoFP { get; set; }
+        public int gIntIdRepuestoFP { get; set; }
 
         /// <summary>Obtiene o establece el código del repuesto.</summary>
-        public string lStrCodigoFP { get; set; }
+        public string gStrCodigoFP { get; set; }
 
         /// <summary>Obtiene o establece el nombre del repuesto.</summary>
-        public string lStrNombreFP { get; set; }
+        public string gStrNombreFP { get; set; }
 
         /// <summary>Obtiene o establece el total de unidades utilizadas en el rango.</summary>
-        public int lIntUnidadesFP { get; set; }
+        public int gIntUnidadesFP { get; set; }
 
         /// <summary>Obtiene o establece en cuántas órdenes distintas se utilizó en el rango.</summary>
-        public int lIntOrdenesFP { get; set; }
+        public int gIntOrdenesFP { get; set; }
 
         /// <summary>Obtiene o establece la fecha (UTC) del último uso dentro del rango.</summary>
-        public DateTime lDatUltimoUsoUtcFP { get; set; }
+        public DateTime gDatUltimoUsoUtcFP { get; set; }
 
         /// <summary>Obtiene o establece las unidades que quedan hoy en bodega.</summary>
-        public int lIntStockActualFP { get; set; }
+        public int gIntStockActualFP { get; set; }
 
         /// <summary>Inicializa los textos con valores no nulos.</summary>
         public ClsRepuestoUtilizadoENFP()
         {
-            lStrCodigoFP = string.Empty;
-            lStrNombreFP = string.Empty;
+            gStrCodigoFP = string.Empty;
+            gStrNombreFP = string.Empty;
         }
     }
 }

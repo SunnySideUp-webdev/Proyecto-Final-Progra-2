@@ -3,6 +3,7 @@
 // Carné: 0900-16-12945
 // Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Capa de Presentación
 // Parte de Neider: todo el código de este archivo es de su módulo.
+// Ajuste de integración (Sharon): nombres según la convención del docente (prefijo g en campos y propiedades, Sub en procedimientos).
 //==============================================================
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,12 @@ namespace CapaPresentacion.OrdenesReparacion
         {
             if (!IsPostBack)
             {
-                FncCargarOrdenesNT();
+                SubCargarOrdenesNT();
             }
         }
 
         /// <summary>Consulta las órdenes abiertas y las muestra en la tabla; si falla, muestra un mensaje.</summary>
-        private void FncCargarOrdenesNT()
+        private void SubCargarOrdenesNT()
         {
             try
             {

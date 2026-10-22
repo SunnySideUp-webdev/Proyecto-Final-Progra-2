@@ -44,9 +44,9 @@
     <Compile Include="ClsRepuestoLNPP.cs" />
     <!-- Repuestos utilizados en órdenes (parte de Sharon) -->
     <Compile Include="ClsRepuestoOrdenLNSC.cs" />
-    <Compile Include="ClsValidacionExcepcionLN.cs" />
+    <Compile Include="ClsValidacionExcepcionLNSC.cs" />
     <Compile Include="ClsVehiculoLNSC.cs" />
-    <Compile Include="ClsZonaHorariaLN.cs" />
+    <Compile Include="ClsZonaHorariaLNSC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -26,9 +26,9 @@
     <%-- Datos de la orden. --%>
     <asp:Panel ID="pnlOrdenSC" runat="server" CssClass="adms-card mb-4" Visible="false">
         <div class="adms-card-cuerpo d-flex flex-wrap align-items-center gap-3">
-            <span class="adms-placa" role="img" aria-label='<%= fncCodificarSC("Placa " + gStrPlacaSC) %>'>
+            <span class="adms-placa" role="img" aria-label='<%= FncCodificarSC("Placa " + gStrPlacaSC) %>'>
                 <span class="adms-placa-pais" aria-hidden="true">GT</span>
-                <span class="adms-placa-numero" aria-hidden="true"><%= fncCodificarSC(gStrPlacaSC) %></span>
+                <span class="adms-placa-numero" aria-hidden="true"><%= FncCodificarSC(gStrPlacaSC) %></span>
             </span>
             <div class="flex-grow-1">
                 <div class="fw-semibold">
@@ -110,14 +110,14 @@
             <ItemTemplate>
                             <tr>
                                 <td>
-                                    <div class="fw-semibold"><%# fncCodificarSC(Eval("lStrNombreRepuestoSC")) %></div>
-                                    <div class="adms-persona-detalle adms-numero"><%# fncCodificarSC(Eval("lStrCodigoSC")) %></div>
+                                    <div class="fw-semibold"><%# FncCodificarSC(Eval("gStrNombreRepuestoSC")) %></div>
+                                    <div class="adms-persona-detalle adms-numero"><%# FncCodificarSC(Eval("gStrCodigoSC")) %></div>
                                 </td>
-                                <td class="adms-numero"><%# Eval("lIntCantidadSC") %></td>
-                                <td class="d-none d-md-table-cell adms-numero text-secondary"><%# fncCodificarSC(ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaRegistroUtcSC"))) %></td>
+                                <td class="adms-numero"><%# Eval("gIntCantidadSC") %></td>
+                                <td class="d-none d-md-table-cell adms-numero text-secondary"><%# FncCodificarSC(ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatFechaRegistroUtcSC"))) %></td>
                                 <td class="text-end">
                                     <asp:LinkButton ID="lnkQuitarSC" runat="server" CssClass="btn btn-sm btn-outline-danger text-nowrap"
-                                        CommandName="Quitar" CommandArgument='<%# Eval("lIntIdRepuestoOrdenSC") %>' Visible='<%# gBlnOrdenAbiertaSC %>'
+                                        CommandName="Quitar" CommandArgument='<%# Eval("gIntIdRepuestoOrdenSC") %>' Visible='<%# gBlnOrdenAbiertaSC %>'
                                         OnClientClick="return confirm('¿Quitar este repuesto de la orden? Sus unidades vuelven al inventario.');"
                                         ToolTip="Quitar de la orden">
                                         <i class="bi bi-x-lg" aria-hidden="true"></i><span class="ms-1">Quitar</span>

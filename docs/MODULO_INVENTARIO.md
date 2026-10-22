@@ -37,12 +37,12 @@ repuesto se registra como utilizado en una orden de reparación (sección 7).
 
 Componentes compartidos que el módulo reutiliza:
 
-- `ClsConexionDA`: conexión a `AutoManagerDMS` a partir de `ConnectionStrings.config`.
-- `ClsValidacionExcepcionLN`: mecanismo con el que la Capa Lógica informa los errores de cada campo.
-- `ClsDatoDuplicadoExcepcionDA`: traduce el error de SQL Server por código repetido.
-- `ClsSqlDA.fncEscaparPatronLike`: hace que `%`, `_` y `[` se busquen como texto.
+- `ClsConexionDASC`: conexión a `AutoManagerDMS` a partir de `ConnectionStrings.config`.
+- `ClsValidacionExcepcionLNSC`: mecanismo con el que la Capa Lógica informa los errores de cada campo.
+- `ClsDatoDuplicadoExcepcionDASC`: traduce el error de SQL Server por código repetido.
+- `ClsSqlDASC.FncEscaparPatronLikeSC`: hace que `%`, `_` y `[` se busquen como texto.
 - `ClsVehiculoLNSC` (módulo 1): regla del año de un vehículo (de 1981 al año siguiente al actual).
-- `Site.Master`, `ClsRegistroErrores` y `autodms.css`: estructura, registro de errores y estilos comunes.
+- `Site.Master`, `ClsRegistroErroresSC` y `autodms.css`: estructura, registro de errores y estilos comunes.
 
 ---
 
@@ -54,8 +54,8 @@ pasó a las capas comunes del proyecto. Esta tabla permite ubicar cada elemento 
 | Versión original | Versión integrada |
 |---|---|
 | `ClsCapaEntidades` | `ClsRepuestoENPP` |
-| Propiedades `gstrcodrepuestoPP`, `gstrnomrepuestoPP`, `gintstockrepuestoPP`… | `lStrCodigoPP`, `lStrNombrePP`, `lIntStockPP`… (convención del proyecto para propiedades) |
-| `Clsconexion.fncobtenerconexionPP` | `ClsConexionDA.fncObtenerConexion` (conexión compartida) |
+| Propiedades `gstrcodrepuestoPP`, `gstrnomrepuestoPP`, `gintstockrepuestoPP`… | `gStrCodigoPP`, `gStrNombrePP`, `gIntStockPP`… (mismo prefijo `g` de su versión, con el tipo y cada palabra en mayúscula inicial) |
+| `Clsconexion.fncobtenerconexionPP` | `ClsConexionDASC.FncObtenerConexionSC` (conexión compartida) |
 | `Clsconexion.fncagregarepuestoPP` | `ClsRepuestoDAPP.FncAgregarRepuestoPP` |
 | `Clsconexion.fncconsultarPP` | `ClsRepuestoDAPP.FncConsultarPP` |
 | `Clsconexion.fncactualizarstockPP` | `ClsRepuestoDAPP.FncActualizarStockPP` |
@@ -76,8 +76,8 @@ el stock y las dos secciones del formulario (información del repuesto y compati
 | Situación en la versión original | Ajuste | Motivo |
 |---|---|---|
 | El `INSERT` se armaba con `string.Format` y el texto del usuario. | Todas las consultas usan parámetros. | Un apóstrofo (por ejemplo, en «D'Angelo») rompía la instrucción y permitía inyección SQL. |
-| Cadena de conexión fija a `DESKTOP-FEI37DB\SQLEXPRESS`. | Se usa `ClsConexionDA`. | La conexión depende de la configuración de cada computadora, no del código. |
-| La Capa Lógica devolvía textos «Éxito:»/«Error:» y las páginas buscaban `"exito"` y `"Exito"`. | Los errores se informan con `ClsValidacionExcepcionLN`; tras guardar, la página redirige con un aviso. | La comparación nunca coincidía con «Éxito» (tilde y mayúscula): el formulario no se limpiaba y la tabla no se actualizaba. |
+| Cadena de conexión fija a `DESKTOP-FEI37DB\SQLEXPRESS`. | Se usa `ClsConexionDASC`. | La conexión depende de la configuración de cada computadora, no del código. |
+| La Capa Lógica devolvía textos «Éxito:»/«Error:» y las páginas buscaban `"exito"` y `"Exito"`. | Los errores se informan con `ClsValidacionExcepcionLNSC`; tras guardar, la página redirige con un aviso. | La comparación nunca coincidía con «Éxito» (tilde y mayúscula): el formulario no se limpiaba y la tabla no se actualizaba. |
 | La ventana decía «Nuevo stock», pero el SQL sumaba la cantidad. | El campo se llama «Unidades que ingresan». | El texto ahora describe lo que hace la instrucción (`stock = stock + @Cantidad`). |
 | `int.Parse` sobre el texto escrito. | Validación de números con mensajes por campo. | Escribir letras producía un error técnico en pantalla. |
 | Los datos se mostraban sin codificar. | Todo texto se codifica con `HttpUtility.HtmlEncode`. | Evita que un dato guardado ejecute código en el navegador (XSS). |
@@ -110,7 +110,7 @@ Navegador ── POST RegistroRepuesto.aspx (botón Guardar) ──►  Presenta
                      ◄── 302 a Inventario.aspx?registrado=<id> (aviso de éxito con los datos guardados)
 ```
 
-Si un dato no cumple una regla, la Capa Lógica lanza `ClsValidacionExcepcionLN` con un mensaje por campo y
+Si un dato no cumple una regla, la Capa Lógica lanza `ClsValidacionExcepcionLNSC` con un mensaje por campo y
 la página marca cada campo en rojo sin perder lo escrito.
 
 ---
@@ -149,7 +149,7 @@ ORDER BY CASE WHEN @Patron IS NULL THEN idrepuesto END DESC,
 
 - Sin texto de búsqueda (`@Patron` nulo) se listan los más recientes.
 - `COLLATE Latin1_General_CI_AI` compara sin distinguir mayúsculas ni tildes.
-- `ESCAPE '\'` junto con `ClsSqlDA.fncEscaparPatronLike` hace que los comodines se busquen como texto.
+- `ESCAPE '\'` junto con `ClsSqlDASC.FncEscaparPatronLikeSC` hace que los comodines se busquen como texto.
 - El código exacto aparece primero; se muestran como máximo 100 repuestos.
 
 ### 6.3 Entrada a bodega
@@ -208,7 +208,7 @@ anterior a 1981), se detiene con un mensaje que indica qué corregir; después s
 | Código malicioso en pantalla (XSS) | Todo texto se codifica antes de mostrarse; los nombres con `<` no superan la validación. |
 | Registro doble al recargar | Después de guardar, la página redirige (patrón POST, redirección, GET). |
 | Datos inválidos en la dirección | `?entrada=` con un repuesto inexistente muestra un aviso y no abre la ventana. |
-| Base de datos no disponible | Se registra el error (`ClsRegistroErrores`) y se muestra un mensaje general sin detalles técnicos. |
+| Base de datos no disponible | Se registra el error (`ClsRegistroErroresSC`) y se muestra un mensaje general sin detalles técnicos. |
 
 ---
 
@@ -223,7 +223,7 @@ Se siguen las del documento del equipo, con las iniciales **PP**:
 | Procedimientos | `Sub…PP` | `SubCargarRepuestosPP`, `SubNormalizarRepuestoPP` |
 | Variables locales | `l` + tipo + nombre + iniciales | `lStrCriterioPP`, `lIntCantidadPP` |
 | Parámetros | `p` + tipo + nombre + iniciales | `pIntIdRepuestoPP`, `pStrCantidadPP` |
-| Campos de la clase | `g` + tipo + nombre + iniciales | `gObjRepuestoLNPP`, `gStrUrlVolverPP` |
+| Campos, constantes y propiedades de la clase | `g` + tipo + nombre + iniciales | `gObjRepuestoLNPP`, `gIntEntradaMaximaPP`, `gStrCodigoPP` |
 | Controles | prefijo del control + nombre + iniciales | `txtCodigoPP`, `rptRepuestosPP`, `btnGuardarEntradaPP` |
 
 ---

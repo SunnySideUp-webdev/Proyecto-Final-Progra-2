@@ -19,14 +19,14 @@ namespace CapaPresentacion.Inventario
     {
         private readonly ClsRepuestoLNPP gObjRepuestoLNPP = new ClsRepuestoLNPP();
 
-        private SiteMaster gObjSitioPP
+        private webSiteMasterSC gObjSitioPP
         {
-            get { return (SiteMaster)Master; }
+            get { return (webSiteMasterSC)Master; }
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            litAyudaAnioPP.Text = "Entre " + ClsVehiculoLNSC.lIntAnioMinimoSC + " y " + ClsVehiculoLNSC.fncObtenerAnioMaximoSC() + ".";
+            litAyudaAnioPP.Text = "Entre " + ClsVehiculoLNSC.gIntAnioMinimoSC + " y " + ClsVehiculoLNSC.FncObtenerAnioMaximoSC() + ".";
 
             if (!IsPostBack)
             {
@@ -41,11 +41,11 @@ namespace CapaPresentacion.Inventario
 
             ClsRepuestoENPP lObjRepuestoPP = new ClsRepuestoENPP
             {
-                lStrCodigoPP = txtCodigoPP.Text,
-                lStrNombrePP = txtNombrePP.Text,
-                lStrDescripcionPP = txtDescripcionPP.Text,
-                lStrMarcaCarroPP = txtMarcaPP.Text,
-                lStrModeloCarroPP = txtModeloPP.Text
+                gStrCodigoPP = txtCodigoPP.Text,
+                gStrNombrePP = txtNombrePP.Text,
+                gStrDescripcionPP = txtDescripcionPP.Text,
+                gStrMarcaCarroPP = txtMarcaPP.Text,
+                gStrModeloCarroPP = txtModeloPP.Text
             };
 
             try
@@ -56,22 +56,22 @@ namespace CapaPresentacion.Inventario
                 Response.Redirect("~/Inventario/Inventario.aspx?registrado=" + lIntIdRepuestoPP, false);
                 Context.ApplicationInstance.CompleteRequest();
             }
-            catch (ClsValidacionExcepcionLN lObjExcepcionPP)
+            catch (ClsValidacionExcepcionLNSC lObjExcepcionPP)
             {
-                foreach (KeyValuePair<string, string> lObjErrorPP in lObjExcepcionPP.lDicErroresCampos)
+                foreach (KeyValuePair<string, string> lObjErrorPP in lObjExcepcionPP.gDicErroresCamposSC)
                 {
                     SubMarcarErrorPP(lObjErrorPP.Key, lObjErrorPP.Value);
                 }
 
-                gObjSitioPP.fncMostrarAlerta(TipoAlerta.Error,
-                    lObjExcepcionPP.lDicErroresCampos.Count == 1
+                gObjSitioPP.SubMostrarAlertaSC(TipoAlertaSC.Error,
+                    lObjExcepcionPP.gDicErroresCamposSC.Count == 1
                         ? "No se guardó el repuesto. Revisa el campo marcado."
-                        : "No se guardó el repuesto. Revisa los " + lObjExcepcionPP.lDicErroresCampos.Count + " campos marcados.");
+                        : "No se guardó el repuesto. Revisa los " + lObjExcepcionPP.gDicErroresCamposSC.Count + " campos marcados.");
             }
             catch (Exception lObjExcepcionPP)
             {
-                ClsRegistroErrores.fncRegistrar(lObjExcepcionPP, "RegistroRepuesto.aspx - guardar repuesto");
-                gObjSitioPP.fncMostrarAlerta(TipoAlerta.Error,
+                ClsRegistroErroresSC.SubRegistrarSC(lObjExcepcionPP, "RegistroRepuesto.aspx - guardar repuesto");
+                gObjSitioPP.SubMostrarAlertaSC(TipoAlertaSC.Error,
                     "No fue posible guardar el repuesto en este momento. Tus datos siguen en el formulario; intenta de nuevo en unos minutos.");
             }
         }
@@ -81,13 +81,13 @@ namespace CapaPresentacion.Inventario
         {
             return new Dictionary<string, Tuple<TextBox, Label>>
             {
-                { ClsRepuestoLNPP.lStrCampoCodigoPP, Tuple.Create(txtCodigoPP, errCodigoPP) },
-                { ClsRepuestoLNPP.lStrCampoNombrePP, Tuple.Create(txtNombrePP, errNombrePP) },
-                { ClsRepuestoLNPP.lStrCampoDescripcionPP, Tuple.Create(txtDescripcionPP, errDescripcionPP) },
-                { ClsRepuestoLNPP.lStrCampoStockPP, Tuple.Create(txtStockPP, errStockPP) },
-                { ClsRepuestoLNPP.lStrCampoMarcaPP, Tuple.Create(txtMarcaPP, errMarcaPP) },
-                { ClsRepuestoLNPP.lStrCampoModeloPP, Tuple.Create(txtModeloPP, errModeloPP) },
-                { ClsRepuestoLNPP.lStrCampoAnioPP, Tuple.Create(txtAnioPP, errAnioPP) }
+                { ClsRepuestoLNPP.gStrCampoCodigoPP, Tuple.Create(txtCodigoPP, errCodigoPP) },
+                { ClsRepuestoLNPP.gStrCampoNombrePP, Tuple.Create(txtNombrePP, errNombrePP) },
+                { ClsRepuestoLNPP.gStrCampoDescripcionPP, Tuple.Create(txtDescripcionPP, errDescripcionPP) },
+                { ClsRepuestoLNPP.gStrCampoStockPP, Tuple.Create(txtStockPP, errStockPP) },
+                { ClsRepuestoLNPP.gStrCampoMarcaPP, Tuple.Create(txtMarcaPP, errMarcaPP) },
+                { ClsRepuestoLNPP.gStrCampoModeloPP, Tuple.Create(txtModeloPP, errModeloPP) },
+                { ClsRepuestoLNPP.gStrCampoAnioPP, Tuple.Create(txtAnioPP, errAnioPP) }
             };
         }
 

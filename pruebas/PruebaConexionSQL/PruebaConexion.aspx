@@ -1,4 +1,4 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PruebaConexion.aspx.cs" Inherits="PruebaConexionSQL.PruebaConexion" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="PruebaConexion.aspx.cs" Inherits="PruebaConexionSQL.webPruebaConexionSC" %>
 
 <!DOCTYPE html>
 <html lang="es">

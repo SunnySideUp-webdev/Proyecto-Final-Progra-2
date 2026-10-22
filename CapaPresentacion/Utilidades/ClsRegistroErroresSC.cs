@@ -12,18 +12,18 @@ namespace CapaPresentacion.Utilidades
     /// Registra los errores inesperados para el equipo de desarrollo. Al usuario
     /// solo se le muestra un mensaje general, nunca el detalle técnico.
     /// </summary>
-    public static class ClsRegistroErrores
+    public static class ClsRegistroErroresSC
     {
         /// <summary>Escribe el error en la consola de XSP4 y en el seguimiento de Visual Studio.</summary>
         /// <param name="pObjExcepcion">Error capturado.</param>
         /// <param name="pStrContexto">Operación que se estaba realizando.</param>
-        public static void fncRegistrar(Exception pObjExcepcion, string pStrContexto)
+        public static void SubRegistrarSC(Exception pObjExcepcionSC, string pStrContextoSC)
         {
-            string lStrMensaje = string.Format("[{0:yyyy-MM-dd HH:mm:ss}] ERROR en {1}: {2}",
-                DateTime.Now, pStrContexto, pObjExcepcion);
+            string lStrMensajeSC = string.Format("[{0:yyyy-MM-dd HH:mm:ss}] ERROR en {1}: {2}",
+                DateTime.Now, pStrContextoSC, pObjExcepcionSC);
 
-            Trace.TraceError(lStrMensaje);
-            Console.Error.WriteLine(lStrMensaje);
+            Trace.TraceError(lStrMensajeSC);
+            Console.Error.WriteLine(lStrMensajeSC);
         }
     }
 }

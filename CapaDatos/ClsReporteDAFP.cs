@@ -24,7 +24,7 @@ namespace CapaDatos
         /// Las órdenes se relacionan con el vehículo por IdVehiculo (y VIN), y el vehículo
         /// con su cliente por IdCliente.
         /// </summary>
-        private const string lStrConsultaBaseFP = @"
+        private const string gStrConsultaBaseFP = @"
             SELECT o.IdOrden, o.IdVehiculo, v.Placa, v.VIN, v.Marca, v.Modelo,
                    c.IdCliente, c.Nombres + N' ' + c.Apellidos AS Cliente,
                    o.Estado, o.MotivoIngreso, o.FechaApertura, o.FechaCierre
@@ -36,11 +36,11 @@ namespace CapaDatos
         /// <returns>Órdenes abiertas con su vehículo y su cliente.</returns>
         public List<ClsReporteOrdenENFP> FncListarOrdenesAbiertasFP()
         {
-            const string lStrConsultaFP = lStrConsultaBaseFP + @"
+            const string lStrConsultaFP = gStrConsultaBaseFP + @"
                 WHERE o.Estado = N'Abierta'
                 ORDER BY o.FechaApertura, o.IdOrden;";
 
-            using (SqlConnection lObjConexionFP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionFP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoFP = new SqlCommand(lStrConsultaFP, lObjConexionFP))
             {
                 lObjConexionFP.Open();
@@ -58,13 +58,13 @@ namespace CapaDatos
         /// <returns>Órdenes cerradas en el rango, con su vehículo y su cliente.</returns>
         public List<ClsReporteOrdenENFP> FncListarOrdenesCerradasFP(DateTime pDatDesdeUtcFP, DateTime pDatHastaUtcFP)
         {
-            const string lStrConsultaFP = lStrConsultaBaseFP + @"
+            const string lStrConsultaFP = gStrConsultaBaseFP + @"
                 WHERE o.Estado = N'Cerrada'
                   AND o.FechaCierre >= @Desde
                   AND o.FechaCierre < @Hasta
                 ORDER BY o.FechaCierre DESC, o.IdOrden DESC;";
 
-            using (SqlConnection lObjConexionFP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionFP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoFP = new SqlCommand(lStrConsultaFP, lObjConexionFP))
             {
                 lObjComandoFP.Parameters.Add("@Desde", SqlDbType.DateTime2).Value = pDatDesdeUtcFP;
@@ -82,11 +82,11 @@ namespace CapaDatos
         /// <returns>Historial de reparaciones del cliente; vacío si no tiene órdenes.</returns>
         public List<ClsReporteOrdenENFP> FncListarOrdenesPorClienteFP(int pIntIdClienteFP)
         {
-            const string lStrConsultaFP = lStrConsultaBaseFP + @"
+            const string lStrConsultaFP = gStrConsultaBaseFP + @"
                 WHERE v.IdCliente = @IdCliente
                 ORDER BY o.FechaApertura DESC, o.IdOrden DESC;";
 
-            using (SqlConnection lObjConexionFP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionFP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoFP = new SqlCommand(lStrConsultaFP, lObjConexionFP))
             {
                 lObjComandoFP.Parameters.Add("@IdCliente", SqlDbType.Int).Value = pIntIdClienteFP;
@@ -119,7 +119,7 @@ namespace CapaDatos
                      FROM dbo.OrdenesReparacion WHERE Estado = N'Cerrada' AND FechaCierre IS NOT NULL) AS MinutosPromedio,
                     (SELECT MIN(FechaApertura) FROM dbo.OrdenesReparacion WHERE Estado = N'Abierta') AS AperturaMasAntigua;";
 
-            using (SqlConnection lObjConexionFP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionFP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoFP = new SqlCommand(lStrConsultaFP, lObjConexionFP))
             {
                 lObjComandoFP.Parameters.Add("@Desde", SqlDbType.DateTime2).Value = pDatInicioMesUtcFP;
@@ -131,11 +131,11 @@ namespace CapaDatos
                     lObjLectorFP.Read();
                     return new ClsResumenReportesENFP
                     {
-                        lIntOrdenesAbiertasFP = lObjLectorFP.GetInt32(0),
-                        lIntOrdenesCerradasMesFP = lObjLectorFP.GetInt32(1),
-                        lIntVehiculosAtendidosFP = lObjLectorFP.GetInt32(2),
-                        lIntMinutosPromedioReparacionFP = lObjLectorFP.IsDBNull(3) ? (int?)null : (int)lObjLectorFP.GetInt64(3),
-                        lDatAperturaMasAntiguaUtcFP = lObjLectorFP.IsDBNull(4)
+                        gIntOrdenesAbiertasFP = lObjLectorFP.GetInt32(0),
+                        gIntOrdenesCerradasMesFP = lObjLectorFP.GetInt32(1),
+                        gIntVehiculosAtendidosFP = lObjLectorFP.GetInt32(2),
+                        gIntMinutosPromedioReparacionFP = lObjLectorFP.IsDBNull(3) ? (int?)null : (int)lObjLectorFP.GetInt64(3),
+                        gDatAperturaMasAntiguaUtcFP = lObjLectorFP.IsDBNull(4)
                             ? (DateTime?)null
                             : DateTime.SpecifyKind(lObjLectorFP.GetDateTime(4), DateTimeKind.Utc)
                     };
@@ -161,7 +161,7 @@ namespace CapaDatos
 
             List<ClsExistenciaRepuestoENFP> lLstExistenciasFP = new List<ClsExistenciaRepuestoENFP>();
 
-            using (SqlConnection lObjConexionFP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionFP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoFP = new SqlCommand(lStrConsultaFP, lObjConexionFP))
             {
                 lObjConexionFP.Open();
@@ -171,12 +171,12 @@ namespace CapaDatos
                     {
                         lLstExistenciasFP.Add(new ClsExistenciaRepuestoENFP
                         {
-                            lIntIdRepuestoFP = lObjLectorFP.GetInt32(0),
-                            lStrCodigoFP = lObjLectorFP.GetString(1),
-                            lStrNombreFP = lObjLectorFP.GetString(2),
-                            lStrVehiculoFP = lObjLectorFP.GetString(3) + " " + lObjLectorFP.GetString(4) + " " + lObjLectorFP.GetInt32(5),
-                            lIntStockFP = lObjLectorFP.GetInt32(6),
-                            lIntUnidadesUsadasFP = lObjLectorFP.GetInt32(7)
+                            gIntIdRepuestoFP = lObjLectorFP.GetInt32(0),
+                            gStrCodigoFP = lObjLectorFP.GetString(1),
+                            gStrNombreFP = lObjLectorFP.GetString(2),
+                            gStrVehiculoFP = lObjLectorFP.GetString(3) + " " + lObjLectorFP.GetString(4) + " " + lObjLectorFP.GetInt32(5),
+                            gIntStockFP = lObjLectorFP.GetInt32(6),
+                            gIntUnidadesUsadasFP = lObjLectorFP.GetInt32(7)
                         });
                     }
                 }
@@ -208,7 +208,7 @@ namespace CapaDatos
 
             List<ClsRepuestoUtilizadoENFP> lLstUtilizadosFP = new List<ClsRepuestoUtilizadoENFP>();
 
-            using (SqlConnection lObjConexionFP = ClsConexionDA.fncObtenerConexion())
+            using (SqlConnection lObjConexionFP = ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoFP = new SqlCommand(lStrConsultaFP, lObjConexionFP))
             {
                 lObjComandoFP.Parameters.Add("@Desde", SqlDbType.DateTime2).Value = pDatDesdeUtcFP;
@@ -220,13 +220,13 @@ namespace CapaDatos
                     {
                         lLstUtilizadosFP.Add(new ClsRepuestoUtilizadoENFP
                         {
-                            lIntIdRepuestoFP = lObjLectorFP.GetInt32(0),
-                            lStrCodigoFP = lObjLectorFP.GetString(1),
-                            lStrNombreFP = lObjLectorFP.GetString(2),
-                            lIntUnidadesFP = lObjLectorFP.GetInt32(3),
-                            lIntOrdenesFP = lObjLectorFP.GetInt32(4),
-                            lDatUltimoUsoUtcFP = DateTime.SpecifyKind(lObjLectorFP.GetDateTime(5), DateTimeKind.Utc),
-                            lIntStockActualFP = lObjLectorFP.GetInt32(6)
+                            gIntIdRepuestoFP = lObjLectorFP.GetInt32(0),
+                            gStrCodigoFP = lObjLectorFP.GetString(1),
+                            gStrNombreFP = lObjLectorFP.GetString(2),
+                            gIntUnidadesFP = lObjLectorFP.GetInt32(3),
+                            gIntOrdenesFP = lObjLectorFP.GetInt32(4),
+                            gDatUltimoUsoUtcFP = DateTime.SpecifyKind(lObjLectorFP.GetDateTime(5), DateTimeKind.Utc),
+                            gIntStockActualFP = lObjLectorFP.GetInt32(6)
                         });
                     }
                 }
@@ -245,19 +245,19 @@ namespace CapaDatos
                 {
                     lLstOrdenesFP.Add(new ClsReporteOrdenENFP
                     {
-                        lIntIdOrdenFP = lObjLectorFP.GetInt32(0),
-                        lIntIdVehiculoFP = lObjLectorFP.GetInt32(1),
-                        lStrPlacaFP = lObjLectorFP.GetString(2),
-                        lStrVinFP = lObjLectorFP.GetString(3),
-                        lStrMarcaFP = lObjLectorFP.GetString(4),
-                        lStrModeloFP = lObjLectorFP.GetString(5),
-                        lIntIdClienteFP = lObjLectorFP.GetInt32(6),
-                        lStrClienteFP = lObjLectorFP.GetString(7),
-                        lStrEstadoFP = lObjLectorFP.GetString(8),
-                        lStrMotivoIngresoFP = lObjLectorFP.GetString(9),
+                        gIntIdOrdenFP = lObjLectorFP.GetInt32(0),
+                        gIntIdVehiculoFP = lObjLectorFP.GetInt32(1),
+                        gStrPlacaFP = lObjLectorFP.GetString(2),
+                        gStrVinFP = lObjLectorFP.GetString(3),
+                        gStrMarcaFP = lObjLectorFP.GetString(4),
+                        gStrModeloFP = lObjLectorFP.GetString(5),
+                        gIntIdClienteFP = lObjLectorFP.GetInt32(6),
+                        gStrClienteFP = lObjLectorFP.GetString(7),
+                        gStrEstadoFP = lObjLectorFP.GetString(8),
+                        gStrMotivoIngresoFP = lObjLectorFP.GetString(9),
                         // SQL Server devuelve DATETIME2 sin zona; las fechas se guardan en UTC.
-                        lDatFechaAperturaUtcFP = DateTime.SpecifyKind(lObjLectorFP.GetDateTime(10), DateTimeKind.Utc),
-                        lDatFechaCierreUtcFP = lObjLectorFP.IsDBNull(11)
+                        gDatFechaAperturaUtcFP = DateTime.SpecifyKind(lObjLectorFP.GetDateTime(10), DateTimeKind.Utc),
+                        gDatFechaCierreUtcFP = lObjLectorFP.IsDBNull(11)
                             ? (DateTime?)null
                             : DateTime.SpecifyKind(lObjLectorFP.GetDateTime(11), DateTimeKind.Utc)
                     });

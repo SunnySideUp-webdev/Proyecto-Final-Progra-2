@@ -37,8 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClsClienteDASC.cs" />
-    <Compile Include="ClsConexionDA.cs" />
-    <Compile Include="ClsDatoDuplicadoExcepcionDA.cs" />
+    <Compile Include="ClsConexionDASC.cs" />
+    <Compile Include="ClsDatoDuplicadoExcepcionDASC.cs" />
     <!-- Módulo 2: Órdenes de reparación (parte de Neider) -->
     <Compile Include="ClsOrdenReparacionDANT.cs" />
     <!-- Módulo 4: Reportes (parte de Fátima) -->
@@ -47,7 +47,7 @@
     <Compile Include="ClsRepuestoDAPP.cs" />
     <!-- Repuestos utilizados en órdenes (parte de Sharon) -->
     <Compile Include="ClsRepuestoOrdenDASC.cs" />
-    <Compile Include="ClsSqlDA.cs" />
+    <Compile Include="ClsSqlDASC.cs" />
     <Compile Include="ClsVehiculoDASC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

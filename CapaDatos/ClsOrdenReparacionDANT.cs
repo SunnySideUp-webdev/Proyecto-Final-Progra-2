@@ -3,6 +3,7 @@
 // Carné: 0900-16-12945
 // Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Capa de Datos
 // Parte de Neider: todo el código de este archivo es de su módulo.
+// Ajuste de integración (Sharon): nombres según la convención del docente (prefijo g en campos y propiedades, Sub en procedimientos).
 //==============================================================
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace CapaDatos
                 new List<ClsOrdenReparacionENT>();
 
             using (SqlConnection lObjConexionNT =
-                ClsConexionDA.fncObtenerConexion())
+                ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoNT =
                 new SqlCommand(lStrConsultaNT, lObjConexionNT))
             {
@@ -63,42 +64,42 @@ namespace CapaDatos
                     {
                         lObjOrdenesNT.Add(new ClsOrdenReparacionENT
                         {
-                            lIntIdOrdenNT =
+                            gIntIdOrdenNT =
                                 Convert.ToInt32(lObjLectorNT["IdOrden"]),
 
-                            lIntIdVehiculoNT =
+                            gIntIdVehiculoNT =
                                 Convert.ToInt32(lObjLectorNT["IdVehiculo"]),
 
-                            lStrVinNT =
+                            gStrVinNT =
                                 Convert.ToString(lObjLectorNT["VIN"]),
 
-                            lStrPlacaNT =
+                            gStrPlacaNT =
                                 Convert.ToString(lObjLectorNT["Placa"]),
 
-                            lDatFechaAperturaNT =
+                            gDatFechaAperturaNT =
                                 Convert.ToDateTime(
                                     lObjLectorNT["FechaApertura"]),
 
-                            lStrMotivoIngresoNT =
+                            gStrMotivoIngresoNT =
                                 Convert.ToString(
                                     lObjLectorNT["MotivoIngreso"]),
 
-                            lStrDiagnosticoNT =
+                            gStrDiagnosticoNT =
                                 lObjLectorNT["Diagnostico"] == DBNull.Value
                                     ? string.Empty
                                     : Convert.ToString(
                                         lObjLectorNT["Diagnostico"]),
 
-                            lStrEstadoNT =
+                            gStrEstadoNT =
                                 Convert.ToString(lObjLectorNT["Estado"]),
 
-                            lDatFechaCierreNT =
+                            gDatFechaCierreNT =
                                 lObjLectorNT["FechaCierre"] == DBNull.Value
                                     ? (DateTime?)null
                                     : Convert.ToDateTime(
                                         lObjLectorNT["FechaCierre"]),
 
-                            lStrObservacionesCierreNT =
+                            gStrObservacionesCierreNT =
                                 lObjLectorNT["ObservacionesCierre"] == DBNull.Value
                                     ? string.Empty
                                     : Convert.ToString(
@@ -135,7 +136,7 @@ namespace CapaDatos
                 new List<ClsOrdenReparacionENT>();
 
             using (SqlConnection lObjConexionNT =
-                ClsConexionDA.fncObtenerConexion())
+                ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoNT =
                 new SqlCommand(lStrConsultaNT, lObjConexionNT))
             {
@@ -152,20 +153,20 @@ namespace CapaDatos
                         ClsOrdenReparacionENT lObjOrdenNT =
                             new ClsOrdenReparacionENT
                             {
-                                lIntIdOrdenNT = lObjLectorNT.GetInt32(0),
-                                lIntIdVehiculoNT = lObjLectorNT.GetInt32(1),
-                                lStrVinNT = lObjLectorNT.IsDBNull(2)
+                                gIntIdOrdenNT = lObjLectorNT.GetInt32(0),
+                                gIntIdVehiculoNT = lObjLectorNT.GetInt32(1),
+                                gStrVinNT = lObjLectorNT.IsDBNull(2)
                                     ? string.Empty : lObjLectorNT.GetString(2),
-                                lStrPlacaNT = lObjLectorNT.IsDBNull(3)
+                                gStrPlacaNT = lObjLectorNT.IsDBNull(3)
                                     ? string.Empty : lObjLectorNT.GetString(3),
-                                lDatFechaAperturaNT = lObjLectorNT.GetDateTime(4),
-                                lStrMotivoIngresoNT = lObjLectorNT.GetString(5),
-                                lStrDiagnosticoNT = lObjLectorNT.IsDBNull(6)
+                                gDatFechaAperturaNT = lObjLectorNT.GetDateTime(4),
+                                gStrMotivoIngresoNT = lObjLectorNT.GetString(5),
+                                gStrDiagnosticoNT = lObjLectorNT.IsDBNull(6)
                                     ? string.Empty : lObjLectorNT.GetString(6),
-                                lStrEstadoNT = lObjLectorNT.GetString(7),
-                                lDatFechaCierreNT = lObjLectorNT.IsDBNull(8)
+                                gStrEstadoNT = lObjLectorNT.GetString(7),
+                                gDatFechaCierreNT = lObjLectorNT.IsDBNull(8)
                                     ? (DateTime?)null : lObjLectorNT.GetDateTime(8),
-                                lStrObservacionesCierreNT = lObjLectorNT.IsDBNull(9)
+                                gStrObservacionesCierreNT = lObjLectorNT.IsDBNull(9)
                                     ? string.Empty : lObjLectorNT.GetString(9)
                             };
 
@@ -200,7 +201,7 @@ namespace CapaDatos
         WHERE IdOrden = @IdOrden;";
 
             using (SqlConnection lObjConexionNT =
-                ClsConexionDA.fncObtenerConexion())
+                ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoNT =
                 new SqlCommand(lStrConsultaNT, lObjConexionNT))
             {
@@ -220,46 +221,46 @@ namespace CapaDatos
 
                     return new ClsOrdenReparacionENT
                     {
-                        lIntIdOrdenNT =
+                        gIntIdOrdenNT =
                             Convert.ToInt32(lObjLectorNT["IdOrden"]),
 
-                        lIntIdVehiculoNT =
+                        gIntIdVehiculoNT =
                             Convert.ToInt32(lObjLectorNT["IdVehiculo"]),
 
-                        lStrVinNT =
+                        gStrVinNT =
                             lObjLectorNT["VIN"] == DBNull.Value
                                 ? string.Empty
                                 : Convert.ToString(lObjLectorNT["VIN"]),
 
-                        lStrPlacaNT =
+                        gStrPlacaNT =
                             lObjLectorNT["Placa"] == DBNull.Value
                                 ? string.Empty
                                 : Convert.ToString(lObjLectorNT["Placa"]),
 
-                        lDatFechaAperturaNT =
+                        gDatFechaAperturaNT =
                             Convert.ToDateTime(
                                 lObjLectorNT["FechaApertura"]),
 
-                        lStrMotivoIngresoNT =
+                        gStrMotivoIngresoNT =
                             Convert.ToString(
                                 lObjLectorNT["MotivoIngreso"]),
 
-                        lStrDiagnosticoNT =
+                        gStrDiagnosticoNT =
                             lObjLectorNT["Diagnostico"] == DBNull.Value
                                 ? string.Empty
                                 : Convert.ToString(
                                     lObjLectorNT["Diagnostico"]),
 
-                        lStrEstadoNT =
+                        gStrEstadoNT =
                             Convert.ToString(lObjLectorNT["Estado"]),
 
-                        lDatFechaCierreNT =
+                        gDatFechaCierreNT =
                             lObjLectorNT["FechaCierre"] == DBNull.Value
                                 ? (DateTime?)null
                                 : Convert.ToDateTime(
                                     lObjLectorNT["FechaCierre"]),
 
-                        lStrObservacionesCierreNT =
+                        gStrObservacionesCierreNT =
                             lObjLectorNT["ObservacionesCierre"] == DBNull.Value
                                 ? string.Empty
                                 : Convert.ToString(
@@ -299,29 +300,29 @@ namespace CapaDatos
         );";
 
             using (SqlConnection lObjConexionNT =
-                ClsConexionDA.fncObtenerConexion())
+                ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoNT =
                 new SqlCommand(lStrConsultaNT, lObjConexionNT))
             {
                 lObjComandoNT.Parameters.Add(
                     "@IdVehiculo", SqlDbType.Int).Value =
-                    pObjOrdenNT.lIntIdVehiculoNT;
+                    pObjOrdenNT.gIntIdVehiculoNT;
 
                 lObjComandoNT.Parameters.Add(
                     "@VIN", SqlDbType.VarChar, 17).Value =
-                    pObjOrdenNT.lStrVinNT;
+                    pObjOrdenNT.gStrVinNT;
 
                 lObjComandoNT.Parameters.Add(
                     "@Placa", SqlDbType.VarChar, 20).Value =
-                    (object)pObjOrdenNT.lStrPlacaNT ?? DBNull.Value;
+                    (object)pObjOrdenNT.gStrPlacaNT ?? DBNull.Value;
 
                 lObjComandoNT.Parameters.Add(
                     "@MotivoIngreso", SqlDbType.NVarChar, 500).Value =
-                    pObjOrdenNT.lStrMotivoIngresoNT;
+                    pObjOrdenNT.gStrMotivoIngresoNT;
 
                 lObjComandoNT.Parameters.Add(
                     "@Diagnostico", SqlDbType.NVarChar, 1000).Value =
-                    (object)pObjOrdenNT.lStrDiagnosticoNT ?? DBNull.Value;
+                    (object)pObjOrdenNT.gStrDiagnosticoNT ?? DBNull.Value;
 
                 lObjComandoNT.Parameters.Add(
                     "@Estado", SqlDbType.NVarChar, 20).Value =
@@ -353,7 +354,7 @@ namespace CapaDatos
           AND Estado = N'Abierta';";
 
             using (SqlConnection lObjConexionNT =
-                ClsConexionDA.fncObtenerConexion())
+                ClsConexionDASC.FncObtenerConexionSC())
             using (SqlCommand lObjComandoNT =
                 new SqlCommand(lStrConsultaNT, lObjConexionNT))
             {

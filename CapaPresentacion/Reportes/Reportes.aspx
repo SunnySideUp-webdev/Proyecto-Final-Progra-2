@@ -120,24 +120,24 @@
             </HeaderTemplate>
             <ItemTemplate>
                             <tr>
-                                <td class="d-none d-sm-table-cell adms-numero fw-semibold">#<%# Eval("lIntIdOrdenFP") %></td>
+                                <td class="d-none d-sm-table-cell adms-numero fw-semibold">#<%# Eval("gIntIdOrdenFP") %></td>
                                 <td>
                                     <div class="adms-vehiculo">
                                         <span class="adms-placa">
                                             <span class="adms-placa-pais" aria-hidden="true">GT</span>
-                                            <span class="adms-placa-numero"><span class="visually-hidden">Placa </span><%# FncCodificarFP(ClsFormatoSC.fncFormatearPlacaSC((string)Eval("lStrPlacaFP"))) %></span>
+                                            <span class="adms-placa-numero"><span class="visually-hidden">Placa </span><%# FncCodificarFP(ClsFormatoSC.FncFormatearPlacaSC((string)Eval("gStrPlacaFP"))) %></span>
                                         </span>
-                                        <span class="adms-vehiculo-titulo d-none d-sm-inline"><%# FncCodificarFP(Eval("lStrMarcaFP") + " " + Eval("lStrModeloFP")) %></span>
+                                        <span class="adms-vehiculo-titulo d-none d-sm-inline"><%# FncCodificarFP(Eval("gStrMarcaFP") + " " + Eval("gStrModeloFP")) %></span>
                                     </div>
                                 </td>
                                 <td class="d-none d-md-table-cell adms-col-propietario">
-                                    <a class="adms-persona-nombre" href='../Clientes/DetalleCliente.aspx?id=<%# Eval("lIntIdClienteFP") %>'><%# FncCodificarFP(Eval("lStrClienteFP")) %></a>
+                                    <a class="adms-persona-nombre" href='../Clientes/DetalleCliente.aspx?id=<%# Eval("gIntIdClienteFP") %>'><%# FncCodificarFP(Eval("gStrClienteFP")) %></a>
                                 </td>
-                                <td class="d-none d-lg-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaAperturaUtcFP"))) %></td>
-                                <td><span class='<%# FncClaseDiasFP((int)Eval("lIntDiasAbiertaFP")) %>'><%# FncCodificarFP(FncTextoDiasFP((int)Eval("lIntDiasAbiertaFP"))) %></span></td>
-                                <td class="d-none d-xxl-table-cell"><%# FncCodificarFP(Eval("lStrMotivoIngresoFP")) %></td>
+                                <td class="d-none d-lg-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatFechaAperturaUtcFP"))) %></td>
+                                <td><span class='<%# FncClaseDiasFP((int)Eval("gIntDiasAbiertaFP")) %>'><%# FncCodificarFP(FncTextoDiasFP((int)Eval("gIntDiasAbiertaFP"))) %></span></td>
+                                <td class="d-none d-xxl-table-cell"><%# FncCodificarFP(Eval("gStrMotivoIngresoFP")) %></td>
                                 <td class="text-end adms-no-imprimir">
-                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='../OrdenesReparacion/DetalleOrdenNT.aspx?id=<%# Eval("lIntIdOrdenFP") %>' title="Ver la orden">
+                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='../OrdenesReparacion/DetalleOrdenNT.aspx?id=<%# Eval("gIntIdOrdenFP") %>' title="Ver la orden">
                                         <i class="bi bi-eye" aria-hidden="true"></i><span class="visually-hidden">Ver la orden</span>
                                     </a>
                                 </td>
@@ -216,28 +216,28 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                                 <tr>
-                                    <td class="d-none d-sm-table-cell adms-numero fw-semibold">#<%# Eval("lIntIdOrdenFP") %></td>
+                                    <td class="d-none d-sm-table-cell adms-numero fw-semibold">#<%# Eval("gIntIdOrdenFP") %></td>
                                     <td>
                                         <div class="adms-vehiculo">
                                             <span class="adms-placa">
                                                 <span class="adms-placa-pais" aria-hidden="true">GT</span>
-                                                <span class="adms-placa-numero"><span class="visually-hidden">Placa </span><%# FncCodificarFP(ClsFormatoSC.fncFormatearPlacaSC((string)Eval("lStrPlacaFP"))) %></span>
+                                                <span class="adms-placa-numero"><span class="visually-hidden">Placa </span><%# FncCodificarFP(ClsFormatoSC.FncFormatearPlacaSC((string)Eval("gStrPlacaFP"))) %></span>
                                             </span>
-                                            <span class="adms-vehiculo-titulo d-none d-sm-inline"><%# FncCodificarFP(Eval("lStrMarcaFP") + " " + Eval("lStrModeloFP")) %></span>
+                                            <span class="adms-vehiculo-titulo d-none d-sm-inline"><%# FncCodificarFP(Eval("gStrMarcaFP") + " " + Eval("gStrModeloFP")) %></span>
                                         </div>
                                     </td>
                                     <td class="d-none d-md-table-cell adms-col-propietario">
-                                        <a class="adms-persona-nombre" href='../Clientes/DetalleCliente.aspx?id=<%# Eval("lIntIdClienteFP") %>'><%# FncCodificarFP(Eval("lStrClienteFP")) %></a>
+                                        <a class="adms-persona-nombre" href='../Clientes/DetalleCliente.aspx?id=<%# Eval("gIntIdClienteFP") %>'><%# FncCodificarFP(Eval("gStrClienteFP")) %></a>
                                     </td>
-                                    <td class="d-none d-xxl-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaAperturaUtcFP"))) %></td>
-                                    <td class="d-none d-xxl-table-cell adms-numero"><%# FncCodificarFP(FncFechaOpcionalFP(Eval("lDatFechaCierreUtcFP"))) %></td>
+                                    <td class="d-none d-xxl-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatFechaAperturaUtcFP"))) %></td>
+                                    <td class="d-none d-xxl-table-cell adms-numero"><%# FncCodificarFP(FncFechaOpcionalFP(Eval("gDatFechaCierreUtcFP"))) %></td>
                                     <td class="adms-dias">
-                                        <%# FncCodificarFP(FncFormatearDuracionFP((int)Eval("lIntMinutosReparacionFP"))) %>
+                                        <%# FncCodificarFP(FncFormatearDuracionFP((int)Eval("gIntMinutosReparacionFP"))) %>
                                         <%-- En pantallas medianas la columna «Cierre» se oculta: la fecha se muestra aquí. --%>
-                                        <div class="adms-persona-detalle d-xxl-none">Cerró el <%# FncCodificarFP(FncFechaOpcionalFP(Eval("lDatFechaCierreUtcFP"))) %></div>
+                                        <div class="adms-persona-detalle d-xxl-none">Cerró el <%# FncCodificarFP(FncFechaOpcionalFP(Eval("gDatFechaCierreUtcFP"))) %></div>
                                     </td>
                                     <td class="text-end adms-no-imprimir">
-                                        <a class="btn btn-sm btn-outline-primary text-nowrap" href='../OrdenesReparacion/DetalleOrdenNT.aspx?id=<%# Eval("lIntIdOrdenFP") %>' title="Ver la orden">
+                                        <a class="btn btn-sm btn-outline-primary text-nowrap" href='../OrdenesReparacion/DetalleOrdenNT.aspx?id=<%# Eval("gIntIdOrdenFP") %>' title="Ver la orden">
                                             <i class="bi bi-eye" aria-hidden="true"></i><span class="visually-hidden">Ver la orden</span>
                                         </a>
                                     </td>
@@ -286,13 +286,13 @@
             <ItemTemplate>
                             <tr>
                                 <td>
-                                    <div class="fw-semibold"><%# FncCodificarFP(Eval("lStrNombreFP")) %></div>
-                                    <div class="adms-persona-detalle adms-numero"><%# FncCodificarFP(Eval("lStrCodigoFP")) %></div>
+                                    <div class="fw-semibold"><%# FncCodificarFP(Eval("gStrNombreFP")) %></div>
+                                    <div class="adms-persona-detalle adms-numero"><%# FncCodificarFP(Eval("gStrCodigoFP")) %></div>
                                 </td>
-                                <td class="adms-numero fw-semibold"><%# Eval("lIntUnidadesFP") %></td>
-                                <td class="d-none d-sm-table-cell adms-numero"><%# Eval("lIntOrdenesFP") %></td>
-                                <td class="d-none d-lg-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatUltimoUsoUtcFP"))) %></td>
-                                <td class="d-none d-md-table-cell adms-numero"><%# Eval("lIntStockActualFP") %></td>
+                                <td class="adms-numero fw-semibold"><%# Eval("gIntUnidadesFP") %></td>
+                                <td class="d-none d-sm-table-cell adms-numero"><%# Eval("gIntOrdenesFP") %></td>
+                                <td class="d-none d-lg-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatUltimoUsoUtcFP"))) %></td>
+                                <td class="d-none d-md-table-cell adms-numero"><%# Eval("gIntStockActualFP") %></td>
                             </tr>
             </ItemTemplate>
             <FooterTemplate>
@@ -338,19 +338,19 @@
             <ItemTemplate>
                             <tr>
                                 <td>
-                                    <div class="fw-semibold"><%# FncCodificarFP(Eval("lStrNombreFP")) %></div>
-                                    <div class="adms-persona-detalle adms-numero"><%# FncCodificarFP(Eval("lStrCodigoFP")) %></div>
+                                    <div class="fw-semibold"><%# FncCodificarFP(Eval("gStrNombreFP")) %></div>
+                                    <div class="adms-persona-detalle adms-numero"><%# FncCodificarFP(Eval("gStrCodigoFP")) %></div>
                                 </td>
-                                <td class="d-none d-md-table-cell"><%# FncCodificarFP(Eval("lStrVehiculoFP")) %></td>
+                                <td class="d-none d-md-table-cell"><%# FncCodificarFP(Eval("gStrVehiculoFP")) %></td>
                                 <td class="adms-numero fw-semibold">
-                                    <%# Eval("lIntStockFP") %>
+                                    <%# Eval("gIntStockFP") %>
                                     <%-- En teléfonos la columna «Nivel» se oculta: el nivel se muestra aquí. --%>
-                                    <div class="d-sm-none"><span class='<%# FncClaseNivelStockFP((string)Eval("lStrNivelStockFP")) %>'><%# FncCodificarFP(Eval("lStrNivelStockFP")) %></span></div>
+                                    <div class="d-sm-none"><span class='<%# FncClaseNivelStockFP((string)Eval("gStrNivelStockFP")) %>'><%# FncCodificarFP(Eval("gStrNivelStockFP")) %></span></div>
                                 </td>
-                                <td class="d-none d-sm-table-cell"><span class='<%# FncClaseNivelStockFP((string)Eval("lStrNivelStockFP")) %>'><%# FncCodificarFP(Eval("lStrNivelStockFP")) %></span></td>
-                                <td class="d-none d-lg-table-cell adms-numero"><%# Eval("lIntUnidadesUsadasFP") %></td>
+                                <td class="d-none d-sm-table-cell"><span class='<%# FncClaseNivelStockFP((string)Eval("gStrNivelStockFP")) %>'><%# FncCodificarFP(Eval("gStrNivelStockFP")) %></span></td>
+                                <td class="d-none d-lg-table-cell adms-numero"><%# Eval("gIntUnidadesUsadasFP") %></td>
                                 <td class="text-end adms-no-imprimir">
-                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='../Inventario/Inventario.aspx?q=<%# FncCodificarFP(HttpUtility.UrlEncode((string)Eval("lStrCodigoFP"))) %>' title="Ver en el inventario">
+                                    <a class="btn btn-sm btn-outline-primary text-nowrap" href='../Inventario/Inventario.aspx?q=<%# FncCodificarFP(HttpUtility.UrlEncode((string)Eval("gStrCodigoFP"))) %>' title="Ver en el inventario">
                                         <i class="bi bi-box-seam" aria-hidden="true"></i><span class="visually-hidden">Ver en el inventario</span>
                                     </a>
                                 </td>
@@ -404,13 +404,13 @@
                 <ItemTemplate>
                     <li>
                         <div class="adms-persona">
-                            <span class="adms-avatar" aria-hidden="true"><%# FncCodificarFP(ClsFormatoSC.fncObtenerInicialesSC((string)Eval("lStrNombresSC"), (string)Eval("lStrApellidosSC"))) %></span>
+                            <span class="adms-avatar" aria-hidden="true"><%# FncCodificarFP(ClsFormatoSC.FncObtenerInicialesSC((string)Eval("gStrNombresSC"), (string)Eval("gStrApellidosSC"))) %></span>
                             <div class="adms-persona-texto">
-                                <a class="adms-persona-nombre" href='Reportes.aspx?seccion=historial&amp;idCliente=<%# Eval("lIntIdClienteSC") %>'><%# FncCodificarFP(Eval("lStrNombresSC") + " " + Eval("lStrApellidosSC")) %></a>
-                                <div class="adms-persona-detalle">DPI <%# FncCodificarFP(ClsFormatoSC.fncFormatearDpiSC((string)Eval("lStrDpiSC"))) %></div>
+                                <a class="adms-persona-nombre" href='Reportes.aspx?seccion=historial&amp;idCliente=<%# Eval("gIntIdClienteSC") %>'><%# FncCodificarFP(Eval("gStrNombresSC") + " " + Eval("gStrApellidosSC")) %></a>
+                                <div class="adms-persona-detalle">DPI <%# FncCodificarFP(ClsFormatoSC.FncFormatearDpiSC((string)Eval("gStrDpiSC"))) %></div>
                             </div>
                         </div>
-                        <a class="btn btn-sm btn-outline-primary" href='Reportes.aspx?seccion=historial&amp;idCliente=<%# Eval("lIntIdClienteSC") %>'>Ver historial</a>
+                        <a class="btn btn-sm btn-outline-primary" href='Reportes.aspx?seccion=historial&amp;idCliente=<%# Eval("gIntIdClienteSC") %>'>Ver historial</a>
                     </li>
                 </ItemTemplate>
                 <FooterTemplate></ul></FooterTemplate>
@@ -454,22 +454,22 @@
                 </HeaderTemplate>
                 <ItemTemplate>
                                 <tr>
-                                    <td class="d-none d-sm-table-cell adms-numero fw-semibold">#<%# Eval("lIntIdOrdenFP") %></td>
+                                    <td class="d-none d-sm-table-cell adms-numero fw-semibold">#<%# Eval("gIntIdOrdenFP") %></td>
                                     <td>
                                         <div class="adms-vehiculo">
                                             <span class="adms-placa">
                                                 <span class="adms-placa-pais" aria-hidden="true">GT</span>
-                                                <span class="adms-placa-numero"><span class="visually-hidden">Placa </span><%# FncCodificarFP(ClsFormatoSC.fncFormatearPlacaSC((string)Eval("lStrPlacaFP"))) %></span>
+                                                <span class="adms-placa-numero"><span class="visually-hidden">Placa </span><%# FncCodificarFP(ClsFormatoSC.FncFormatearPlacaSC((string)Eval("gStrPlacaFP"))) %></span>
                                             </span>
-                                            <span class="adms-vehiculo-titulo d-none d-sm-inline"><%# FncCodificarFP(Eval("lStrMarcaFP") + " " + Eval("lStrModeloFP")) %></span>
+                                            <span class="adms-vehiculo-titulo d-none d-sm-inline"><%# FncCodificarFP(Eval("gStrMarcaFP") + " " + Eval("gStrModeloFP")) %></span>
                                         </div>
                                     </td>
-                                    <td><span class='<%# FncClaseEstadoFP((string)Eval("lStrEstadoFP")) %>'><%# FncCodificarFP(Eval("lStrEstadoFP")) %></span></td>
-                                    <td class="d-none d-lg-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaAperturaUtcFP"))) %></td>
+                                    <td><span class='<%# FncClaseEstadoFP((string)Eval("gStrEstadoFP")) %>'><%# FncCodificarFP(Eval("gStrEstadoFP")) %></span></td>
+                                    <td class="d-none d-lg-table-cell adms-numero text-secondary"><%# FncCodificarFP(ClsFormatoSC.FncFormatearFechaSC((DateTime)Eval("gDatFechaAperturaUtcFP"))) %></td>
                                     <td class="d-none d-md-table-cell adms-dias"><%# FncCodificarFP(FncTiempoOrdenFP(Container.DataItem)) %></td>
-                                    <td class="d-none d-xxl-table-cell"><%# FncCodificarFP(Eval("lStrMotivoIngresoFP")) %></td>
+                                    <td class="d-none d-xxl-table-cell"><%# FncCodificarFP(Eval("gStrMotivoIngresoFP")) %></td>
                                     <td class="text-end adms-no-imprimir">
-                                        <a class="btn btn-sm btn-outline-primary text-nowrap" href='../OrdenesReparacion/DetalleOrdenNT.aspx?id=<%# Eval("lIntIdOrdenFP") %>' title="Ver la orden">
+                                        <a class="btn btn-sm btn-outline-primary text-nowrap" href='../OrdenesReparacion/DetalleOrdenNT.aspx?id=<%# Eval("gIntIdOrdenFP") %>' title="Ver la orden">
                                             <i class="bi bi-eye" aria-hidden="true"></i><span class="visually-hidden">Ver la orden</span>
                                         </a>
                                     </td>
