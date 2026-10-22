@@ -47,12 +47,14 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Inicio de la parte de Neider: Módulo 2, Órdenes de reparación -->
     <Content Include="OrdenesReparacion\DetalleOrdenNT.aspx" />
     <Content Include="OrdenesReparacion\HistorialOrdenesNT.aspx" />
     <Content Include="OrdenesReparacion\OrdenesNT.aspx" />
     <Content Include="OrdenesReparacion\RegistrarOrdenNT.aspx" />
-    
+    <!-- Fin de la parte de Neider -->
     <Content Include="Web.config" />
+    <!-- Agregado por Neider: archivo local de conexión (tiene la contraseña local; Git lo ignora y no se sube). -->
     <None Include="ConnectionStrings.config" />
     <None Include="ConnectionStrings.config.example" />
     <Content Include="Site.Master" />
@@ -109,6 +111,7 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <!-- Inicio de la parte de Neider: Módulo 2, Órdenes de reparación -->
     <Compile Include="OrdenesReparacion\DetalleOrdenNT.aspx.cs">
       <DependentUpon>DetalleOrdenNT.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -136,8 +139,8 @@
     <Compile Include="OrdenesReparacion\RegistrarOrdenNT.aspx.designer.cs">
       <DependentUpon>RegistrarOrdenNT.aspx</DependentUpon>
     </Compile>
+    <!-- Fin de la parte de Neider -->
     <Compile Include="Properties\AssemblyInfo.cs" />
-    
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -170,6 +173,7 @@
     <Compile Include="Utilidades\ClsRegistroErrores.cs" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Agregado por Neider al integrar su módulo (las páginas no usan CapaDatos directamente). -->
     <ProjectReference Include="..\CapaDatos\CapaDatos.csproj">
       <Project>{b4172473-e599-49a6-bb7d-edc157f72f01}</Project>
       <Name>CapaDatos</Name>

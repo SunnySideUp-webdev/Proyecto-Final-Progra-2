@@ -1,4 +1,9 @@
-﻿
+//==============================================================
+// Nombre: Neider Ernesto Tomas Raxcaco
+// Carné: 0900-16-12945
+// Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Capa de Presentación
+// Parte de Neider: todo el código de este archivo es de su módulo.
+//==============================================================
 using System;
 using System.Web.UI;
 using CapaEntidades;
@@ -7,6 +12,7 @@ using System.Collections.Generic;
 
 namespace CapaPresentacion.OrdenesReparacion
 {
+    /// <summary>Formulario para abrir una orden de reparación de un vehículo registrado.</summary>
     public partial class webRegistrarOrdenNT : Page
     {
         protected void Page_Load(object sender, EventArgs e)
@@ -18,6 +24,10 @@ namespace CapaPresentacion.OrdenesReparacion
         }
 
 
+        /// <summary>
+        /// Llena la lista de vehículos (por placa). Usa la búsqueda del módulo de vehículos,
+        /// que devuelve como máximo los 50 registrados más recientemente.
+        /// </summary>
         private void FncCargarVehiculosNT()
         {
             ClsVehiculoLNSC lObjVehiculoLogicaNT =
@@ -40,6 +50,7 @@ namespace CapaPresentacion.OrdenesReparacion
         }
 
 
+        /// <summary>Valida y registra la orden; al terminar vuelve al listado de órdenes.</summary>
         protected void btnGuardarOrdenNT_Click(
             object sender, EventArgs e)
         {

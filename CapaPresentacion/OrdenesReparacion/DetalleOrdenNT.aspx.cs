@@ -1,4 +1,9 @@
-﻿
+//==============================================================
+// Nombre: Neider Ernesto Tomas Raxcaco
+// Carné: 0900-16-12945
+// Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Capa de Presentación
+// Parte de Neider: todo el código de este archivo es de su módulo.
+//==============================================================
 using System;
 using System.Web.UI;
 using CapaEntidades;
@@ -6,6 +11,7 @@ using CapaLogica;
 
 namespace CapaPresentacion.OrdenesReparacion
 {
+    /// <summary>Muestra los datos de una orden y permite cerrarla mientras sigue abierta.</summary>
     public partial class webDetalleOrdenNT : Page
     {
 
@@ -17,6 +23,7 @@ namespace CapaPresentacion.OrdenesReparacion
             }
         }
 
+        /// <summary>Carga la orden indicada en ?id=; si no es válida o no existe, muestra un mensaje.</summary>
         private void FncCargarDetalleNT()
         {
             int lIntIdOrdenNT;
@@ -81,6 +88,7 @@ namespace CapaPresentacion.OrdenesReparacion
             }
         }
 
+        /// <summary>Cierra la orden con las observaciones escritas y vuelve a mostrar su detalle.</summary>
         protected void btnCerrarOrdenNT_Click(
             object sender, EventArgs e)
         {

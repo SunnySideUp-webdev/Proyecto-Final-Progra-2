@@ -50,6 +50,7 @@ namespace CapaPresentacion
                 lStrUrl = "~/Clientes/Clientes.aspx", lStrIcono = "bi-people", lStrCarpeta = "~/Clientes/" },
             new ClsElementoMenu { lStrTexto = "Vehículos", lStrDescripcion = "Vehículos de cada cliente",
                 lStrUrl = "~/Vehiculos/Vehiculos.aspx", lStrIcono = "bi-car-front", lStrCarpeta = "~/Vehiculos/" },
+            // Módulo 2 (parte de Neider): ruta de su página principal.
             new ClsElementoMenu { lStrTexto = "Órdenes de reparación", lStrDescripcion = "Seguimiento de reparaciones",
                 lStrUrl = "~/OrdenesReparacion/OrdenesNT.aspx", lStrIcono = "bi-clipboard-check", lStrCarpeta = "~/OrdenesReparacion/" },
             new ClsElementoMenu { lStrTexto = "Inventario", lStrDescripcion = "Control de repuestos",

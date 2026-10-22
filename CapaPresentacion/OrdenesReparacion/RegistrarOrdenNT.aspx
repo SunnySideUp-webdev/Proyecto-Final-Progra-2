@@ -1,10 +1,10 @@
-﻿
 <%@ Page Title="Registrar orden de reparación"
     Language="C#"
     MasterPageFile="~/Site.Master"
     AutoEventWireup="true"
     CodeBehind="RegistrarOrdenNT.aspx.cs"
     Inherits="CapaPresentacion.OrdenesReparacion.webRegistrarOrdenNT" %>
+<%-- Módulo 2: Órdenes de reparación. Parte de Neider (todo el contenido de esta página). --%>
 
 <asp:Content ID="cntRegistrarOrdenNT"
     ContentPlaceHolderID="cphContenido"

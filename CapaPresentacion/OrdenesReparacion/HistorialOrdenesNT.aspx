@@ -1,10 +1,10 @@
-﻿
 <%@ Page Title="Historial de reparaciones"
     Language="C#"
     MasterPageFile="~/Site.Master"
     AutoEventWireup="true"
     CodeBehind="HistorialOrdenesNT.aspx.cs"
     Inherits="CapaPresentacion.OrdenesReparacion.webHistorialOrdenesNT" %>
+<%-- Módulo 2: Órdenes de reparación. Parte de Neider (todo el contenido de esta página). --%>
 
 <asp:Content ID="cntHistorialNT"
     ContentPlaceHolderID="cphContenido"
@@ -68,10 +68,13 @@
                         DataField="lIntIdOrdenNT"
                         HeaderText="Orden" />
 
-                    <asp:BoundField
-                        DataField="lDatFechaAperturaNT"
-                        HeaderText="Fecha de apertura"
-                        DataFormatString="{0:dd/MM/yyyy HH:mm}" />
+                    <%-- Ajuste de integración (Sharon): la fecha se guarda en UTC y aquí se muestra en hora de Guatemala. --%>
+                    <asp:TemplateField
+                        HeaderText="Fecha de apertura">
+                        <ItemTemplate>
+                            <%# CapaPresentacion.Utilidades.ClsFormatoSC.fncFormatearFechaSC((DateTime)Eval("lDatFechaAperturaNT")) %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
 
                     <asp:BoundField
                         DataField="lStrPlacaNT"

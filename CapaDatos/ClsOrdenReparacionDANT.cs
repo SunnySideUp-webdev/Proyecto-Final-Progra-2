@@ -1,4 +1,9 @@
-﻿
+//==============================================================
+// Nombre: Neider Ernesto Tomas Raxcaco
+// Carné: 0900-16-12945
+// Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Capa de Datos
+// Parte de Neider: todo el código de este archivo es de su módulo.
+//==============================================================
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,6 +20,9 @@ namespace CapaDatos
     {
 
 
+        /// <summary>Consulta todas las órdenes (abiertas y cerradas) de un vehículo, de la más reciente a la más antigua.</summary>
+        /// <param name="pStrVinNT">VIN normalizado de 17 caracteres.</param>
+        /// <returns>Historial de órdenes del vehículo; vacío si no tiene.</returns>
         public List<ClsOrdenReparacionENT> FncConsultarHistorialPorVinNT(
             string pStrVinNT)
         {
@@ -103,6 +111,8 @@ namespace CapaDatos
             return lObjOrdenesNT;
         }
 
+        /// <summary>Consulta las órdenes en estado Abierta, de la más reciente a la más antigua.</summary>
+        /// <returns>Órdenes abiertas.</returns>
         public List<ClsOrdenReparacionENT> FncConsultarOrdenesAbiertasNT()
         {
             const string lStrConsultaNT = @"
@@ -168,6 +178,9 @@ namespace CapaDatos
         }
 
 
+        /// <summary>Obtiene una orden por su número.</summary>
+        /// <param name="pIntIdOrdenNT">Número de la orden.</param>
+        /// <returns>La orden o <c>null</c> si no existe.</returns>
         public ClsOrdenReparacionENT FncObtenerOrdenPorIdNT(
             int pIntIdOrdenNT)
         {
@@ -258,6 +271,9 @@ namespace CapaDatos
 
 
 
+        /// <summary>Inserta una orden nueva en estado Abierta; la fecha de apertura la asigna SQL Server (UTC).</summary>
+        /// <param name="pObjOrdenNT">Orden validada por la Capa Lógica (vehículo, VIN, placa, motivo y diagnóstico).</param>
+        /// <returns>Número asignado a la orden.</returns>
         public int FncRegistrarOrdenNT(
             ClsOrdenReparacionENT pObjOrdenNT)
         {
@@ -318,6 +334,10 @@ namespace CapaDatos
         }
 
 
+        /// <summary>Cierra una orden abierta: cambia el estado, registra la fecha de cierre y las observaciones.</summary>
+        /// <param name="pIntIdOrdenNT">Número de la orden.</param>
+        /// <param name="pStrObservacionesNT">Observaciones de cierre.</param>
+        /// <returns><c>true</c> si la orden existía y estaba abierta; de lo contrario, <c>false</c>.</returns>
         public bool FncCerrarOrdenNT(
             int pIntIdOrdenNT,
             string pStrObservacionesNT)
@@ -326,7 +346,8 @@ namespace CapaDatos
         UPDATE dbo.OrdenesReparacion
         SET
             Estado = N'Cerrada',
-            FechaCierre = SYSDATETIME(),
+            -- Ajuste de integracion (Sharon): fecha en UTC, igual que el resto del sistema.
+            FechaCierre = SYSUTCDATETIME(),
             ObservacionesCierre = @Observaciones
         WHERE IdOrden = @IdOrden
           AND Estado = N'Abierta';";

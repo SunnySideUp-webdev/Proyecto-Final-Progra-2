@@ -1,4 +1,9 @@
-﻿
+//==============================================================
+// Nombre: Neider Ernesto Tomas Raxcaco
+// Carné: 0900-16-12945
+// Tema: AutoManager DMS - Módulo 2 Órdenes de reparación - Lógica de Negocio
+// Parte de Neider: todo el código de este archivo es de su módulo.
+//==============================================================
 using CapaDatos;
 using CapaEntidades;
 using System;
@@ -14,12 +19,14 @@ namespace CapaLogica
     {
         private readonly ClsOrdenReparacionDANT gObjOrdenDatosNT;
 
+        /// <summary>Crea la lógica de órdenes con su acceso a datos.</summary>
         public ClsOrdenReparacionLNT()
         {
             gObjOrdenDatosNT = new ClsOrdenReparacionDANT();
         }
 
-        // Consulta las órdenes abiertas.
+        /// <summary>Consulta las órdenes que siguen abiertas.</summary>
+        /// <returns>Órdenes abiertas.</returns>
         public List<ClsOrdenReparacionENT>
             FncConsultarOrdenesAbiertasNT()
         {
@@ -27,6 +34,7 @@ namespace CapaLogica
         }
 
 
+        /// <summary>Indica si un VIN tiene 17 caracteres válidos (letras y números, sin I, O ni Q).</summary>
         private bool FncValidarVinNT(string pStrVinNT)
         {
             if (string.IsNullOrWhiteSpace(pStrVinNT))
@@ -45,6 +53,7 @@ namespace CapaLogica
                     || (pObjCaracterNT >= '0' && pObjCaracterNT <= '9'));
         }
 
+        /// <summary>Indica si existe un vehículo registrado con el VIN indicado.</summary>
         private bool FncExisteVehiculoNT(string pStrVinNT)
         {
             if (!FncValidarVinNT(pStrVinNT))
@@ -60,6 +69,7 @@ namespace CapaLogica
             return lObjVehiculoDatosNT.fncExisteVinSC(lStrVinNT);
         }
 
+        /// <summary>Indica si el identificador y el VIN corresponden al mismo vehículo registrado.</summary>
         private bool FncValidarVehiculoNT(
             int pIntIdVehiculoNT,
             string pStrVinNT)
@@ -89,6 +99,10 @@ namespace CapaLogica
         }
 
 
+        /// <summary>Valida y registra una orden nueva: el vehículo debe existir y coincidir con el VIN, y el motivo es obligatorio.</summary>
+        /// <param name="pObjOrdenNT">Datos de la orden escritos en el formulario.</param>
+        /// <returns>Número asignado a la orden.</returns>
+        /// <exception cref="ArgumentException">Algún dato no es válido; el mensaje se muestra al usuario.</exception>
         public int FncRegistrarOrdenNT(
             ClsOrdenReparacionENT pObjOrdenNT)
         {
@@ -153,6 +167,11 @@ namespace CapaLogica
             return gObjOrdenDatosNT.FncRegistrarOrdenNT(pObjOrdenNT);
         }
 
+        /// <summary>Valida y cierra una orden; las observaciones de cierre son obligatorias.</summary>
+        /// <param name="pIntIdOrdenNT">Número de la orden.</param>
+        /// <param name="pStrObservacionesNT">Observaciones de cierre.</param>
+        /// <returns><c>true</c> si la orden se cerró; <c>false</c> si no existe o ya estaba cerrada.</returns>
+        /// <exception cref="ArgumentException">El número de orden o las observaciones no son válidos.</exception>
         public bool FncCerrarOrdenNT(
             int pIntIdOrdenNT,
             string pStrObservacionesNT)
@@ -183,6 +202,10 @@ namespace CapaLogica
                 lStrObservacionesNT);
         }
 
+        /// <summary>Obtiene una orden por su número.</summary>
+        /// <param name="pIntIdOrdenNT">Número de la orden.</param>
+        /// <returns>La orden o <c>null</c> si no existe.</returns>
+        /// <exception cref="ArgumentException">El número de orden no es válido.</exception>
         public ClsOrdenReparacionENT FncObtenerOrdenPorIdNT(
             int pIntIdOrdenNT)
         {
@@ -198,6 +221,10 @@ namespace CapaLogica
 
 
 
+        /// <summary>Consulta el historial de reparaciones de un vehículo por su VIN (sin importar mayúsculas).</summary>
+        /// <param name="pStrVinNT">VIN escrito por el usuario.</param>
+        /// <returns>Órdenes del vehículo, de la más reciente a la más antigua.</returns>
+        /// <exception cref="ArgumentException">El VIN está vacío o no tiene 17 caracteres válidos.</exception>
         public List<ClsOrdenReparacionENT> FncConsultarHistorialPorVinNT(
             string pStrVinNT)
         {

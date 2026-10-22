@@ -1,10 +1,10 @@
-﻿
 <%@ Page Title="Detalle de orden"
     Language="C#"
     MasterPageFile="~/Site.Master"
     AutoEventWireup="true"
     CodeBehind="DetalleOrdenNT.aspx.cs"
     Inherits="CapaPresentacion.OrdenesReparacion.webDetalleOrdenNT" %>
+<%-- Módulo 2: Órdenes de reparación. Parte de Neider (todo el contenido de esta página). --%>
 
 <asp:Content ID="cntDetalleOrdenNT"
     ContentPlaceHolderID="cphContenido"
