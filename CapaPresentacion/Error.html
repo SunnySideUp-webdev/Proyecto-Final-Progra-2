@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+==============================================================
+ Nombre: Sharon Yasmin Consuegra Borrayo
+ Carné: 0900-25-22148
+ Tema: AutoManager DMS - Componente compartido - Página de error
+==============================================================
+ Página estática que muestra Web.config (customErrors) ante un error no controlado
+ o una dirección inexistente. Es HTML sin código de servidor para que nunca falle
+ ni revele detalles técnicos.
+-->
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Página no disponible · AutoManager DMS</title>
+    <link href="Content/lib/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/lib/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="Content/autodms.css" rel="stylesheet" />
+</head>
+<body class="adms-body">
+    <main class="container py-5">
+        <div class="adms-card adms-pagina-error mx-auto">
+            <div class="adms-vacio">
+                <span class="adms-vacio-icono" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></span>
+                <h1 class="adms-vacio-titulo">No fue posible mostrar esta página</h1>
+                <p class="adms-vacio-texto">Es posible que la dirección esté incompleta o que haya ocurrido un problema momentáneo. Vuelve al inicio e inténtalo de nuevo.</p>
+                <a class="btn btn-primary" href="Default.aspx">
+                    <i class="bi bi-house-door me-1" aria-hidden="true"></i>Ir al inicio
+                </a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

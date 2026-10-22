@@ -1,0 +1,1107 @@
+/* =============================================================
+   AutoManager DMS - Estilos compartidos
+   Se carga después de Bootstrap 5.3 y ajusta sus variables.
+   Estructura: tipografía, variables, distribución (barra lateral,
+   encabezado, contenido), componentes y ajustes responsivos.
+   ============================================================= */
+
+/* ---------- Tipografía local (Poppins, licencia OFL) ---------- */
+@font-face {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("lib/poppins/poppins-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("lib/poppins/poppins-latin-500-normal.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("lib/poppins/poppins-latin-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("lib/poppins/poppins-latin-700-normal.woff2") format("woff2");
+}
+
+/* ---------- Variables ---------- */
+:root {
+    --adms-azul: #2045a5;
+    --adms-azul-oscuro: #0b3685;
+    --adms-azul-suave: #eaf0fb;
+    --adms-azul-borde: #c7d4f0;
+    --adms-fondo: #f5f6fa;
+    --adms-tarjeta: #ffffff;
+    --adms-texto: #222938;
+    --adms-texto-secundario: #5f6b7e;
+    --adms-borde: #e5e8f0;
+    --adms-gris-suave: #f2f4f8;
+    --adms-exito: #10734f;
+    --adms-exito-suave: #e9f6f0;
+    --adms-error: #b42318;
+    --adms-error-suave: #fdeeec;
+    --adms-advertencia: #9a5b00;
+    --adms-advertencia-suave: #fff6e5;
+    --adms-sombra: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+    --adms-sombra-media: 0 6px 18px rgba(16, 24, 40, 0.08);
+    --adms-radio: 14px;
+    --adms-radio-control: 10px;
+    --adms-ancho-sidebar: 264px;
+
+    --bs-body-font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --bs-body-font-size: 0.9375rem;
+    --bs-body-color: #222938;
+    /* --bs-body-bg se deja en blanco: Bootstrap lo usa como fondo de campos y tablas.
+       El gris de la página se aplica directamente en body.adms-body. */
+    --bs-primary: #2045a5;
+    --bs-primary-rgb: 32, 69, 165;
+    --bs-border-color: #e5e8f0;
+    --bs-secondary-color: #5f6b7e;
+    --bs-link-color: #2045a5;
+    --bs-link-color-rgb: 32, 69, 165;
+    --bs-link-hover-color: #0b3685;
+    --bs-link-hover-color-rgb: 11, 54, 133;
+    --bs-focus-ring-color: rgba(32, 69, 165, 0.25);
+    --bs-border-radius: 10px;
+}
+
+body.adms-body {
+    background-color: var(--adms-fondo);
+    color: var(--adms-texto);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Distribución general ---------- */
+.adms-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.adms-principal {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.adms-saltar:focus {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 1090;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--adms-radio-control);
+    background: #fff;
+    box-shadow: var(--adms-sombra-media);
+}
+
+/* ---------- Barra lateral ---------- */
+.adms-sidebar {
+    --bs-offcanvas-width: 280px;
+    --bs-offcanvas-bg: var(--adms-azul);
+    --bs-offcanvas-color: #fff;
+    color: #fff;
+}
+
+.adms-sidebar-interior {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 1.5rem 1rem 1.25rem;
+    background-color: var(--adms-azul);
+    overflow-y: auto;
+}
+
+.adms-sidebar-encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.5rem 1.75rem;
+}
+
+.adms-marca {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.adms-marca:hover,
+.adms-marca:focus {
+    color: #fff;
+}
+
+.adms-marca-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.12);
+    font-size: 1.25rem;
+}
+
+.adms-marca-texto {
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.15;
+}
+
+.adms-marca-texto small {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    opacity: 0.72;
+}
+
+.adms-sidebar-etiqueta {
+    padding: 0 0.9rem 0.6rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.adms-sidebar-nav .nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.3rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.84);
+    font-weight: 500;
+}
+
+.adms-sidebar-nav .nav-link .bi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.08);
+    font-size: 1.05rem;
+}
+
+.adms-sidebar-nav .nav-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.adms-sidebar-nav .nav-link:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+.adms-sidebar-nav .nav-link.active {
+    color: #fff;
+    background-color: var(--adms-azul-oscuro);
+    box-shadow: 0 6px 14px rgba(5, 25, 70, 0.28);
+}
+
+.adms-sidebar-nav .nav-link.active::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -1rem;
+    width: 4px;
+    height: 60%;
+    border-radius: 0 4px 4px 0;
+    background-color: #fff;
+    transform: translateY(-50%);
+}
+
+.adms-sidebar-nav .nav-link.active .bi {
+    background-color: rgba(255, 255, 255, 0.16);
+}
+
+.adms-sidebar-pie {
+    margin-top: auto;
+    padding: 1rem 0.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.75rem;
+}
+
+/* ---------- Encabezado superior ---------- */
+.adms-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    min-height: 78px;
+    padding: 0.9rem 2rem;
+    border-bottom: 1px solid var(--adms-borde);
+    background-color: #fff;
+}
+
+.adms-topbar-titulo {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.adms-topbar .breadcrumb {
+    --bs-breadcrumb-divider-color: #9aa3b2;
+    --bs-breadcrumb-item-active-color: var(--adms-texto-secundario);
+    margin: 0 0 0.1rem;
+    font-size: 0.8rem;
+}
+
+.adms-topbar .breadcrumb a {
+    text-decoration: none;
+}
+
+.adms-topbar .breadcrumb a:hover,
+.adms-topbar .breadcrumb a:focus-visible {
+    text-decoration: underline;
+}
+
+.adms-titulo-pagina {
+    margin: 0;
+    overflow: hidden;
+    color: var(--adms-texto);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adms-topbar-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.adms-btn-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--adms-borde);
+    border-radius: 12px;
+    background-color: #fff;
+    color: var(--adms-texto);
+    font-size: 1.35rem;
+}
+
+.adms-btn-menu:hover {
+    background-color: var(--adms-gris-suave);
+}
+
+/* ---------- Contenido y pie ---------- */
+.adms-contenido {
+    flex: 1 0 auto;
+    padding: 2rem;
+}
+
+.adms-pie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-top: 1px solid var(--adms-borde);
+    color: var(--adms-texto-secundario);
+    font-size: 0.8rem;
+}
+
+/* ---------- Tarjetas ---------- */
+.adms-card {
+    border: 1px solid var(--adms-borde);
+    border-radius: var(--adms-radio);
+    background-color: var(--adms-tarjeta);
+    box-shadow: var(--adms-sombra);
+}
+
+/* Tarjetas que contienen una tabla: recorta las esquinas de la tabla. */
+.adms-card-tabla {
+    overflow: hidden;
+}
+
+.adms-card-encabezado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.15rem 1.5rem;
+    border-bottom: 1px solid var(--adms-borde);
+}
+
+.adms-card-titulo {
+    margin: 0;
+    color: var(--adms-texto);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.adms-card-subtitulo {
+    margin: 0.15rem 0 0;
+    color: var(--adms-texto-secundario);
+    font-size: 0.82rem;
+}
+
+.adms-card-cuerpo {
+    padding: 1.5rem;
+}
+
+.adms-card-pie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--adms-borde);
+    border-radius: 0 0 var(--adms-radio) var(--adms-radio);
+    background-color: #fafbfd;
+}
+
+.adms-contador {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background-color: var(--adms-azul-suave);
+    color: var(--adms-azul);
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+    --bs-btn-font-weight: 500;
+    --bs-btn-padding-x: 1.1rem;
+    --bs-btn-padding-y: 0.6rem;
+    --bs-btn-border-radius: var(--adms-radio-control);
+}
+
+.btn-sm {
+    --bs-btn-padding-x: 0.75rem;
+    --bs-btn-padding-y: 0.35rem;
+    --bs-btn-border-radius: 8px;
+}
+
+.btn-primary {
+    --bs-btn-bg: var(--adms-azul);
+    --bs-btn-border-color: var(--adms-azul);
+    --bs-btn-hover-bg: var(--adms-azul-oscuro);
+    --bs-btn-hover-border-color: var(--adms-azul-oscuro);
+    --bs-btn-active-bg: var(--adms-azul-oscuro);
+    --bs-btn-active-border-color: var(--adms-azul-oscuro);
+    --bs-btn-disabled-bg: #8fa2d3;
+    --bs-btn-disabled-border-color: #8fa2d3;
+    --bs-btn-focus-shadow-rgb: 32, 69, 165;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--adms-azul);
+    --bs-btn-border-color: var(--adms-azul-borde);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--adms-azul);
+    --bs-btn-hover-border-color: var(--adms-azul);
+    --bs-btn-active-bg: var(--adms-azul-oscuro);
+    --bs-btn-active-border-color: var(--adms-azul-oscuro);
+    --bs-btn-disabled-color: #8fa2d3;
+    --bs-btn-focus-shadow-rgb: 32, 69, 165;
+}
+
+.btn-light {
+    --bs-btn-color: var(--adms-texto);
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: var(--adms-borde);
+    --bs-btn-hover-color: var(--adms-texto);
+    --bs-btn-hover-bg: var(--adms-gris-suave);
+    --bs-btn-hover-border-color: #d7dce7;
+    --bs-btn-active-bg: #e9ecf3;
+    --bs-btn-active-border-color: #d7dce7;
+    --bs-btn-focus-shadow-rgb: 32, 69, 165;
+}
+
+.btn:focus-visible {
+    box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
+}
+
+.btn:disabled,
+.btn.disabled {
+    cursor: not-allowed;
+}
+
+/* ---------- Formularios ---------- */
+.form-label {
+    margin-bottom: 0.4rem;
+    color: var(--adms-texto);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.form-control {
+    padding: 0.62rem 0.9rem;
+    border-color: var(--adms-borde);
+    border-radius: var(--adms-radio-control);
+    font-size: 0.9375rem;
+}
+
+.form-control:focus {
+    border-color: #7f9be0;
+    box-shadow: 0 0 0 0.25rem rgba(32, 69, 165, 0.14);
+}
+
+.form-control.is-invalid {
+    border-color: var(--adms-error);
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0 0.25rem rgba(180, 35, 24, 0.14);
+}
+
+.form-text {
+    color: var(--adms-texto-secundario);
+    font-size: 0.8rem;
+}
+
+.invalid-feedback {
+    color: var(--adms-error);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.input-group-text {
+    border-color: var(--adms-borde);
+    border-radius: var(--adms-radio-control);
+    background-color: #fff;
+    color: var(--adms-texto-secundario);
+}
+
+.adms-requerido {
+    color: var(--adms-error);
+}
+
+.adms-seccion-form + .adms-seccion-form {
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 1px dashed var(--adms-borde);
+}
+
+.adms-seccion-titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.1rem;
+    color: var(--adms-texto);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.adms-seccion-titulo .bi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background-color: var(--adms-azul-suave);
+    color: var(--adms-azul);
+}
+
+/* ---------- Tablas ---------- */
+.adms-tabla {
+    --bs-table-hover-bg: #f7f9fd;
+    margin-bottom: 0;
+}
+
+.adms-tabla thead th {
+    padding: 0.85rem 1.5rem;
+    border-bottom: 1px solid var(--adms-borde);
+    background-color: #f9fafc;
+    color: var(--adms-texto-secundario);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.adms-tabla td {
+    padding: 0.95rem 1.5rem;
+    border-color: var(--adms-borde);
+    vertical-align: middle;
+}
+
+.adms-tabla tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.adms-numero {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* ---------- Personas y avatares ---------- */
+.adms-persona {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.adms-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--adms-azul-suave);
+    color: var(--adms-azul);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.adms-avatar-lg {
+    width: 72px;
+    height: 72px;
+    font-size: 1.5rem;
+}
+
+.adms-persona-texto {
+    min-width: 0;
+}
+
+.adms-persona-nombre {
+    color: var(--adms-texto);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.adms-persona-nombre:hover {
+    color: var(--adms-azul);
+    text-decoration: underline;
+}
+
+.adms-persona-detalle {
+    overflow: hidden;
+    color: var(--adms-texto-secundario);
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adms-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background-color: var(--adms-gris-suave);
+    color: var(--adms-texto-secundario);
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+/* ---------- Detalle ---------- */
+.adms-perfil {
+    position: relative;
+    container-type: inline-size; /* Referencia de ancho para la placa grande (cqi). */
+    padding-top: 2.5rem; /* Deja libre la esquina del #N aunque la placa grande ocupe todo el ancho. */
+    text-align: center;
+}
+
+/* Identificador discreto (#N) en la esquina superior izquierda de la ficha. */
+.adms-id-tarjeta {
+    position: absolute;
+    top: 1rem;
+    left: 1.25rem;
+    color: var(--adms-texto-secundario);
+    font-size: 0.8rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+.adms-perfil-nombre {
+    margin: 1rem 0 0.75rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.adms-datos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem 1.5rem;
+    margin: 0;
+}
+
+.adms-datos dt {
+    margin-bottom: 0.3rem;
+    color: var(--adms-texto-secundario);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.adms-datos dd {
+    margin: 0;
+    color: var(--adms-texto);
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.adms-dato-vacio {
+    color: #8a94a6;
+    font-weight: 400;
+    font-style: italic;
+}
+
+/* ---------- Inicio ---------- */
+.adms-bienvenida {
+    padding: 1.75rem 2rem;
+    border-radius: var(--adms-radio);
+    background-color: var(--adms-azul);
+    color: #fff;
+}
+
+.adms-bienvenida h2 {
+    margin-bottom: 0.35rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+}
+
+.adms-bienvenida p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.adms-bienvenida-fecha {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.14);
+    font-size: 0.8rem;
+}
+
+.adms-estadistica {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+    padding: 1.35rem 1.5rem;
+}
+
+.adms-estadistica-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background-color: var(--adms-azul-suave);
+    color: var(--adms-azul);
+    font-size: 1.4rem;
+}
+
+.adms-estadistica-valor {
+    font-size: 1.85rem;
+    font-weight: 600;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+}
+
+.adms-estadistica-etiqueta {
+    color: var(--adms-texto-secundario);
+    font-size: 0.85rem;
+}
+
+.adms-lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.adms-lista li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.5rem;
+    border-bottom: 1px solid var(--adms-borde);
+}
+
+.adms-lista li:last-child {
+    border-bottom: 0;
+}
+
+.adms-acceso {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--adms-borde);
+    border-radius: 12px;
+    color: var(--adms-texto);
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.adms-acceso + .adms-acceso {
+    margin-top: 0.75rem;
+}
+
+.adms-acceso:hover {
+    border-color: var(--adms-azul-borde);
+    box-shadow: var(--adms-sombra-media);
+    color: var(--adms-texto);
+}
+
+.adms-acceso:focus-visible {
+    outline: 2px solid var(--adms-azul);
+    outline-offset: 2px;
+}
+
+.adms-acceso-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background-color: var(--adms-azul-suave);
+    color: var(--adms-azul);
+    font-size: 1.1rem;
+}
+
+.adms-acceso-titulo {
+    display: block;
+    font-weight: 600;
+}
+
+.adms-acceso-descripcion {
+    display: block;
+    color: var(--adms-texto-secundario);
+    font-size: 0.8rem;
+}
+
+.adms-acceso-flecha {
+    margin-left: auto;
+    color: #9aa3b2;
+}
+
+/* ---------- Vehículos: placa y VIN ---------- */
+.adms-placa {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: stretch;
+    overflow: hidden;
+    border: 2px solid var(--adms-texto);
+    border-radius: 7px;
+    background-color: #fff;
+    color: var(--adms-texto);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.adms-placa-pais {
+    display: flex;
+    align-items: center;
+    padding: 0 0.3rem;
+    background-color: var(--adms-azul);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.adms-placa-numero {
+    flex: 1 1 auto;
+    padding: 0.32rem 0.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+}
+
+.adms-placa-lg {
+    border-width: 3px;
+    border-radius: 10px;
+}
+
+.adms-placa-lg .adms-placa-pais {
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+}
+
+.adms-placa-lg .adms-placa-numero {
+    padding: 0.55rem 1rem;
+    font-size: 1.75rem;
+    /* Dentro de la ficha (.adms-perfil) se ajusta a su ancho para verse completa también
+       en tabletas horizontales; los navegadores sin "cqi" usan el tamaño de arriba. */
+    font-size: min(1.75rem, calc(14.5cqi - 0.6rem));
+}
+
+.adms-vin {
+    font-family: SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+}
+
+/* Celda "Vehículo" de las tablas: placa de ancho uniforme + marca, modelo y año. */
+.adms-vehiculo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 16.5rem;
+}
+
+.adms-vehiculo .adms-placa {
+    min-width: 8.5rem;
+}
+
+.adms-col-propietario {
+    min-width: 11rem;
+}
+
+.adms-vehiculo-titulo {
+    color: var(--adms-texto);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.adms-vehiculo-titulo:hover {
+    color: var(--adms-azul);
+    text-decoration: underline;
+}
+
+/* ---------- Selección del propietario ---------- */
+.adms-seleccion {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--adms-azul-borde);
+    border-radius: 12px;
+    background-color: var(--adms-azul-suave);
+}
+
+.adms-resultados {
+    margin-top: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--adms-borde);
+    border-radius: 12px;
+}
+
+.adms-resultados .adms-lista li {
+    padding: 0.75rem 1rem;
+}
+
+/* ---------- Estados vacíos ---------- */
+.adms-vacio {
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+
+.adms-vacio-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background-color: var(--adms-gris-suave);
+    color: #8a94a6;
+    font-size: 1.75rem;
+}
+
+.adms-vacio-titulo {
+    margin-bottom: 0.35rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.adms-vacio-texto {
+    max-width: 420px;
+    margin: 0 auto 1.25rem;
+    color: var(--adms-texto-secundario);
+}
+
+/* Error.html: página estática que se muestra ante errores no controlados. */
+.adms-pagina-error {
+    max-width: 36rem;
+}
+
+/* ---------- Mensajes ---------- */
+.adms-alerta {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.95rem 3rem 0.95rem 1rem;
+    border: 1px solid;
+    border-left-width: 4px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.adms-alerta .bi {
+    font-size: 1.15rem;
+}
+
+.alert-success.adms-alerta {
+    border-color: #b8e2cf;
+    border-left-color: var(--adms-exito);
+    background-color: var(--adms-exito-suave);
+    color: #0b5a3e;
+}
+
+.alert-danger.adms-alerta {
+    border-color: #f4c7c1;
+    border-left-color: var(--adms-error);
+    background-color: var(--adms-error-suave);
+    color: #8a1c13;
+}
+
+.alert-warning.adms-alerta {
+    border-color: #f5dba6;
+    border-left-color: var(--adms-advertencia);
+    background-color: var(--adms-advertencia-suave);
+    color: #6f4100;
+}
+
+.alert-info.adms-alerta {
+    border-color: var(--adms-azul-borde);
+    border-left-color: var(--adms-azul);
+    background-color: var(--adms-azul-suave);
+    color: var(--adms-azul-oscuro);
+}
+
+/* ---------- Escritorio: barra lateral fija ---------- */
+@media (min-width: 992px) {
+    /* Alinea los botones de búsqueda con el campo (debajo de su etiqueta). */
+    .adms-busqueda-botones {
+        padding-top: calc(0.875rem * 1.5 + 0.4rem);
+    }
+
+    .adms-sidebar {
+        position: sticky;
+        top: 0;
+        flex: 0 0 var(--adms-ancho-sidebar);
+        width: var(--adms-ancho-sidebar);
+        height: 100vh;
+    }
+}
+
+/* ---------- Tableta y móvil ---------- */
+@media (max-width: 991.98px) {
+    .adms-topbar {
+        min-height: 68px;
+        padding: 0.75rem 1rem;
+    }
+
+    .adms-titulo-pagina {
+        font-size: 1.2rem;
+    }
+
+    .adms-contenido {
+        padding: 1.25rem 1rem;
+    }
+
+    .adms-pie {
+        padding: 1rem;
+    }
+
+    .adms-tabla thead th,
+    .adms-tabla td,
+    .adms-lista li {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .adms-topbar-acciones {
+        width: 100%;
+    }
+
+    .adms-topbar-acciones .btn {
+        flex: 1 1 auto;
+    }
+
+    .adms-card-encabezado,
+    .adms-card-cuerpo,
+    .adms-card-pie {
+        padding-right: 1rem;
+        padding-left: 1rem;
+    }
+
+    .adms-card-pie .btn {
+        flex: 1 1 auto;
+    }
+
+    /* En teléfono la fila debe caber sin desplazamiento: placa algo más compacta (pero uniforme)
+       y solo un nombre de vehículo muy largo pasa a dos líneas. */
+    .adms-vehiculo {
+        min-width: 0;
+        gap: 0.75rem;
+    }
+
+    .adms-vehiculo .adms-placa {
+        min-width: 7.5rem;
+    }
+
+    .adms-vehiculo .adms-placa-numero {
+        padding: 0.28rem 0.4rem;
+        font-size: 0.8rem;
+    }
+
+    .adms-tabla td.text-end {
+        padding-left: 0.5rem;
+    }
+
+    .adms-bienvenida {
+        padding: 1.35rem 1.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .adms-acceso {
+        transition: none;
+    }
+}

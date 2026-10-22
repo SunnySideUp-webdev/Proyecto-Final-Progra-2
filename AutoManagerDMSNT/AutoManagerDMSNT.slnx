@@ -1,6 +1,0 @@
-<Solution>
-  <Project Path="CapaAccesoDatosNT/CapaAccesoDatosNT.csproj" />
-  <Project Path="CapaEntidadesNT/CapaEntidadesNT.csproj" />
-  <Project Path="CapaLogicaNegocioNT/CapaLogicaNegocioNT.csproj" />
-  <Project Path="CapaPresentacionNT/CapaPresentacionNT.csproj" />
-</Solution>
