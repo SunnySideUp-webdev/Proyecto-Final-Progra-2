@@ -16,9 +16,9 @@ using CapaPresentacion.Utilidades;
 namespace CapaPresentacion.Reportes
 {
     /// <summary>
-    /// Página de reportes del taller. Tiene cuatro secciones que se eligen con ?seccion=:
-    /// resumen (por defecto), abiertas, cerradas e historial. Solo consulta información;
-    /// no registra ni modifica datos.
+    /// Página de reportes del taller. Tiene seis secciones que se eligen con ?seccion=:
+    /// resumen (por defecto), abiertas, cerradas, historial, existencias y repuestos.
+    /// Solo consulta información; no registra ni modifica datos.
     /// </summary>
     public partial class webReportesFP : Page
     {
@@ -26,6 +26,8 @@ namespace CapaPresentacion.Reportes
         private const string lStrSeccionAbiertasFP = "abiertas";
         private const string lStrSeccionCerradasFP = "cerradas";
         private const string lStrSeccionHistorialFP = "historial";
+        private const string lStrSeccionExistenciasFP = "existencias";
+        private const string lStrSeccionRepuestosFP = "repuestos";
 
         /// <summary>A partir de cuántos días una orden abierta se resalta como atrasada.</summary>
         private const int lIntDiasAlertaFP = 7;
@@ -35,11 +37,15 @@ namespace CapaPresentacion.Reportes
 
         private readonly ClsReporteLNFP gObjReporteLNFP = new ClsReporteLNFP();
 
-        // Valor y estilo de los dos campos de fecha (inputs HTML de la sección «Órdenes cerradas»).
+        // Valor y estilo de los dos campos de fecha (inputs HTML del filtro que comparten
+        // «Órdenes cerradas» y «Repuestos utilizados»), la etiqueta del primero y la sección
+        // a la que vuelve el enlace «Mes actual».
         protected string gStrDesdeFP = string.Empty;
         protected string gStrHastaFP = string.Empty;
         protected string gStrClaseDesdeFP = lStrClaseCampoFP;
         protected string gStrClaseHastaFP = lStrClaseCampoFP;
+        protected string gStrEtiquetaDesdeFP = "Cerradas desde";
+        protected string gStrSeccionFP = lStrSeccionCerradasFP;
 
         // La búsqueda de clientes se reutiliza del módulo 1 (Clientes y vehículos).
         private readonly ClsClienteLNSC gObjClienteLNFP = new ClsClienteLNSC();
@@ -70,6 +76,12 @@ namespace CapaPresentacion.Reportes
                 case lStrSeccionHistorialFP:
                     SubCargarHistorialFP();
                     break;
+                case lStrSeccionExistenciasFP:
+                    SubCargarExistenciasFP();
+                    break;
+                case lStrSeccionRepuestosFP:
+                    SubCargarRepuestosFP();
+                    break;
                 default:
                     SubCargarResumenFP();
                     break;
@@ -82,8 +94,11 @@ namespace CapaPresentacion.Reportes
         /// </summary>
         protected void btnFiltrarFP_Click(object sender, EventArgs e)
         {
+            // El filtro vuelve a la sección en la que está el usuario (cerradas o repuestos).
+            string lStrSeccionFP = FncObtenerSeccionFP() == lStrSeccionRepuestosFP ? lStrSeccionRepuestosFP : lStrSeccionCerradasFP;
+
             // Los campos de fecha son inputs HTML: su valor llega en el formulario con su atributo name.
-            string lStrDestinoFP = "~/Reportes/Reportes.aspx?seccion=" + lStrSeccionCerradasFP
+            string lStrDestinoFP = "~/Reportes/Reportes.aspx?seccion=" + lStrSeccionFP
                 + "&desde=" + HttpUtility.UrlEncode((Request.Form["desde"] ?? string.Empty).Trim())
                 + "&hasta=" + HttpUtility.UrlEncode((Request.Form["hasta"] ?? string.Empty).Trim());
             Response.Redirect(lStrDestinoFP, false);
@@ -156,6 +171,7 @@ namespace CapaPresentacion.Reportes
         /// </summary>
         private void SubCargarCerradasFP()
         {
+            pnlFiltroFP.Visible = true;
             pnlCerradasFP.Visible = true;
             string lStrDesdeFP = Request.QueryString["desde"];
             string lStrHastaFP = Request.QueryString["hasta"];
@@ -181,23 +197,104 @@ namespace CapaPresentacion.Reportes
             }
             catch (ClsValidacionExcepcionLN lObjExcepcionFP)
             {
-                // Se conserva lo que escribió el usuario y se marca el campo con error.
-                gStrDesdeFP = lStrDesdeFP ?? string.Empty;
-                gStrHastaFP = lStrHastaFP ?? string.Empty;
-                if (FncMarcarErrorCampoFP(lObjExcepcionFP, ClsReporteLNFP.lStrCampoDesdeFP, errDesdeFP))
-                {
-                    gStrClaseDesdeFP = lStrClaseCampoErrorFP;
-                }
-                if (FncMarcarErrorCampoFP(lObjExcepcionFP, ClsReporteLNFP.lStrCampoHastaFP, errHastaFP))
-                {
-                    gStrClaseHastaFP = lStrClaseCampoErrorFP;
-                }
+                SubMarcarErroresFechasFP(lObjExcepcionFP, lStrDesdeFP, lStrHastaFP);
                 pnlResultadoCerradasFP.Visible = false;
             }
             catch (Exception lObjExcepcionFP)
             {
                 SubMostrarErrorFP(lObjExcepcionFP, "cargar las órdenes cerradas", "No fue posible cargar las órdenes cerradas en este momento.");
                 pnlResultadoCerradasFP.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// Muestra los repuestos utilizados en órdenes en el rango de ?desde= y ?hasta=; sin
+        /// fechas, el mes actual. Usa el mismo filtro que «Órdenes cerradas».
+        /// </summary>
+        private void SubCargarRepuestosFP()
+        {
+            pnlFiltroFP.Visible = true;
+            pnlRepuestosFP.Visible = true;
+            gStrEtiquetaDesdeFP = "Utilizados desde";
+            gStrSeccionFP = lStrSeccionRepuestosFP;
+            string lStrDesdeFP = Request.QueryString["desde"];
+            string lStrHastaFP = Request.QueryString["hasta"];
+
+            try
+            {
+                DateTime lDatDesdeFP;
+                DateTime lDatHastaFP;
+                List<ClsRepuestoUtilizadoENFP> lLstRepuestosFP =
+                    gObjReporteLNFP.FncListarRepuestosUtilizadosFP(lStrDesdeFP, lStrHastaFP, out lDatDesdeFP, out lDatHastaFP);
+
+                gStrDesdeFP = lDatDesdeFP.ToString(ClsReporteLNFP.lStrFormatoFechaFP, CultureInfo.InvariantCulture);
+                gStrHastaFP = lDatHastaFP.ToString(ClsReporteLNFP.lStrFormatoFechaFP, CultureInfo.InvariantCulture);
+
+                int lIntUnidadesFP = 0;
+                foreach (ClsRepuestoUtilizadoENFP lObjRepuestoFP in lLstRepuestosFP)
+                {
+                    lIntUnidadesFP += lObjRepuestoFP.lIntUnidadesFP;
+                }
+                litRangoRepuestosFP.Text = "Del " + ClsFormatoSC.fncFormatearFechaLargaSC(lDatDesdeFP)
+                    + " al " + ClsFormatoSC.fncFormatearFechaLargaSC(lDatHastaFP) + ": "
+                    + FncContarFP(lIntUnidadesFP, "unidad", "unidades") + " en total. Primero los más utilizados.";
+
+                rptRepuestosFP.DataSource = lLstRepuestosFP;
+                rptRepuestosFP.DataBind();
+                rptRepuestosFP.Visible = lLstRepuestosFP.Count > 0;
+                pnlSinRepuestosFP.Visible = lLstRepuestosFP.Count == 0;
+                litTotalRepuestosFP.Text = FncContarFP(lLstRepuestosFP.Count, "repuesto", "repuestos");
+            }
+            catch (ClsValidacionExcepcionLN lObjExcepcionFP)
+            {
+                SubMarcarErroresFechasFP(lObjExcepcionFP, lStrDesdeFP, lStrHastaFP);
+                pnlRepuestosFP.Visible = false;
+            }
+            catch (Exception lObjExcepcionFP)
+            {
+                SubMostrarErrorFP(lObjExcepcionFP, "cargar los repuestos utilizados", "No fue posible cargar los repuestos utilizados en este momento.");
+                pnlRepuestosFP.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// Muestra las existencias del inventario: primero los repuestos con menos unidades,
+        /// con su nivel de stock (agotado, bajo o disponible).
+        /// </summary>
+        private void SubCargarExistenciasFP()
+        {
+            pnlExistenciasFP.Visible = true;
+            try
+            {
+                List<ClsExistenciaRepuestoENFP> lLstExistenciasFP = gObjReporteLNFP.FncListarExistenciasFP();
+
+                int lIntAgotadosFP = 0;
+                int lIntBajosFP = 0;
+                foreach (ClsExistenciaRepuestoENFP lObjExistenciaFP in lLstExistenciasFP)
+                {
+                    if (lObjExistenciaFP.lStrNivelStockFP == ClsReporteLNFP.lStrNivelAgotadoFP)
+                    {
+                        lIntAgotadosFP++;
+                    }
+                    else if (lObjExistenciaFP.lStrNivelStockFP == ClsReporteLNFP.lStrNivelBajoFP)
+                    {
+                        lIntBajosFP++;
+                    }
+                }
+                litResumenExistenciasFP.Text = FncContarFP(lIntAgotadosFP, "agotado", "agotados") + " y "
+                    + FncContarFP(lIntBajosFP, "con stock bajo", "con stock bajo") + " ("
+                    + ClsReporteLNFP.lIntStockBajoFP + " unidades o menos). Primero los que tienen menos unidades.";
+
+                rptExistenciasFP.DataSource = lLstExistenciasFP;
+                rptExistenciasFP.DataBind();
+                rptExistenciasFP.Visible = lLstExistenciasFP.Count > 0;
+                pnlSinExistenciasFP.Visible = lLstExistenciasFP.Count == 0;
+                litTotalExistenciasFP.Text = FncContarFP(lLstExistenciasFP.Count, "repuesto", "repuestos");
+            }
+            catch (Exception lObjExcepcionFP)
+            {
+                SubMostrarErrorFP(lObjExcepcionFP, "cargar las existencias", "No fue posible cargar las existencias en este momento.");
+                pnlExistenciasFP.Visible = false;
             }
         }
 
@@ -298,6 +395,8 @@ namespace CapaPresentacion.Reportes
                 case lStrSeccionAbiertasFP:
                 case lStrSeccionCerradasFP:
                 case lStrSeccionHistorialFP:
+                case lStrSeccionExistenciasFP:
+                case lStrSeccionRepuestosFP:
                     return lStrSeccionFP;
                 default:
                     return lStrSeccionResumenFP;
@@ -312,7 +411,9 @@ namespace CapaPresentacion.Reportes
                 { lStrSeccionResumenFP, lnkResumenFP },
                 { lStrSeccionAbiertasFP, lnkAbiertasFP },
                 { lStrSeccionCerradasFP, lnkCerradasFP },
-                { lStrSeccionHistorialFP, lnkHistorialFP }
+                { lStrSeccionHistorialFP, lnkHistorialFP },
+                { lStrSeccionExistenciasFP, lnkExistenciasFP },
+                { lStrSeccionRepuestosFP, lnkRepuestosFP }
             };
 
             foreach (KeyValuePair<string, HyperLink> lObjPestanaFP in lDicPestanasFP)
@@ -340,6 +441,24 @@ namespace CapaPresentacion.Reportes
             pLblErrorFP.Text = HttpUtility.HtmlEncode(lStrMensajeFP);
             pLblErrorFP.Visible = true;
             return true;
+        }
+
+        /// <summary>
+        /// Conserva en el filtro las fechas que escribió el usuario y marca en rojo el campo
+        /// con error, con el mensaje que envió la Capa Lógica.
+        /// </summary>
+        private void SubMarcarErroresFechasFP(ClsValidacionExcepcionLN pObjExcepcionFP, string pStrDesdeFP, string pStrHastaFP)
+        {
+            gStrDesdeFP = pStrDesdeFP ?? string.Empty;
+            gStrHastaFP = pStrHastaFP ?? string.Empty;
+            if (FncMarcarErrorCampoFP(pObjExcepcionFP, ClsReporteLNFP.lStrCampoDesdeFP, errDesdeFP))
+            {
+                gStrClaseDesdeFP = lStrClaseCampoErrorFP;
+            }
+            if (FncMarcarErrorCampoFP(pObjExcepcionFP, ClsReporteLNFP.lStrCampoHastaFP, errHastaFP))
+            {
+                gStrClaseHastaFP = lStrClaseCampoErrorFP;
+            }
         }
 
         /// <summary>Muestra el aviso de cliente inexistente y responde 404 (el recurso pedido no existe).</summary>
@@ -385,6 +504,16 @@ namespace CapaPresentacion.Reportes
         protected static string FncClaseEstadoFP(string pStrEstadoFP)
         {
             return pStrEstadoFP == "Abierta" ? "adms-estado adms-estado-abierta" : "adms-estado adms-estado-cerrada";
+        }
+
+        /// <summary>Clase CSS de la etiqueta del nivel de stock (agotado, bajo o disponible).</summary>
+        protected static string FncClaseNivelStockFP(string pStrNivelFP)
+        {
+            if (pStrNivelFP == ClsReporteLNFP.lStrNivelAgotadoFP)
+            {
+                return "adms-estado adms-nivel-agotado";
+            }
+            return pStrNivelFP == ClsReporteLNFP.lStrNivelBajoFP ? "adms-estado adms-nivel-bajo" : "adms-estado adms-nivel-disponible";
         }
 
         /// <summary>

@@ -1032,6 +1032,46 @@ body.adms-body {
     font-weight: 600;
 }
 
+/* Nivel de stock en el reporte de existencias (se usa junto con .adms-estado). */
+.adms-nivel-agotado {
+    background-color: var(--adms-error-suave);
+    color: var(--adms-error);
+}
+
+.adms-nivel-bajo {
+    background-color: var(--adms-advertencia-suave);
+    color: var(--adms-advertencia);
+}
+
+.adms-nivel-disponible {
+    background-color: var(--adms-exito-suave);
+    color: var(--adms-exito);
+}
+
+/* ---------- Inventario (módulo de Pavel) ---------- */
+/* Unidades en bodega; en rojo cuando no quedan. */
+.adms-stock {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.adms-stock-agotado {
+    color: var(--adms-error);
+    font-weight: 600;
+}
+
+/* Ventana de entrada a bodega: la dibuja el servidor ya abierta (sin JavaScript),
+   por eso se muestra con d-block y su fondo oscuro se agrega en la misma página. */
+.adms-modal-servidor {
+    overflow-y: auto;
+}
+
+.adms-modal-servidor .modal-content {
+    border: 0;
+    border-radius: var(--adms-radio);
+    box-shadow: var(--adms-sombra-media);
+}
+
 /* ---------- Mensajes ---------- */
 .adms-alerta {
     display: flex;

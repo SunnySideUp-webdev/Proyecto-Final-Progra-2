@@ -13,7 +13,8 @@ namespace CapaDatos
 {
     /// <summary>
     /// Consultas de solo lectura para los reportes. No inserta ni modifica datos: lee las
-    /// tablas de los módulos 1 (Clientes y Vehiculos) y 2 (OrdenesReparacion).
+    /// tablas de los módulos 1 (Clientes y Vehiculos), 2 (OrdenesReparacion) y 3 (Repuesto),
+    /// y la de repuestos utilizados en órdenes (RepuestosOrden).
     /// Todas las consultas usan parámetros (nunca texto concatenado) para evitar inyección SQL.
     /// </summary>
     public class ClsReporteDAFP
@@ -140,6 +141,98 @@ namespace CapaDatos
                     };
                 }
             }
+        }
+
+        /// <summary>
+        /// Lista todos los repuestos del inventario con su stock y las unidades que se han
+        /// utilizado en órdenes. Primero los que tienen menos unidades (los que requieren compra).
+        /// </summary>
+        /// <returns>Existencias de cada repuesto.</returns>
+        public List<ClsExistenciaRepuestoENFP> FncListarExistenciasFP()
+        {
+            // LEFT JOIN: un repuesto que nunca se ha usado también aparece, con 0 unidades usadas.
+            const string lStrConsultaFP = @"
+                SELECT r.idrepuesto, r.codigo, r.nombre, r.marcacarro, r.modelocarro, r.aniocarro, r.stock,
+                       COALESCE(SUM(ro.Cantidad), 0) AS UnidadesUsadas
+                FROM dbo.Repuesto AS r
+                LEFT JOIN dbo.RepuestosOrden AS ro ON ro.IdRepuesto = r.idrepuesto
+                GROUP BY r.idrepuesto, r.codigo, r.nombre, r.marcacarro, r.modelocarro, r.aniocarro, r.stock
+                ORDER BY r.stock, r.nombre, r.codigo;";
+
+            List<ClsExistenciaRepuestoENFP> lLstExistenciasFP = new List<ClsExistenciaRepuestoENFP>();
+
+            using (SqlConnection lObjConexionFP = ClsConexionDA.fncObtenerConexion())
+            using (SqlCommand lObjComandoFP = new SqlCommand(lStrConsultaFP, lObjConexionFP))
+            {
+                lObjConexionFP.Open();
+                using (SqlDataReader lObjLectorFP = lObjComandoFP.ExecuteReader())
+                {
+                    while (lObjLectorFP.Read())
+                    {
+                        lLstExistenciasFP.Add(new ClsExistenciaRepuestoENFP
+                        {
+                            lIntIdRepuestoFP = lObjLectorFP.GetInt32(0),
+                            lStrCodigoFP = lObjLectorFP.GetString(1),
+                            lStrNombreFP = lObjLectorFP.GetString(2),
+                            lStrVehiculoFP = lObjLectorFP.GetString(3) + " " + lObjLectorFP.GetString(4) + " " + lObjLectorFP.GetInt32(5),
+                            lIntStockFP = lObjLectorFP.GetInt32(6),
+                            lIntUnidadesUsadasFP = lObjLectorFP.GetInt32(7)
+                        });
+                    }
+                }
+            }
+
+            return lLstExistenciasFP;
+        }
+
+        /// <summary>
+        /// Suma, por repuesto, las unidades utilizadas en órdenes dentro de un rango de fechas
+        /// de registro. Primero los repuestos más utilizados.
+        /// </summary>
+        /// <param name="pDatDesdeUtcFP">Inicio del rango en UTC (incluido).</param>
+        /// <param name="pDatHastaUtcFP">Fin del rango en UTC (no incluido).</param>
+        /// <returns>Repuestos utilizados en el rango.</returns>
+        public List<ClsRepuestoUtilizadoENFP> FncListarRepuestosUtilizadosFP(DateTime pDatDesdeUtcFP, DateTime pDatHastaUtcFP)
+        {
+            const string lStrConsultaFP = @"
+                SELECT r.idrepuesto, r.codigo, r.nombre,
+                       SUM(ro.Cantidad) AS Unidades,
+                       COUNT(DISTINCT ro.IdOrden) AS Ordenes,
+                       MAX(ro.FechaRegistro) AS UltimoUso,
+                       r.stock
+                FROM dbo.RepuestosOrden AS ro
+                INNER JOIN dbo.Repuesto AS r ON r.idrepuesto = ro.IdRepuesto
+                WHERE ro.FechaRegistro >= @Desde AND ro.FechaRegistro < @Hasta
+                GROUP BY r.idrepuesto, r.codigo, r.nombre, r.stock
+                ORDER BY Unidades DESC, r.nombre;";
+
+            List<ClsRepuestoUtilizadoENFP> lLstUtilizadosFP = new List<ClsRepuestoUtilizadoENFP>();
+
+            using (SqlConnection lObjConexionFP = ClsConexionDA.fncObtenerConexion())
+            using (SqlCommand lObjComandoFP = new SqlCommand(lStrConsultaFP, lObjConexionFP))
+            {
+                lObjComandoFP.Parameters.Add("@Desde", SqlDbType.DateTime2).Value = pDatDesdeUtcFP;
+                lObjComandoFP.Parameters.Add("@Hasta", SqlDbType.DateTime2).Value = pDatHastaUtcFP;
+                lObjConexionFP.Open();
+                using (SqlDataReader lObjLectorFP = lObjComandoFP.ExecuteReader())
+                {
+                    while (lObjLectorFP.Read())
+                    {
+                        lLstUtilizadosFP.Add(new ClsRepuestoUtilizadoENFP
+                        {
+                            lIntIdRepuestoFP = lObjLectorFP.GetInt32(0),
+                            lStrCodigoFP = lObjLectorFP.GetString(1),
+                            lStrNombreFP = lObjLectorFP.GetString(2),
+                            lIntUnidadesFP = lObjLectorFP.GetInt32(3),
+                            lIntOrdenesFP = lObjLectorFP.GetInt32(4),
+                            lDatUltimoUsoUtcFP = DateTime.SpecifyKind(lObjLectorFP.GetDateTime(5), DateTimeKind.Utc),
+                            lIntStockActualFP = lObjLectorFP.GetInt32(6)
+                        });
+                    }
+                }
+            }
+
+            return lLstUtilizadosFP;
         }
 
         /// <summary>Ejecuta una consulta basada en la consulta base y convierte cada fila en una entidad.</summary>
