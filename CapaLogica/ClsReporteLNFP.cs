@@ -13,13 +13,22 @@ namespace CapaLogica
 {
     /// <summary>
     /// Reglas de los reportes: define los rangos de fechas (con el calendario de Guatemala),
-    /// valida los filtros que escribe el usuario y calcula los tiempos de cada orden
-    /// (días abierta y duración de la reparación). Las consultas las hace la Capa de Datos.
+    /// valida los filtros que escribe el usuario, calcula los tiempos de cada orden (días
+    /// abierta y duración de la reparación) y el nivel de stock de cada repuesto. Las
+    /// consultas las hace la Capa de Datos.
     /// </summary>
     public class ClsReporteLNFP
     {
-        /// <summary>Cantidad máxima de días que puede abarcar el filtro de órdenes cerradas.</summary>
+        /// <summary>Cantidad máxima de días que puede abarcar un filtro de fechas.</summary>
         public const int lIntRangoMaximoDiasFP = 366;
+
+        /// <summary>Un repuesto con esta cantidad de unidades o menos se considera con stock bajo.</summary>
+        public const int lIntStockBajoFP = 3;
+
+        // Niveles de stock del reporte de existencias.
+        public const string lStrNivelAgotadoFP = "Agotado";
+        public const string lStrNivelBajoFP = "Stock bajo";
+        public const string lStrNivelDisponibleFP = "Disponible";
 
         /// <summary>Formato de fecha que envía el campo de fecha del navegador (año-mes-día).</summary>
         public const string lStrFormatoFechaFP = "yyyy-MM-dd";
@@ -76,6 +85,88 @@ namespace CapaLogica
         public List<ClsReporteOrdenENFP> FncListarOrdenesCerradasFP(string pStrDesdeFP, string pStrHastaFP,
             out DateTime pDatDesdeFP, out DateTime pDatHastaFP)
         {
+            SubLeerRangoFP(pStrDesdeFP, pStrHastaFP, out pDatDesdeFP, out pDatHastaFP);
+
+            // El día final se incluye completo: se busca hasta el inicio del día siguiente.
+            List<ClsReporteOrdenENFP> lLstOrdenesFP = gObjReporteDAFP.FncListarOrdenesCerradasFP(
+                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatDesdeFP),
+                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatHastaFP.AddDays(1)));
+            SubCalcularTiemposFP(lLstOrdenesFP);
+            return lLstOrdenesFP;
+        }
+
+        /// <summary>Lista el historial de reparaciones de todos los vehículos de un cliente.</summary>
+        /// <param name="pIntIdClienteFP">Identificador del cliente.</param>
+        /// <returns>Órdenes del cliente; vacío si el identificador no es válido o no tiene órdenes.</returns>
+        public List<ClsReporteOrdenENFP> FncListarOrdenesPorClienteFP(int pIntIdClienteFP)
+        {
+            if (pIntIdClienteFP <= 0)
+            {
+                return new List<ClsReporteOrdenENFP>();
+            }
+
+            List<ClsReporteOrdenENFP> lLstOrdenesFP = gObjReporteDAFP.FncListarOrdenesPorClienteFP(pIntIdClienteFP);
+            SubCalcularTiemposFP(lLstOrdenesFP);
+            return lLstOrdenesFP;
+        }
+
+        /// <summary>
+        /// Lista las existencias del inventario con el nivel de stock de cada repuesto, de los
+        /// que tienen menos unidades a los que tienen más.
+        /// </summary>
+        /// <returns>Existencias de cada repuesto.</returns>
+        public List<ClsExistenciaRepuestoENFP> FncListarExistenciasFP()
+        {
+            List<ClsExistenciaRepuestoENFP> lLstExistenciasFP = gObjReporteDAFP.FncListarExistenciasFP();
+            foreach (ClsExistenciaRepuestoENFP lObjExistenciaFP in lLstExistenciasFP)
+            {
+                lObjExistenciaFP.lStrNivelStockFP = FncObtenerNivelStockFP(lObjExistenciaFP.lIntStockFP);
+            }
+            return lLstExistenciasFP;
+        }
+
+        /// <summary>
+        /// Lista los repuestos utilizados en órdenes entre dos fechas (de registro del uso), con
+        /// las mismas reglas de fechas que las órdenes cerradas. Sin fechas, el mes actual.
+        /// </summary>
+        /// <param name="pStrDesdeFP">Fecha inicial en formato año-mes-día, o vacío.</param>
+        /// <param name="pStrHastaFP">Fecha final en formato año-mes-día, o vacío. Se incluye el día completo.</param>
+        /// <param name="pDatDesdeFP">Devuelve la fecha inicial que se usó (calendario de Guatemala).</param>
+        /// <param name="pDatHastaFP">Devuelve la fecha final que se usó (calendario de Guatemala).</param>
+        /// <returns>Repuestos utilizados en el rango, del más utilizado al menos utilizado.</returns>
+        /// <exception cref="ClsValidacionExcepcionLN">Alguna fecha no es válida o el rango no es correcto.</exception>
+        public List<ClsRepuestoUtilizadoENFP> FncListarRepuestosUtilizadosFP(string pStrDesdeFP, string pStrHastaFP,
+            out DateTime pDatDesdeFP, out DateTime pDatHastaFP)
+        {
+            SubLeerRangoFP(pStrDesdeFP, pStrHastaFP, out pDatDesdeFP, out pDatHastaFP);
+            return gObjReporteDAFP.FncListarRepuestosUtilizadosFP(
+                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatDesdeFP),
+                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatHastaFP.AddDays(1)));
+        }
+
+        /// <summary>
+        /// Nivel de stock de un repuesto: «Agotado» sin unidades, «Stock bajo» con
+        /// <see cref="lIntStockBajoFP"/> unidades o menos y «Disponible» con más.
+        /// </summary>
+        /// <param name="pIntStockFP">Unidades en bodega.</param>
+        /// <returns>Texto del nivel.</returns>
+        public static string FncObtenerNivelStockFP(int pIntStockFP)
+        {
+            if (pIntStockFP <= 0)
+            {
+                return lStrNivelAgotadoFP;
+            }
+            return pIntStockFP <= lIntStockBajoFP ? lStrNivelBajoFP : lStrNivelDisponibleFP;
+        }
+
+        /// <summary>
+        /// Lee y valida el rango de fechas de un filtro. Sin fechas usa el mes actual (del día 1
+        /// a hoy); el rango no puede estar invertido ni pasar de <see cref="lIntRangoMaximoDiasFP"/> días.
+        /// </summary>
+        /// <exception cref="ClsValidacionExcepcionLN">Alguna fecha no es válida o el rango no es correcto.</exception>
+        private static void SubLeerRangoFP(string pStrDesdeFP, string pStrHastaFP,
+            out DateTime pDatDesdeFP, out DateTime pDatHastaFP)
+        {
             DateTime lDatHoyFP = ClsZonaHorariaLN.fncObtenerHoyGuatemala();
             Dictionary<string, string> lDicErroresFP = new Dictionary<string, string>();
 
@@ -99,28 +190,6 @@ namespace CapaLogica
             {
                 throw new ClsValidacionExcepcionLN(lDicErroresFP);
             }
-
-            // El día final se incluye completo: se busca hasta el inicio del día siguiente.
-            List<ClsReporteOrdenENFP> lLstOrdenesFP = gObjReporteDAFP.FncListarOrdenesCerradasFP(
-                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatDesdeFP),
-                ClsZonaHorariaLN.fncConvertirGuatemalaAUtc(pDatHastaFP.AddDays(1)));
-            SubCalcularTiemposFP(lLstOrdenesFP);
-            return lLstOrdenesFP;
-        }
-
-        /// <summary>Lista el historial de reparaciones de todos los vehículos de un cliente.</summary>
-        /// <param name="pIntIdClienteFP">Identificador del cliente.</param>
-        /// <returns>Órdenes del cliente; vacío si el identificador no es válido o no tiene órdenes.</returns>
-        public List<ClsReporteOrdenENFP> FncListarOrdenesPorClienteFP(int pIntIdClienteFP)
-        {
-            if (pIntIdClienteFP <= 0)
-            {
-                return new List<ClsReporteOrdenENFP>();
-            }
-
-            List<ClsReporteOrdenENFP> lLstOrdenesFP = gObjReporteDAFP.FncListarOrdenesPorClienteFP(pIntIdClienteFP);
-            SubCalcularTiemposFP(lLstOrdenesFP);
-            return lLstOrdenesFP;
         }
 
         /// <summary>
