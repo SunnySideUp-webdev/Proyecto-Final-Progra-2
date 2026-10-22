@@ -378,10 +378,3 @@ Es una regla del negocio (qué se considera «stock bajo») que puede cambiar; v
 **¿Por qué los dos filtros de fechas usan el mismo método?**
 Para que las reglas y los mensajes sean idénticos en ambos reportes y cualquier corrección se haga en un
 solo lugar (`SubLeerRangoFP`).
-
----
-
-## 11. Pendientes
-
-- Completar el nombre completo y el carné de la integrante en el encabezado de cada archivo del módulo
-  (donde dice `PENDIENTE`) y en `database/91_DatosEjemploReportesFP.sql`.

@@ -10,7 +10,7 @@ Sistema de gestión para un taller mecánico, desarrollado en **ASP.NET Web Form
 | Gestión de Clientes y Vehículos | Sharon | `Sharon` |
 | Órdenes de reparación | Neider | `Neider` |
 | Inventario | Pavel | `Pavel` |
-| Reportes e integración | Fátima | `Fatima` |
+| Reportes | Fátima | `Fatima` |
 
 ### Quién hizo qué
 
