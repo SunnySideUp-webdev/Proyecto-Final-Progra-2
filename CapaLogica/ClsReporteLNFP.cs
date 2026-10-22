@@ -1,6 +1,6 @@
 //==============================================================
-// Nombre: Fátima PENDIENTE (nombre completo)
-// Carné: PENDIENTE
+// Nombre: Fátima Palacios Ordoñez
+// Carné: 0900-21-1810
 // Tema: AutoManager DMS - Módulo 4 Reportes - Lógica de Negocio
 //==============================================================
 using System;

@@ -1,7 +1,7 @@
 
 -- AutoManager DMS
 -- Datos de ejemplo del Modulo 4 (Reportes)
--- Integrante: Fatima PENDIENTE (nombre completo y carne)
+-- Integrante: Fatima Palacios Ordonez (carne 0900-21-1810)
 -- Ordenes de reparacion FICTICIAS sobre los vehiculos de ejemplo (90_DatosEjemploSC.sql),
 -- para que los reportes muestren informacion en cualquier computadora.
 -- No usa identificadores fijos: busca cada vehiculo por su VIN. Si el vehiculo no existe,
