@@ -45,6 +45,8 @@
     <Compile Include="ClsReporteDAFP.cs" />
     <!-- Módulo 3: Inventario (parte de Pavel) -->
     <Compile Include="ClsRepuestoDAPP.cs" />
+    <!-- Repuestos utilizados en órdenes (parte de Sharon) -->
+    <Compile Include="ClsRepuestoOrdenDASC.cs" />
     <Compile Include="ClsSqlDA.cs" />
     <Compile Include="ClsVehiculoDASC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

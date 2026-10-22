@@ -58,6 +58,8 @@
     <!-- Módulo 3: Inventario (parte de Pavel) -->
     <Content Include="Inventario\Inventario.aspx" />
     <Content Include="Inventario\RegistroRepuesto.aspx" />
+    <!-- Repuestos utilizados en órdenes (parte de Sharon) -->
+    <Content Include="OrdenesReparacion\RepuestosOrdenSC.aspx" />
     <Content Include="Web.config" />
     <!-- Agregado por Neider: archivo local de conexión (tiene la contraseña local; Git lo ignora y no se sube). -->
     <None Include="ConnectionStrings.config" />
@@ -167,6 +169,14 @@
     </Compile>
     <Compile Include="Inventario\RegistroRepuesto.aspx.designer.cs">
       <DependentUpon>RegistroRepuesto.aspx</DependentUpon>
+    </Compile>
+    <!-- Repuestos utilizados en órdenes (parte de Sharon) -->
+    <Compile Include="OrdenesReparacion\RepuestosOrdenSC.aspx.cs">
+      <DependentUpon>RepuestosOrdenSC.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\RepuestosOrdenSC.aspx.designer.cs">
+      <DependentUpon>RepuestosOrdenSC.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">

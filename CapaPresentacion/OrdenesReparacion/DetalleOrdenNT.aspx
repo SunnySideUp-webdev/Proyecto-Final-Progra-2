@@ -61,6 +61,12 @@
                     <asp:Label ID="lblEstadoNT" runat="server" />
                 </p>
 
+                <%-- Ajuste de integración (Sharon): acceso a los repuestos utilizados en la orden. --%>
+                <a class="btn btn-outline-primary"
+                    href='RepuestosOrdenSC.aspx?idOrden=<%: HttpUtility.UrlEncode(Request.QueryString["id"]) %>'>
+                    <i class="bi bi-box-seam me-2" aria-hidden="true"></i>Repuestos utilizados
+                </a>
+
             </div>
         </asp:Panel>
 

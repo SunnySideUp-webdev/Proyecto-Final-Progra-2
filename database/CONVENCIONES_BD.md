@@ -64,10 +64,40 @@ cumplen, se detiene con un mensaje que indica qué corregir; después se vuelve 
 
 Al cerrar una orden, `FechaCierre` se llena con `SYSUTCDATETIME()` (o `DateTime.UtcNow` desde C#).
 
-## 4. Scripts
+## 4. Inventario y repuestos utilizados (`03_InventarioPP.sql` y `04_RepuestosOrdenSC.sql`)
+
+`dbo.Repuesto` (módulo de Pavel) conserva sus columnas originales en minúsculas (`idrepuesto`, `codigo`,
+`stock`, `marcacarro`…), con estas reglas:
+
+- `UQ_Repuesto_Codigo`: el código es único;
+- `CK_Repuesto_Stock`: el stock nunca queda negativo (su regla original `chk_stock_negativo`, renombrada);
+- `CK_Repuesto_Textos` y `CK_Repuesto_Anio`: textos no vacíos y año del vehículo compatible desde 1981;
+- textos en `NVARCHAR`, como el resto de la base.
+
+Si la tabla ya existe con el script original (`database/Inventario.sql` de su rama), `03` la actualiza sin
+perder datos, igual que `02` con las órdenes.
+
+`dbo.RepuestosOrden` registra los repuestos utilizados en cada orden: `IdOrden` (llave foránea a
+`dbo.OrdenesReparacion`), `IdRepuesto` (llave foránea a `dbo.Repuesto`), `Cantidad` (`CK_RepuestosOrden_Cantidad`:
+mayor que cero) y `FechaRegistro` en UTC. Las llaves foráneas impiden borrar un repuesto o una orden que ya
+tenga usos registrados, para conservar el historial.
+
+El stock se modifica siempre con una sola instrucción sobre el valor actual, nunca leyendo el valor en C# y
+escribiéndolo después:
+
+```sql
+UPDATE dbo.Repuesto SET stock = stock + @Cantidad WHERE idrepuesto = @IdRepuesto;                     -- entrada
+UPDATE dbo.Repuesto SET stock = stock - @Cantidad WHERE idrepuesto = @IdRepuesto AND stock >= @Cantidad; -- uso
+```
+
+El uso en una orden se registra en una transacción junto con el descuento del stock (ver
+`ClsRepuestoOrdenDASC`), y solo mientras la orden está abierta.
+
+## 5. Scripts
 
 - Un script por módulo en `database/`, con número para fijar el orden de ejecución:
-  `00_` crea la base, `01_ClientesVehiculosSC.sql`, `02_OrdenesReparacionNT.sql`, etc.
+  `00_` crea la base, `01_ClientesVehiculosSC.sql`, `02_OrdenesReparacionNT.sql`, `03_InventarioPP.sql`,
+  `04_RepuestosOrdenSC.sql`, etc.
   Los datos de ejemplo (siempre ficticios) van al final, en `90_` en adelante, y se insertan
   sin identificadores fijos (buscando por DPI, placa o VIN) para no chocar con datos existentes.
   Docker ejecuta automáticamente los archivos `database/[0-9][0-9]_*.sql` en orden.
@@ -78,13 +108,13 @@ Al cerrar una orden, `FechaCierre` se llena con `SYSUTCDATETIME()` (o `DateTime.
 - Incluir `SET QUOTED_IDENTIFIER ON;` al inicio (es la configuración que recomienda SQL Server
   y la obligatoria si algún módulo crea índices filtrados); con `sqlcmd`, usar la opción `-I`.
 
-## 5. Identificadores
+## 6. Identificadores
 
 - `IDENTITY_CACHE` está desactivado en `AutoManagerDMS` para evitar saltos de 1000 cuando
   el servidor se detiene. Aun así, **los identificadores pueden tener huecos** (por ejemplo,
   si una transacción se deshace); no se debe suponer que son consecutivos.
 
-## 6. Conexión desde C#
+## 7. Conexión desde C#
 
 - Obtener las conexiones siempre con `CapaDatos.ClsConexionDA.fncObtenerConexion()`.
 - La cadena de conexión `AutoManagerDMS` está en `CapaPresentacion/ConnectionStrings.config`
