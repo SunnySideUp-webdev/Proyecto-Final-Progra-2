@@ -19,6 +19,20 @@ packages/
 *.user
 *.suo
 *.userprefs
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.cache
+TestResults/
+
+# --- Bases de datos y respaldos locales (pueden tener datos reales) ---
+*.mdf
+*.ldf
+*.bak
+*.bacpac
+
+# --- Registros ---
+*.log
 
 # --- Sistema operativo ---
 .DS_Store

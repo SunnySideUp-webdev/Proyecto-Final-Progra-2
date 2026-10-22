@@ -12,14 +12,27 @@ Sistema de gestión para un taller mecánico, desarrollado en **ASP.NET Web Form
 | Inventario | Pavel | `Pavel` |
 | Reportes e integración | Fátima | `Fatima` |
 
+### Quién hizo qué
+
+| Parte | Autor | Archivos |
+|---|---|---|
+| Módulo 1: Clientes y vehículos | Sharon | `Cls*ClienteSC`, `Cls*VehiculoSC` (entidades, datos y lógica), `CapaPresentacion/Clientes/`, `CapaPresentacion/Vehiculos/`, `Utilidades/ClsFormatoSC.cs`, `database/01_ClientesVehiculosSC.sql`, `database/90_DatosEjemploSC.sql`, `pruebas/` |
+| Módulo 2: Órdenes de reparación | Neider | `ClsOrdenReparacionENT`, `ClsOrdenReparacionDANT`, `ClsOrdenReparacionLNT`, `CapaPresentacion/OrdenesReparacion/`, `database/02_OrdenesReparacionNT.sql` (su tabla, con ajustes de integración) |
+| Base común del sitio | Sharon | `Site.Master`, `Default.aspx`, `Error.html`, `Web.config`, `Content/autodms.css`, `Scripts/autodms.js`, `ClsConexionDA`, `ClsSqlDA`, `ClsDatoDuplicadoExcepcionDA`, `ClsValidacionExcepcionLN`, `ClsZonaHorariaLN`, `ClsRegistroErrores`, `scripts/`, `compose.yaml` |
+
+En los archivos compartidos (`.csproj` y `Site.Master.cs`) las líneas de Neider están marcadas con
+comentarios que dicen «parte de Neider» (o «Inicio / Fin de la parte de Neider» cuando son varias).
+Los archivos del módulo 2 llevan su encabezado, y los cambios que se hicieron en ellos al integrarlo
+tienen el comentario «Ajuste de integración (Sharon)».
+
 ## Estructura de la solución
 
 ```
 TallerMecanico.sln
-├── CapaEntidades/        Clases que viajan entre capas (ClsClienteENSC, ClsVehiculoENSC)
-├── CapaDatos/            Acceso a SQL Server con consultas parametrizadas (ClsConexionDA, Cls*DASC)
-├── CapaLogica/           Reglas de negocio y validaciones (Cls*LNSC, ClsZonaHorariaLN)
-├── CapaPresentacion/     Sitio Web Forms: Site.Master, Default.aspx, Clientes/, Vehiculos/, Error.html
+├── CapaEntidades/        Clases que viajan entre capas (ClsClienteENSC, ClsVehiculoENSC, ClsOrdenReparacionENT)
+├── CapaDatos/            Acceso a SQL Server con consultas parametrizadas (ClsConexionDA, Cls*DASC, ClsOrdenReparacionDANT)
+├── CapaLogica/           Reglas de negocio y validaciones (Cls*LNSC, ClsOrdenReparacionLNT, ClsZonaHorariaLN)
+├── CapaPresentacion/     Sitio Web Forms: Site.Master, Default.aspx, Clientes/, Vehiculos/, OrdenesReparacion/, Error.html
 ├── database/             Scripts SQL numerados y CONVENCIONES_BD.md
 ├── pruebas/              Pruebas de capas (consola), de SQL y de conexión
 ├── scripts/              Configuración local e inicio del sitio en macOS
@@ -64,12 +77,12 @@ TallerMecanico.sln
 
 ### Opción A: SQL Server Express
 
-1. Crea la base de datos y sus tablas (usa `-I`, igual que Docker: activa QUOTED_IDENTIFIER, la configuración que recomienda SQL Server):
+1. Crea la base de datos y ejecuta en orden todos los scripts numerados de `database/` (cada módulo agrega el suyo; usa `-I`, igual que Docker: activa QUOTED_IDENTIFIER, la configuración que recomienda SQL Server):
    ```powershell
    sqlcmd -S .\SQLEXPRESS -E -Q "CREATE DATABASE AutoManagerDMS"
-   sqlcmd -S .\SQLEXPRESS -E -I -i database\01_ClientesVehiculosSC.sql
+   Get-ChildItem database\[0-9][0-9]_*.sql | Sort-Object Name | ForEach-Object { sqlcmd -S .\SQLEXPRESS -E -I -b -i $_.FullName }
    ```
-   También se puede abrir el script en SSMS y ejecutarlo sobre `AutoManagerDMS`.
+   También se puede abrir cada script en SSMS y ejecutarlo en orden sobre `AutoManagerDMS`.
    Opcional, para evitar saltos grandes en los identificadores tras reiniciar el servidor:
    ```powershell
    sqlcmd -S .\SQLEXPRESS -E -d AutoManagerDMS -Q "ALTER DATABASE SCOPED CONFIGURATION SET IDENTITY_CACHE = OFF;"
@@ -93,10 +106,11 @@ TallerMecanico.sln
 
 ## Base de datos
 
-- Todo el equipo usa una sola base: **AutoManagerDMS**. `TallerMecanicoDB` solo la usa la prueba de conexión `pruebas/PruebaConexionSQL`.
+- Todo el equipo usa una sola base: **AutoManagerDMS**. La base principal para la integración final es la de Neider (SQL Server Express); para actualizarla basta ejecutar en orden los scripts numerados. `TallerMecanicoDB` solo la usa la prueba de conexión `pruebas/PruebaConexionSQL`.
 - Los scripts de `database/` se numeran (`01_`, `02_`, …) y se pueden ejecutar varias veces sin duplicar nada. Docker ejecuta solo los archivos que empiezan con dos dígitos.
+- `90_DatosEjemploSC.sql` agrega clientes y vehículos **ficticios** de ejemplo. No usa identificadores fijos, así que se puede ejecutar sobre cualquier base, también sobre una que ya tenga datos. Nunca subas datos reales de personas al repositorio.
 - Las fechas se guardan en UTC (`SYSUTCDATETIME()`) y se muestran en hora de Guatemala con `CapaLogica/ClsZonaHorariaLN`.
-- Las reglas para nuevas tablas (claves foráneas por `IdVehiculo`, nombres de restricciones, etc.) están en [database/CONVENCIONES_BD.md](database/CONVENCIONES_BD.md).
+- Las reglas para nuevas tablas (claves foráneas por `VIN`, nombres de restricciones, etc.) están en [database/CONVENCIONES_BD.md](database/CONVENCIONES_BD.md).
 
 ## Pruebas
 
@@ -106,11 +120,11 @@ TallerMecanico.sln
 
 ## Cómo integrar un módulo nuevo
 
-- Crea la página principal en su carpeta de `CapaPresentacion` usando `MasterPageFile="~/Site.Master"`. El menú muestra un módulo automáticamente en cuanto su página existe:
-  `Ordenes/Ordenes.aspx`, `Inventario/Inventario.aspx`, `Reportes/Reportes.aspx`.
+- Crea la página principal en su carpeta de `CapaPresentacion` usando `MasterPageFile="~/Site.Master"`. El menú muestra un módulo automáticamente en cuanto su página existe (las rutas están en `Site.Master.cs`):
+  `OrdenesReparacion/OrdenesNT.aspx` (ya integrado), `Inventario/Inventario.aspx`, `Reportes/Reportes.aspx`.
 - Obtén las conexiones con `CapaDatos.ClsConexionDA.fncObtenerConexion()` y usa siempre parámetros (`SqlCommand.Parameters`), nunca texto concatenado.
-- Para relacionar órdenes con vehículos usa el `VIN`, que es obligatorio y único como la placa: llave foránea a `dbo.Vehiculos (VIN)` con `ON UPDATE CASCADE`. `ClsVehiculoLNSC` ya permite obtener un vehículo, listar los de un cliente y buscar por placa o VIN.
-- Agrega tus tablas en un script numerado nuevo (por ejemplo `database/02_OrdenesReparacionNT.sql`).
+- Para relacionar con vehículos usa el `VIN`, que es obligatorio y único como la placa: llave foránea a `dbo.Vehiculos (VIN)` con `ON UPDATE CASCADE` (las órdenes usan `(IdVehiculo, VIN)`; ver `CONVENCIONES_BD.md`). `ClsVehiculoLNSC` ya permite obtener un vehículo, listar los de un cliente y buscar por placa o VIN.
+- Agrega tus tablas en un script numerado nuevo (`01_` clientes y vehículos y `02_` órdenes ya existen; por ejemplo `database/03_InventarioPP.sql`).
 - Convención de nombres del curso: clases `Cls<Entidad><EN|LN|DA><Iniciales>`, métodos `fnc…`, variables `l<Tipo>…` y parámetros `p<Tipo>…`.
 
 ## Seguridad y archivos locales

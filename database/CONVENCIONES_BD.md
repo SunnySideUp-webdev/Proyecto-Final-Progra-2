@@ -35,63 +35,41 @@ CONSTRAINT FK_<Tabla>_Vehiculos
 `ON UPDATE CASCADE` hace que, si se corrige un VIN mal escrito en `dbo.Vehiculos`, las filas
 relacionadas se actualicen solas. La placa y el propietario se obtienen con un `JOIN`
 (`ON v.VIN = o.VIN`) a `dbo.Vehiculos` y `dbo.Clientes`.
+
+Si una tabla guarda **también** `IdVehiculo` (como `OrdenesReparacion`), la llave foránea usa
+los dos datos para que siempre sean del mismo vehículo (restricción `UQ_Vehiculos_IdVehiculo_VIN`):
+
+```sql
+CONSTRAINT FK_<Tabla>_Vehiculos
+    FOREIGN KEY (IdVehiculo, VIN) REFERENCES dbo.Vehiculos (IdVehiculo, VIN) ON UPDATE CASCADE
+```
+
 Desde C# se pueden usar `ClsVehiculoLNSC.fncBuscarVehiculosSC(placaOVin)` (el VIN exacto
 aparece primero) y `ClsVehiculoLNSC.fncObtenerVehiculoSC(idVehiculo)`.
 
-## 3. Ejemplo para `OrdenesReparacion` (propuesta para Neider)
+## 3. Órdenes de reparación (`02_OrdenesReparacionNT.sql`)
 
-Este es el script `OrdenesReparacionNT.sql` con los ajustes de las secciones 1, 2 y 4.
-Es solo una referencia: el archivo original no se ha modificado.
+La tabla `dbo.OrdenesReparacion` se crea con `database/02_OrdenesReparacionNT.sql`, a partir de
+la estructura que usa el módulo de Neider (`IdVehiculo`, `VIN` y la `Placa` histórica), con:
 
-```sql
-IF OBJECT_ID(N'dbo.OrdenesReparacion', N'U') IS NULL
-BEGIN
-    CREATE TABLE dbo.OrdenesReparacion (
-        IdOrden INT IDENTITY(1,1) NOT NULL,
-        VIN VARCHAR(17) NOT NULL,
-        FechaApertura DATETIME2 NOT NULL
-            CONSTRAINT DF_OrdenesReparacion_FechaApertura DEFAULT SYSUTCDATETIME(),
-        MotivoIngreso NVARCHAR(500) NOT NULL,
-        Diagnostico NVARCHAR(1000) NULL,
-        Estado NVARCHAR(20) NOT NULL
-            CONSTRAINT DF_OrdenesReparacion_Estado DEFAULT 'Abierta',
-        FechaCierre DATETIME2 NULL,
-        ObservacionesCierre NVARCHAR(1000) NULL,
+- llave foránea `(IdVehiculo, VIN)` hacia `dbo.Vehiculos` con `ON UPDATE CASCADE`;
+- `CK_OrdenesReparacion_Cierre`: una orden abierta no tiene fecha de cierre y una cerrada sí;
+- `CK_OrdenesReparacion_Motivo`: el motivo de ingreso no puede estar vacío;
+- `FechaApertura` en UTC e índice `IX_OrdenesReparacion_VIN` para el historial por VIN.
 
-        CONSTRAINT PK_OrdenesReparacion PRIMARY KEY (IdOrden),
-        CONSTRAINT FK_OrdenesReparacion_Vehiculos
-            FOREIGN KEY (VIN) REFERENCES dbo.Vehiculos (VIN) ON UPDATE CASCADE,
-        CONSTRAINT CK_OrdenesReparacion_Estado
-            CHECK (Estado IN ('Abierta', 'Cerrada')),
-        -- Una orden abierta no tiene fecha de cierre y una cerrada sí.
-        CONSTRAINT CK_OrdenesReparacion_Cierre
-            CHECK ((Estado = 'Abierta' AND FechaCierre IS NULL)
-                OR (Estado = 'Cerrada' AND FechaCierre IS NOT NULL AND FechaCierre >= FechaApertura)),
-        CONSTRAINT CK_OrdenesReparacion_Motivo
-            CHECK (LEN(MotivoIngreso) > 0)
-    );
-END
-GO
+Si la tabla ya existe con la estructura anterior (VIN opcional, hora local, sin llave foránea),
+el script la actualiza sin perder datos: completa el VIN desde `dbo.Vehiculos`, pasa las fechas
+a UTC con la diferencia horaria del servidor y agrega las reglas. Si encuentra datos que no las
+cumplen, se detiene con un mensaje que indica qué corregir; después se vuelve a ejecutar.
 
--- Acelera el historial de reparaciones por VIN.
-IF NOT EXISTS (SELECT 1 FROM sys.indexes
-               WHERE name = N'IX_OrdenesReparacion_VIN' AND object_id = OBJECT_ID(N'dbo.OrdenesReparacion'))
-BEGIN
-    CREATE INDEX IX_OrdenesReparacion_VIN ON dbo.OrdenesReparacion (VIN);
-END
-GO
-```
-
-El formato del VIN no hace falta validarlo otra vez: la llave foránea solo acepta VIN que ya
-existen en `dbo.Vehiculos`, donde `CK_Vehiculos_VIN` revisa los 17 caracteres sin I, O ni Q.
-
-Si `FechaCierre` se llena desde SQL, usar también `SYSUTCDATETIME()`; si se llena desde C#,
-usar `DateTime.UtcNow`.
+Al cerrar una orden, `FechaCierre` se llena con `SYSUTCDATETIME()` (o `DateTime.UtcNow` desde C#).
 
 ## 4. Scripts
 
 - Un script por módulo en `database/`, con número para fijar el orden de ejecución:
   `00_` crea la base, `01_ClientesVehiculosSC.sql`, `02_OrdenesReparacionNT.sql`, etc.
+  Los datos de ejemplo (siempre ficticios) van al final, en `90_` en adelante, y se insertan
+  sin identificadores fijos (buscando por DPI, placa o VIN) para no chocar con datos existentes.
   Docker ejecuta automáticamente los archivos `database/[0-9][0-9]_*.sql` en orden.
 - Cada script empieza con `USE AutoManagerDMS;` y debe poder ejecutarse varias veces
   (`IF OBJECT_ID(...) IS NULL`, `IF DB_ID(...) IS NULL`, `IF NOT EXISTS (...)`).

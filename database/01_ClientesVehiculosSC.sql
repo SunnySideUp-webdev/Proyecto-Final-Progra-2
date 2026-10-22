@@ -80,6 +80,10 @@ BEGIN
         CONSTRAINT UQ_Vehiculos_VIN
             UNIQUE (VIN),
 
+        -- Permite que OrdenesReparacion exija que IdVehiculo y VIN sean del mismo vehiculo.
+        CONSTRAINT UQ_Vehiculos_IdVehiculo_VIN
+            UNIQUE (IdVehiculo, VIN),
+
         -- La placa se guarda normalizada: mayusculas y numeros, sin espacios ni guiones.
         CONSTRAINT CK_Vehiculos_Placa
             CHECK (LEN(Placa) BETWEEN 5 AND 10
@@ -129,6 +133,14 @@ IF NOT EXISTS (SELECT 1 FROM sys.key_constraints
                WHERE name = N'UQ_Vehiculos_VIN' AND parent_object_id = OBJECT_ID(N'dbo.Vehiculos'))
 BEGIN
     ALTER TABLE dbo.Vehiculos ADD CONSTRAINT UQ_Vehiculos_VIN UNIQUE (VIN);
+END
+GO
+
+-- Actualizacion: restriccion que usa la llave foranea de OrdenesReparacion (02_OrdenesReparacionNT.sql).
+IF NOT EXISTS (SELECT 1 FROM sys.key_constraints
+               WHERE name = N'UQ_Vehiculos_IdVehiculo_VIN' AND parent_object_id = OBJECT_ID(N'dbo.Vehiculos'))
+BEGIN
+    ALTER TABLE dbo.Vehiculos ADD CONSTRAINT UQ_Vehiculos_IdVehiculo_VIN UNIQUE (IdVehiculo, VIN);
 END
 GO
 
