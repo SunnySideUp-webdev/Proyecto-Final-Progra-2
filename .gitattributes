@@ -1,0 +1,10 @@
+# Saltos de línea: en el repositorio todos los archivos de texto se guardan con LF;
+# al descargarlos, Git usa los de cada sistema (CRLF en Windows, LF en macOS).
+* text=auto
+
+# Los scripts de Bash deben conservar LF en cualquier sistema: con CRLF fallan en macOS.
+*.sh text eol=lf
+
+# Fuentes: archivos binarios, sin conversión de saltos de línea.
+*.woff binary
+*.woff2 binary

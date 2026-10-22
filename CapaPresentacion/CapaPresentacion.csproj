@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D3715CB0-7615-4325-AD98-D1550B50C03A}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CapaPresentacion</RootNamespace>
+    <AssemblyName>CapaPresentacion</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>7.3</LangVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Inicio de la parte de Neider: Módulo 2, Órdenes de reparación -->
+    <Content Include="OrdenesReparacion\DetalleOrdenNT.aspx" />
+    <Content Include="OrdenesReparacion\HistorialOrdenesNT.aspx" />
+    <Content Include="OrdenesReparacion\OrdenesNT.aspx" />
+    <Content Include="OrdenesReparacion\RegistrarOrdenNT.aspx" />
+    <!-- Fin de la parte de Neider -->
+    <!-- Módulo 4: Reportes (parte de Fátima) -->
+    <Content Include="Reportes\Reportes.aspx" />
+    <!-- Módulo 3: Inventario (parte de Pavel) -->
+    <Content Include="Inventario\Inventario.aspx" />
+    <Content Include="Inventario\RegistroRepuesto.aspx" />
+    <Content Include="Web.config" />
+    <!-- Agregado por Neider: archivo local de conexión (tiene la contraseña local; Git lo ignora y no se sube). -->
+    <None Include="ConnectionStrings.config" />
+    <None Include="ConnectionStrings.config.example" />
+    <Content Include="Site.Master" />
+    <Content Include="Default.aspx" />
+    <Content Include="Error.html" />
+    <Content Include="Clientes\Clientes.aspx" />
+    <Content Include="Clientes\DetalleCliente.aspx" />
+    <Content Include="Clientes\RegistrarCliente.aspx" />
+    <Content Include="Vehiculos\DetalleVehiculo.aspx" />
+    <Content Include="Vehiculos\RegistrarVehiculo.aspx" />
+    <Content Include="Vehiculos\Vehiculos.aspx" />
+    <Content Include="Content\autodms.css" />
+    <Content Include="Content\lib\bootstrap\bootstrap.min.css" />
+    <Content Include="Content\lib\bootstrap\LICENSE" />
+    <Content Include="Content\lib\bootstrap-icons\bootstrap-icons.min.css" />
+    <Content Include="Content\lib\bootstrap-icons\fonts\bootstrap-icons.woff" />
+    <Content Include="Content\lib\bootstrap-icons\fonts\bootstrap-icons.woff2" />
+    <Content Include="Content\lib\bootstrap-icons\LICENSE" />
+    <Content Include="Content\lib\poppins\LICENSE" />
+    <Content Include="Content\lib\poppins\poppins-latin-400-normal.woff2" />
+    <Content Include="Content\lib\poppins\poppins-latin-500-normal.woff2" />
+    <Content Include="Content\lib\poppins\poppins-latin-600-normal.woff2" />
+    <Content Include="Content\lib\poppins\poppins-latin-700-normal.woff2" />
+    <Content Include="Scripts\autodms.js" />
+    <Content Include="Scripts\lib\bootstrap\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\lib\bootstrap\LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Clientes\Clientes.aspx.cs">
+      <DependentUpon>Clientes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Clientes\Clientes.aspx.designer.cs">
+      <DependentUpon>Clientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Clientes\DetalleCliente.aspx.cs">
+      <DependentUpon>DetalleCliente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Clientes\DetalleCliente.aspx.designer.cs">
+      <DependentUpon>DetalleCliente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Clientes\RegistrarCliente.aspx.cs">
+      <DependentUpon>RegistrarCliente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Clientes\RegistrarCliente.aspx.designer.cs">
+      <DependentUpon>RegistrarCliente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <!-- Inicio de la parte de Neider: Módulo 2, Órdenes de reparación -->
+    <Compile Include="OrdenesReparacion\DetalleOrdenNT.aspx.cs">
+      <DependentUpon>DetalleOrdenNT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\DetalleOrdenNT.aspx.designer.cs">
+      <DependentUpon>DetalleOrdenNT.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OrdenesReparacion\HistorialOrdenesNT.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\HistorialOrdenesNT.aspx.designer.cs">
+      <DependentUpon>HistorialOrdenesNT.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OrdenesReparacion\OrdenesNT.aspx.cs">
+      <DependentUpon>OrdenesNT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\OrdenesNT.aspx.designer.cs">
+      <DependentUpon>OrdenesNT.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OrdenesReparacion\RegistrarOrdenNT.aspx.cs">
+      <DependentUpon>RegistrarOrdenNT.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdenesReparacion\RegistrarOrdenNT.aspx.designer.cs">
+      <DependentUpon>RegistrarOrdenNT.aspx</DependentUpon>
+    </Compile>
+    <!-- Fin de la parte de Neider -->
+    <!-- Módulo 4: Reportes (parte de Fátima) -->
+    <Compile Include="Reportes\Reportes.aspx.cs">
+      <DependentUpon>Reportes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reportes\Reportes.aspx.designer.cs">
+      <DependentUpon>Reportes.aspx</DependentUpon>
+    </Compile>
+    <!-- Módulo 3: Inventario (parte de Pavel) -->
+    <Compile Include="Inventario\Inventario.aspx.cs">
+      <DependentUpon>Inventario.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Inventario\Inventario.aspx.designer.cs">
+      <DependentUpon>Inventario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Inventario\RegistroRepuesto.aspx.cs">
+      <DependentUpon>RegistroRepuesto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Inventario\RegistroRepuesto.aspx.designer.cs">
+      <DependentUpon>RegistroRepuesto.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Site.Master.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Site.Master.designer.cs">
+      <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Vehiculos\DetalleVehiculo.aspx.cs">
+      <DependentUpon>DetalleVehiculo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vehiculos\DetalleVehiculo.aspx.designer.cs">
+      <DependentUpon>DetalleVehiculo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Vehiculos\RegistrarVehiculo.aspx.cs">
+      <DependentUpon>RegistrarVehiculo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vehiculos\RegistrarVehiculo.aspx.designer.cs">
+      <DependentUpon>RegistrarVehiculo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Vehiculos\Vehiculos.aspx.cs">
+      <DependentUpon>Vehiculos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vehiculos\Vehiculos.aspx.designer.cs">
+      <DependentUpon>Vehiculos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Utilidades\ClsFormatoSC.cs" />
+    <Compile Include="Utilidades\ClsRegistroErrores.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Agregado por Neider al integrar su módulo (las páginas no usan CapaDatos directamente). -->
+    <ProjectReference Include="..\CapaDatos\CapaDatos.csproj">
+      <Project>{b4172473-e599-49a6-bb7d-edc157f72f01}</Project>
+      <Name>CapaDatos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CapaEntidades\CapaEntidades.csproj">
+      <Project>{A614B455-B1AE-4702-B9AB-525B503369EA}</Project>
+      <Name>CapaEntidades</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CapaLogica\CapaLogica.csproj">
+      <Project>{E486DF6E-5EBD-4CED-9A3F-AA90443F53D2}</Project>
+      <Name>CapaLogica</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8080/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,39 @@
+# --- Secretos y configuración local: NUNCA se suben a GitHub ---
+# Se versionan solo las plantillas: .env.example y *.config.example
+.env
+**/ConnectionStrings.config
+
+# Web.config se ignora por defecto porque las pruebas guardan ahí la contraseña.
+# Excepción: el Web.config de CapaPresentacion es compartido y no contiene
+# credenciales; las lee de ConnectionStrings.config mediante configSource.
+**/Web.config
+!CapaPresentacion/Web.config
+
+# --- Compilación ---
+[Bb]in/
+[Oo]bj/
+packages/
+
+# --- Visual Studio ---
+.vs/
+*.user
+*.suo
+*.userprefs
+*.userosscache
+*.sln.docstates
+*.rsuser
+*.cache
+TestResults/
+
+# --- Bases de datos y respaldos locales (pueden tener datos reales) ---
+*.mdf
+*.ldf
+*.bak
+*.bacpac
+
+# --- Registros ---
+*.log
+
+# --- Sistema operativo ---
+.DS_Store
+Thumbs.db

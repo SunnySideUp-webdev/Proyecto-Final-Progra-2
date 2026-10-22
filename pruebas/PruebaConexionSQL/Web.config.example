@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Plantilla de configuración: se sube a GitHub SIN contraseñas.
+  En macOS, crea tu Web.config local (ignorado por git) con:
+      ./scripts/configurar-entorno-local.sh
+  En Windows con SQL Server Express instalado, copia este archivo como Web.config
+  y usa, por ejemplo: Server=.\SQLEXPRESS;Database=TallerMecanicoDB;Integrated Security=True;
+-->
+<configuration>
+  <connectionStrings>
+    <add name="TallerMecanicoDB"
+         connectionString="Server=127.0.0.1,1434;Database=TallerMecanicoDB;User ID=taller_app;Password=__TALLER_APP_PASSWORD__;Encrypt=True;TrustServerCertificate=True;"
+         providerName="System.Data.SqlClient" />
+  </connectionStrings>
+  <system.web>
+    <compilation debug="true" targetFramework="4.8" />
+    <httpRuntime targetFramework="4.8" />
+    <customErrors mode="RemoteOnly" />
+  </system.web>
+</configuration>
